@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+  Copyright (c) 2015, 2019, Gluon and/or its affiliates.
+  All rights reserved. Use is subject to license terms.
+
+  This file is available and licensed under the following license:
+
+  Redistribution and use in source and binary forms, with or without
+  modification, are permitted provided that the following conditions
+  are met:
+
+  - Redistributions of source code must retain the above copyright
+    notice, this list of conditions and the following disclaimer.
+  - Redistributions in binary form must reproduce the above copyright
+    notice, this list of conditions and the following disclaimer in
+    the documentation and/or other materials provided with the distribution.
+  - Neither the name of Oracle Corporation nor the names of its
+    contributors may be used to endorse or promote products derived
+    from this software without specific prior written permission.
+
+  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+  "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+  LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+  A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+  OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+  SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+  DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+  THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+-->
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane id="parentAnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="654.0" prefWidth="466.0" style="-fx-background-color: #0e1621;" stylesheets="@res/style.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.heimdallr.hmdlrapp.controllers.auth.LoginController">
+   <children>
+      <BorderPane layoutX="76.0" layoutY="124.0" prefHeight="608.0" prefWidth="466.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <top>
+            <BorderPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+               <center>
+                  <VBox alignment="CENTER" BorderPane.alignment="CENTER">
+                     <children>
+                        <HBox id="usernameContainer" alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="15.0">
+                           <children>
+                              <Label text="Username" textFill="WHITE">
+                                 <font>
+                                    <Font name="Garuda Bold" size="18.0" />
+                                 </font>
+                              </Label>
+                              <TextField fx:id="usernameTextBox" styleClass="hmdlrTextBox" stylesheets="@res/style.css">
+                                 <font>
+                                    <Font name="Garuda" size="15.0" />
+                                 </font>
+                              </TextField>
+                           </children>
+                           <padding>
+                              <Insets top="40.0" />
+                           </padding>
+                        </HBox>
+                        <HBox id="usernameContainer" alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="100.0" prefWidth="200.0" spacing="15.0">
+                           <children>
+                              <Label text="Password" textFill="WHITE">
+                                 <font>
+                                    <Font name="Garuda Bold" size="18.0" />
+                                 </font>
+                              </Label>
+                              <fx:include fx:id="passwordTextBox" source="hmdlrPasswordComponent.fxml" />
+                           </children>
+                           <padding>
+                              <Insets top="30.0" />
+                           </padding>
+                        </HBox>
+                        <Label fx:id="errorLabel" text="Error label" textAlignment="CENTER" textFill="#f23e3e" visible="false">
+                           <font>
+                              <Font name="Garuda Bold" size="17.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets top="15.0" />
+                           </VBox.margin>
+                        </Label>
+                     </children>
+                  </VBox>
+               </center>
+               <bottom>
+                  <VBox alignment="CENTER" BorderPane.alignment="CENTER">
+                     <BorderPane.margin>
+                        <Insets top="30.0" />
+                     </BorderPane.margin>
+                     <children>
+                        <Button mnemonicParsing="false" onAction="#loginButtonClicked" styleClass="hmdlrButton" text="Authenticate" textAlignment="CENTER" textFill="WHITE">
+                           <font>
+                              <Font name="Garuda" size="18.0" />
+                           </font>
+                        </Button>
+                     </children>
+                  </VBox>
+               </bottom>
+               <top>
+                  <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+                     <children>
+                        <ImageView fitHeight="150.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@res/prototypeV2White.png" />
+                           </image>
+                        </ImageView>
+                        <Label text="Login to your hmdlr account" textFill="#e4e2e2">
+                           <font>
+                              <Font name="Garuda Bold" size="19.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </VBox>
+               </top>
+            </BorderPane>
+         </top>
+         <bottom>
+            <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="10.0" BorderPane.alignment="CENTER">
+               <children>
+                  <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" style="-fx-background-color: #1c2c3b; -fx-background-radius: 25;">
+                     <center>
+                        <Label alignment="CENTER" text="Don't have an account?" textAlignment="CENTER" textFill="WHITE" wrapText="true" BorderPane.alignment="CENTER">
+                           <font>
+                              <Font name="Garuda" size="15.0" />
+                           </font>
+                        </Label>
+                     </center>
+                     <padding>
+                        <Insets left="12.0" right="12.0" />
+                     </padding>
+                  </BorderPane>
+                  <Button mnemonicParsing="false" onAction="#goToCreateButtonClicked" styleClass="hmdlrButton" text="Create" textAlignment="CENTER" textFill="WHITE">
+                     <font>
+                        <Font name="Garuda" size="18.0" />
+                     </font>
+                  </Button>
+               </children>
+            </VBox>
+         </bottom>
+      </BorderPane>
+   </children>
+</AnchorPane>

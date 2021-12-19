@@ -1,0 +1,15 @@
+.textBoxWhite {
+}
+
+.hmdlrButton {
+    -fx-background-color:  #2a5378;
+    -fx-background-radius: 5;
+    -fx-padding: 8;
+    -fx-font-size: 16;
+}
+
+.hmdlrTextBox {
+    -fx-background-color: #232f3d;
+    -fx-border-radius: 3;
+    -fx-text-fill: white;
+}
