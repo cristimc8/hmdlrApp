@@ -39,6 +39,7 @@ public class LoginController {
     @FXML
     protected void loginButtonClicked() {
         Stage stage = (Stage) usernameTextBox.getScene().getWindow();
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("mainScreen.fxml"));
 
         String username = usernameTextBox.getText();
         String plainTextPassword = passwordTextBox.getText();
@@ -46,15 +47,15 @@ public class LoginController {
         try {
             userService.authenticate(username, plainTextPassword);
 
-            /*FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("main/main.fxml"));
             Scene scene = new Scene(fxmlLoader.load());
-            stage.setTitle("Cristi's chat");
+            stage.setTitle(Constants.appName);
             stage.setScene(scene);
-            stage.show();*/
+            stage.show();
         }
         catch (Exception e) {
             errorLabel.setText(e.getMessage());
             errorLabel.setVisible(true);
+            System.out.println(e.getMessage());
         }
     }
 

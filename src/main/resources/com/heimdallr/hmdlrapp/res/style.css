@@ -12,4 +12,16 @@
     -fx-background-color: #232f3d;
     -fx-border-radius: 3;
     -fx-text-fill: white;
+    -fx-prompt-text-fill: #54606e;
+}
+
+.hmdlrTextBox:focused {
+    -fx-prompt-text-fill: #54606e;
+}
+
+.profilePicture {
+    -fx-background-color: cyan;
+    -fx-pref-width: 50;
+    -fx-pref-height: 50;
+    -fx-background-radius: 50%;
 }
