@@ -126,7 +126,8 @@ public class FriendRequestRepository implements RepoInterface<FriendRequest, Int
             String cmd = "UPDATE friend_requests SET status = ? WHERE friend_request_id = ?";
             try {
                 PreparedStatement preparedStatement = dbInstance.prepareStatement(cmd);
-                preparedStatement.setInt(1, original.getId());
+                preparedStatement.setString(1, changed.getFriendRequestStatusAsString());
+                preparedStatement.setInt(2, original.getId());
 
                 preparedStatement.executeUpdate();
             } catch (SQLException e) {

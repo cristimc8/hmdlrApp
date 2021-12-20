@@ -72,6 +72,22 @@ public class FriendRequest extends BaseEntity<Integer> {
         return friendshipRequestStatus;
     }
 
+    public String getFriendRequestStatusAsString() {
+        String status = "pending";
+        switch (friendshipRequestStatus) {
+            case APPROVED -> {
+                status = "approved";
+            }
+            case REJECTED -> {
+                status = "rejected";
+            }
+            case PENDING -> {
+                status = "pending";
+            }
+        }
+        return status;
+    }
+
     public void setFriendshipRequestStatus(Constants.FriendshipRequestStatus friendshipRequestStatus) {
         this.friendshipRequestStatus = friendshipRequestStatus;
     }

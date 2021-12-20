@@ -11,39 +11,12 @@ public class Message extends BaseEntity<Integer> {
     private Timestamp timestamp;
 
     /**
-     * Base entity default constructor, receives the entity ID and saves
-     * it.
-     *
-     * Message between 2 users with timestamp
-     * @param id entity id
+     * Message from a user to a group or person with timestamp
      */
-    public Message(Integer id, int senderId, int receiverId, int replyTo, String messageBody, Timestamp timestamp) {
+    public Message(Integer id, int senderId, int receiverId, String groupId, int replyTo, String messageBody, Timestamp timestamp) {
         super(id);
         setSenderId(senderId);
         setReceiverId(receiverId);
-        setReplyTo(replyTo);
-        setMessageBody(messageBody);
-        setTimestamp(timestamp);
-    }
-
-    /**
-     * Message between 2 users without timestamp
-     * If it's not replying to any message just pass the parameter as null
-     */
-    public Message(Integer id, int senderId, int receiverId, int replyTo, String messageBody) {
-        super(id);
-        setSenderId(senderId);
-        setReceiverId(receiverId);
-        setReplyTo(replyTo);
-        setMessageBody(messageBody);
-    }
-
-    /**
-     * Message from a user to a group with timestamp
-     */
-    public Message(Integer id, int senderId, String groupId, int replyTo, String messageBody, Timestamp timestamp) {
-        super(id);
-        setSenderId(senderId);
         setGroupId(groupId);
         setReplyTo(replyTo);
         setMessageBody(messageBody);
@@ -51,11 +24,12 @@ public class Message extends BaseEntity<Integer> {
     }
 
     /**
-     * Message from a user to a group without timestamp
+     * Message from a user to a group or user without timestamp
      */
-    public Message(Integer id, int senderId, String groupId, int replyTo, String messageBody) {
+    public Message(Integer id, int senderId, int receiverId, String groupId, int replyTo, String messageBody) {
         super(id);
         setSenderId(senderId);
+        setReceiverId(receiverId);
         setGroupId(groupId);
         setReplyTo(replyTo);
         setMessageBody(messageBody);

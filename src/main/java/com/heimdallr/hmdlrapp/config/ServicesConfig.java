@@ -4,6 +4,7 @@ import com.heimdallr.hmdlrapp.exceptions.ServiceInitException;
 import com.heimdallr.hmdlrapp.services.DI.HmdlrDI;
 import com.heimdallr.hmdlrapp.services.FriendRequestService;
 import com.heimdallr.hmdlrapp.services.FriendshipsService;
+import com.heimdallr.hmdlrapp.services.GroupChatsService;
 import com.heimdallr.hmdlrapp.services.UserService;
 
 import java.util.List;
@@ -21,7 +22,8 @@ public class ServicesConfig {
                 DBConfig.class,
                 UserService.class,
                 FriendshipsService.class,
-                FriendRequestService.class);
+                FriendRequestService.class,
+                GroupChatsService.class);
         hmdlrDI.initialize(servicesToInit);
     }
 }
