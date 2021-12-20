@@ -1,9 +1,13 @@
 package com.heimdallr.hmdlrapp.services;
 
+import com.heimdallr.hmdlrapp.exceptions.ServiceNotRegisteredException;
 import com.heimdallr.hmdlrapp.models.FriendRequest;
 import com.heimdallr.hmdlrapp.models.User;
 import com.heimdallr.hmdlrapp.repository.FriendRequestRepository;
+import com.heimdallr.hmdlrapp.services.DI.HmdlrDI;
 import com.heimdallr.hmdlrapp.services.DI.Service;
+import com.heimdallr.hmdlrapp.services.pubSub.Channel;
+import com.heimdallr.hmdlrapp.services.pubSub.EventDispatcher;
 import com.heimdallr.hmdlrapp.utils.Constants;
 
 import java.util.List;
@@ -24,6 +28,7 @@ public class FriendRequestService {
 
     /**
      * Gets all the friend requests (even past ones) for a certain user.
+     *
      * @param user User we want the friend requests for
      * @return All the user's past friend requests.
      */
@@ -47,10 +52,36 @@ public class FriendRequestService {
 
     public void setFriendRequestStatus(int friendRequestId, Constants.FriendshipRequestStatus friendshipRequestStatus) {
         FriendRequest friendRequest = friendRequestRepository.findById(friendRequestId);
-        FriendRequest copy = friendRequest;
-        copy.setFriendshipRequestStatus(friendshipRequestStatus);
+        friendRequest.setFriendshipRequestStatus(friendshipRequestStatus);
 
-        friendRequestRepository.updateOne(friendRequest, copy);
+        if (friendshipRequestStatus == Constants.FriendshipRequestStatus.APPROVED) {
+            try {
+                ((MessagesService) HmdlrDI.getContainer().getService(MessagesService.class))
+                        .sendMessage(
+                                friendRequest.getSenderId(),
+                                friendRequest.getReceiverId(),
+                                Constants.sayHi
+                        );
+
+                notifySubs();
+            } catch (ServiceNotRegisteredException e) {
+                e.printStackTrace();
+            }
+        }
+
+        friendRequestRepository.updateOne(friendRequest, friendRequest);
+    }
+
+    /**
+     * Notifies subscribers that a new message arrived(or was sent)
+     */
+    private void notifySubs() {
+        try {
+            ((EventDispatcher) HmdlrDI.getContainer().getService(EventDispatcher.class))
+                    .dispatch(Channel.onNewMessage, null);
+        } catch (ServiceNotRegisteredException e) {
+            e.printStackTrace();
+        }
     }
 
     /**

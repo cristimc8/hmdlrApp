@@ -153,7 +153,7 @@ public class UsersRepository implements RepoInterface<User, Integer> {
                 String lastName = resultSet.getString("last_name");
                 String hash = resultSet.getString("hash");
 
-                return new User(id, email, firstName, lastName, username, hash);
+                return new User(id, email, username, firstName, lastName, hash);
             }
         } catch (SQLException e) {
             e.printStackTrace();

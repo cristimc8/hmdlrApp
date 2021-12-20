@@ -1,20 +1,76 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="parentAnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="737.0" prefWidth="1304.0" style="-fx-background-color: #0e1621;" stylesheets="@res/style.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.heimdallr.hmdlrapp.controllers.main.MainController">
+<AnchorPane id="parentAnchorPane" fx:id="mainComponent" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="737.0" prefWidth="1304.0" style="-fx-background-color: #0e1621;" stylesheets="@res/style.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.heimdallr.hmdlrapp.controllers.main.MainController">
    <children>
-      <BorderPane fx:id="secondRegisterScreenBorderPane" layoutX="76.0" layoutY="124.0" prefHeight="732.0" prefWidth="1247.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="-180.0" AnchorPane.topAnchor="0.0">
+      <BorderPane fx:id="mainChildrenComponents" layoutX="76.0" layoutY="124.0" prefHeight="737.0" prefWidth="1304.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <left>
-            <fx:include source="main/friendsAndProfileLeftTabComponent.fxml" />
+            <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="532.0" prefWidth="450.0" style="-fx-background-color: #17212b;" BorderPane.alignment="CENTER">
+               <children>
+                  <VBox fx:id="recentChatsContainer" layoutX="15.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <children>
+                        <BorderPane>
+                           <top>
+                              <AnchorPane style="-fx-background-color: transparent;" BorderPane.alignment="CENTER">
+                                 <children>
+                                    <BorderPane prefHeight="53.0" prefWidth="517.0" style="-fx-background-color: transparent;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                       <center>
+                                          <HBox alignment="CENTER_LEFT" spacing="25.0" BorderPane.alignment="CENTER">
+                                             <children>
+                                                <ImageView fx:id="burgerMenuButton" fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                                                   <image>
+                                                      <Image url="@res/burgerMenuBars.png" />
+                                                   </image>
+                                                   <cursor>
+                                                      <Cursor fx:constant="HAND" />
+                                                   </cursor>
+                                                </ImageView>
+                                                <TextField fx:id="searchTextBox" promptText="Search" styleClass="hmdlrTextBox" HBox.hgrow="ALWAYS">
+                                                   <font>
+                                                      <Font name="Garuda" size="14.0" />
+                                                   </font>
+                                                </TextField>
+                                             </children>
+                                          </HBox>
+                                       </center>
+                                    </BorderPane>
+                                 </children>
+                              </AnchorPane>
+                           </top>
+                        </BorderPane>
+                     </children>
+                  </VBox>
+               </children>
+               <padding>
+                  <Insets left="15.0" right="15.0" />
+               </padding>
+            </AnchorPane>
          </left>
+         <center>
+            <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" style="-fx-background-color: #1c2c3b; -fx-background-radius: 25;" BorderPane.alignment="CENTER">
+               <center>
+                  <Label alignment="CENTER" text="Select a chat and start messaging!" textAlignment="CENTER" textFill="WHITE" wrapText="true" BorderPane.alignment="CENTER">
+                     <font>
+                        <Font name="Garuda" size="15.0" />
+                     </font>
+                  </Label>
+               </center>
+               <padding>
+                  <Insets left="12.0" right="12.0" />
+               </padding>
+            </BorderPane>
+         </center>
       </BorderPane>
       <AnchorPane fx:id="loadingComponent" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="691.0" prefWidth="937.0" style="-fx-background-color: transparent;" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
@@ -45,5 +101,145 @@
             </BorderPane>
          </children>
       </AnchorPane>
+      <BorderPane fx:id="coveringBorderInjectable" layoutX="10.0" layoutY="10.0" pickOnBounds="false" prefHeight="737.0" prefWidth="1304.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <left>
+            <AnchorPane fx:id="sliderMenu" style="-fx-background-color: #17212b;" translateX="-355.0" visible="false" BorderPane.alignment="CENTER">
+               <children>
+                  <VBox fx:id="recentChatsContainer1" layoutX="15.0" prefHeight="737.0" prefWidth="354.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <children>
+                        <BorderPane style="-fx-background-color: #0e1621;">
+                           <top>
+                              <BorderPane BorderPane.alignment="CENTER">
+                                 <right>
+                                    <VBox spacing="17.0" BorderPane.alignment="CENTER">
+                                       <children>
+                                          <ImageView fx:id="closeSliderMenuButton" fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@res/close.png" />
+                                             </image>
+                                             <cursor>
+                                                <Cursor fx:constant="HAND" />
+                                             </cursor>
+                                          </ImageView>
+                                       </children>
+                                       <BorderPane.margin>
+                                          <Insets top="12.0" />
+                                       </BorderPane.margin>
+                                    </VBox>
+                                 </right>
+                                 <left>
+                                    <VBox spacing="15.0" BorderPane.alignment="CENTER">
+                                       <children>
+                                          <AnchorPane fx:id="profilePictureCircle" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" styleClass="profilePicture" stylesheets="@res/style.css">
+                                             <children>
+                                                <BorderPane prefHeight="50.0" prefWidth="50.0" style="-fx-background-color: transparent;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                   <center>
+                                                      <Label fx:id="lettersLabel" text="CM" BorderPane.alignment="CENTER">
+                                                         <font>
+                                                            <Font name="Garuda Bold" size="16.0" />
+                                                         </font>
+                                                      </Label>
+                                                   </center>
+                                                </BorderPane>
+                                             </children>
+                                          </AnchorPane>
+                                          <VBox>
+                                             <children>
+                                                <Label fx:id="nameLabel" text="Lorem Ipsum" textFill="WHITE">
+                                                   <font>
+                                                      <Font name="Garuda Bold" size="16.0" />
+                                                   </font>
+                                                </Label>
+                                                <Label fx:id="usernameLabel" text="\@loremIpsulinum" textFill="#e1d9d9">
+                                                   <font>
+                                                      <Font name="Garuda" size="15.0" />
+                                                   </font>
+                                                   <padding>
+                                                      <Insets top="-5.0" />
+                                                   </padding>
+                                                </Label>
+                                             </children>
+                                             <padding>
+                                                <Insets top="-10.0" />
+                                             </padding>
+                                          </VBox>
+                                       </children>
+                                       <padding>
+                                          <Insets top="15.0" />
+                                       </padding>
+                                    </VBox>
+                                 </left>
+                              </BorderPane>
+                           </top>
+                           <padding>
+                              <Insets bottom="15.0" left="15.0" right="15.0" />
+                           </padding>
+                        </BorderPane>
+                        <HBox alignment="CENTER_LEFT" spacing="20.0">
+                           <children>
+                              <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@res/friends.png" />
+                                 </image>
+                              </ImageView>
+                              <Label text="Your friends" textFill="#ded7d7">
+                                 <font>
+                                    <Font name="Garuda Bold" size="18.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                           <padding>
+                              <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+                           </padding>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                        </HBox>
+                        <HBox alignment="CENTER_LEFT" spacing="20.0">
+                           <children>
+                              <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@res/allUsers.png" />
+                                 </image>
+                              </ImageView>
+                              <Label text="All users" textFill="#ded7d7">
+                                 <font>
+                                    <Font name="Garuda Bold" size="18.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                           <padding>
+                              <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+                           </padding>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                        </HBox>
+                        <HBox alignment="CENTER_LEFT" spacing="20.0">
+                           <children>
+                              <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@res/chat.png" />
+                                 </image>
+                              </ImageView>
+                              <Label text="Create a group chat" textFill="#ded7d7">
+                                 <font>
+                                    <Font name="Garuda Bold" size="18.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                           <padding>
+                              <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+                           </padding>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                        </HBox>
+                     </children>
+                  </VBox>
+               </children>
+            </AnchorPane>
+         </left>
+      </BorderPane>
    </children>
 </AnchorPane>

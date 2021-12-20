@@ -6,6 +6,8 @@ import com.heimdallr.hmdlrapp.exceptions.ValueExistsException;
 import com.heimdallr.hmdlrapp.models.GroupChat;
 import com.heimdallr.hmdlrapp.models.Message;
 import com.heimdallr.hmdlrapp.services.DI.HmdlrDI;
+import com.heimdallr.hmdlrapp.services.pubSub.Channel;
+import com.heimdallr.hmdlrapp.services.pubSub.EventDispatcher;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -20,6 +22,93 @@ public class MessagesRepository implements RepoInterface<Message, Integer> {
         } catch (ServiceNotRegisteredException e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * Deletes all messages between two users.
+     * @param uidOne User id one
+     * @param uidTwo User id two
+     */
+    public void deleteAllBetweenTwoUsers(int uidOne, int uidTwo) {
+        String cmd = "DELETE FROM messages " +
+                "WHERE (sender_id = ? AND receiver_id = ?)" +
+                "OR (sender_id = ? AND receiver_id = ?)";
+        try {
+            PreparedStatement preparedStatement = dbInstance.prepareStatement(cmd);
+            preparedStatement.setInt(1, uidOne);
+            preparedStatement.setInt(2, uidTwo);
+            preparedStatement.setInt(3, uidTwo);
+            preparedStatement.setInt(4, uidOne);
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public List<Message> getAllPreviewsForUser(int uid) {
+        List<Message> messages = new ArrayList<>();
+        List<Integer> candidates = new ArrayList<>();
+
+        String cmd = "SELECT * FROM messages " +
+                "WHERE sender_id = ? OR receiver_id = ? " +
+                "ORDER BY message_id DESC";
+        try {
+            PreparedStatement preparedStatement = dbInstance.prepareStatement(cmd);
+            preparedStatement.setInt(1, uid);
+            preparedStatement.setInt(2, uid);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                int messageId = resultSet.getInt("message_id");
+                int senderId = resultSet.getInt("sender_id");
+                // can be null! for ints = 0
+                int receiverId = resultSet.getInt("receiver_id");
+                // can be null! for strings = null
+                String groupId = resultSet.getString("group_id");
+                int replyTo = resultSet.getInt("reply_to");
+                String messageBody = resultSet.getString("message_body");
+                Timestamp timestamp = resultSet.getTimestamp("timestamp");
+
+                int candidateId = senderId != uid ? senderId : receiverId;
+
+                // We only want the last message with each user
+                if (!candidates.contains(candidateId)) {
+                    messages.add(new Message(messageId, senderId, receiverId, groupId, replyTo, messageBody, timestamp));
+                    candidates.add(candidateId);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return messages;
+    }
+
+    public List<Message> getAllMessagesForUser(int uid) {
+        List<Message> messages = new ArrayList<>();
+        String cmd = "SELECT * FROM messages WHERE sender_id = ? OR receiver_id = ?";
+        try {
+            PreparedStatement preparedStatement = dbInstance.prepareStatement(cmd);
+            preparedStatement.setInt(1, uid);
+            preparedStatement.setInt(2, uid);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                int messageId = resultSet.getInt("message_id");
+                int senderId = resultSet.getInt("sender_id");
+                // can be null! for ints = 0
+                int receiverId = resultSet.getInt("receiver_id");
+                // can be null! for strings = null
+                String groupId = resultSet.getString("group_id");
+                int replyTo = resultSet.getInt("reply_to");
+                String messageBody = resultSet.getString("message_body");
+                Timestamp timestamp = resultSet.getTimestamp("timestamp");
+
+                messages.add(new Message(messageId, senderId, receiverId, groupId, replyTo, messageBody, timestamp));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return messages;
     }
 
     @Override
@@ -52,21 +141,36 @@ public class MessagesRepository implements RepoInterface<Message, Integer> {
     public void addOne(Message entity) {
         String cmd;
         // it's either to a user or to a group
-        if(entity.getReceiverId() == 0)
+        if (entity.getReceiverId() == 0)
             cmd = "INSERT INTO messages(message_id, sender_id, group_id, reply_to, message_body) VALUES(?, ?, ?, ?, ?)";
-        else cmd = "INSERT INTO messages(message_id, sender_id, receiver_id, reply_to, message_body) VALUES(?, ?, ?, ?, ?)";
+        else
+            cmd = "INSERT INTO messages(message_id, sender_id, receiver_id, reply_to, message_body) VALUES(?, ?, ?, ?, ?)";
         try {
             PreparedStatement preparedStatement = dbInstance.prepareStatement(cmd);
             preparedStatement.setInt(1, entity.getId());
             preparedStatement.setInt(2, entity.getSenderId());
-            if(entity.getReceiverId() == 0) {
+            if (entity.getReceiverId() == 0) {
                 preparedStatement.setString(3, entity.getGroupId());
-            }
-            else preparedStatement.setInt(3, entity.getReceiverId());
+            } else preparedStatement.setInt(3, entity.getReceiverId());
             preparedStatement.setInt(4, entity.getReplyTo());
             preparedStatement.setString(5, entity.getMessageBody());
             preparedStatement.executeUpdate();
+
+            notifySubs();
+
         } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Notifies subscribers that a new message arrived(or was sent)
+     */
+    private void notifySubs() {
+        try {
+            ((EventDispatcher) HmdlrDI.getContainer().getService(EventDispatcher.class))
+                    .dispatch(Channel.onNewMessage, null);
+        } catch (ServiceNotRegisteredException e) {
             e.printStackTrace();
         }
     }

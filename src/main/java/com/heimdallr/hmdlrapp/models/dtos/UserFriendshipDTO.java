@@ -1,4 +1,7 @@
-package com.heimdallr.hmdlrapp.models;
+package com.heimdallr.hmdlrapp.models.dtos;
+
+import com.heimdallr.hmdlrapp.models.Friendship;
+import com.heimdallr.hmdlrapp.models.User;
 
 public class UserFriendshipDTO {
     private User userOne;

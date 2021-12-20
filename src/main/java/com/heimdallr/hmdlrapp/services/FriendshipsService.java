@@ -3,10 +3,12 @@ package com.heimdallr.hmdlrapp.services;
 import com.heimdallr.hmdlrapp.exceptions.ServiceNotRegisteredException;
 import com.heimdallr.hmdlrapp.models.Friendship;
 import com.heimdallr.hmdlrapp.models.User;
-import com.heimdallr.hmdlrapp.models.UserFriendshipDTO;
+import com.heimdallr.hmdlrapp.models.dtos.UserFriendshipDTO;
 import com.heimdallr.hmdlrapp.repository.FriendshipsRepository;
 import com.heimdallr.hmdlrapp.services.DI.HmdlrDI;
 import com.heimdallr.hmdlrapp.services.DI.Service;
+import com.heimdallr.hmdlrapp.services.pubSub.Channel;
+import com.heimdallr.hmdlrapp.services.pubSub.EventDispatcher;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +17,7 @@ import java.util.List;
 public class FriendshipsService {
     FriendshipsRepository friendshipsRepository;
     UserService userService;
+    MessagesService messagesService;
 
     /**
      * Private default constructor
@@ -33,6 +36,7 @@ public class FriendshipsService {
 
     /**
      * Deletes a friendship between two users.
+     * Also deletes all the messages they shared.
      *
      * @param userOne User one
      * @param userTwo User two
@@ -42,9 +46,24 @@ public class FriendshipsService {
     }
 
     public void deleteFriendship(int uidOne, int uidTwo) {
+        this.messagesService.deleteAllBetweenUsers(uidOne, uidTwo);
         Friendship friendship = friendshipsRepository.findForTwoUsers(uidOne, uidTwo);
         if (friendship != null) {
             friendshipsRepository.deleteOne(friendship.getId());
+        }
+
+        notifySubs();
+    }
+
+    /**
+     * Notifies subscribers that a new message arrived(or was sent)
+     */
+    private void notifySubs() {
+        try {
+            ((EventDispatcher) HmdlrDI.getContainer().getService(EventDispatcher.class))
+                    .dispatch(Channel.onNewMessage, null);
+        } catch (ServiceNotRegisteredException e) {
+            e.printStackTrace();
         }
     }
 

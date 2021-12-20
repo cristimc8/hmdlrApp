@@ -21,6 +21,22 @@ public class GroupChatsService {
         this.groupChatsRepository = (GroupChatsRepository) groupChatsRepo;
     }
 
+    /**
+     * Return groupChat preview letters
+     * First and last letter or only the first if alias is one character.
+     * @param groupChat GroupChat to extract info from
+     * @return The preview letters String
+     */
+    public String getChatHeadPreviewLetters(GroupChat groupChat) {
+        return this.getChatHeadPreviewLetters(groupChat.getId());
+    }
+
+    public String getChatHeadPreviewLetters(String id) {
+        String groupAlias = this.findById(id).getAlias();
+        if(groupAlias.length() == 1) return String.valueOf(groupAlias.charAt(0));
+        return String.valueOf(groupAlias.charAt(0)) + String.valueOf(groupAlias.charAt(groupAlias.length() - 1));
+    }
+
     public GroupChat findById(String id) {
         return groupChatsRepository.findById(id);
     }

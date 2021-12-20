@@ -1,11 +1,9 @@
 package com.heimdallr.hmdlrapp.config;
 
 import com.heimdallr.hmdlrapp.exceptions.ServiceInitException;
+import com.heimdallr.hmdlrapp.services.*;
 import com.heimdallr.hmdlrapp.services.DI.HmdlrDI;
-import com.heimdallr.hmdlrapp.services.FriendRequestService;
-import com.heimdallr.hmdlrapp.services.FriendshipsService;
-import com.heimdallr.hmdlrapp.services.GroupChatsService;
-import com.heimdallr.hmdlrapp.services.UserService;
+import com.heimdallr.hmdlrapp.services.pubSub.EventDispatcher;
 
 import java.util.List;
 
@@ -20,10 +18,12 @@ public class ServicesConfig {
     public void initServices() throws ServiceInitException {
         List<Class<?>> servicesToInit = List.of(
                 DBConfig.class,
+                EventDispatcher.class,
                 UserService.class,
                 FriendshipsService.class,
                 FriendRequestService.class,
-                GroupChatsService.class);
+                GroupChatsService.class,
+                MessagesService.class);
         hmdlrDI.initialize(servicesToInit);
     }
 }

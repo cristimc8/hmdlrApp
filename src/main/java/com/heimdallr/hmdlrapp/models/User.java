@@ -44,6 +44,10 @@ public class User extends BaseEntity<Integer> {
         this.hash = hash;
     }
 
+    public String getDisplayUsername() {
+        return "@" + this.getUsername();
+    }
+
     public String getFirstName() {
         return firstName;
     }
