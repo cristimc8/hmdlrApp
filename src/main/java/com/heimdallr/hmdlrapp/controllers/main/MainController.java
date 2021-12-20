@@ -6,6 +6,8 @@ import com.heimdallr.hmdlrapp.services.UserService;
 import javafx.fxml.FXML;
 import javafx.scene.layout.VBox;
 
+import java.nio.charset.Charset;
+
 public class MainController {
     private UserService userService;
 
@@ -20,7 +22,7 @@ public class MainController {
             e.printStackTrace();
         }
 
-        ChatHeadController chatHeadController = new ChatHeadController();
+        ChatHeadController chatHeadController = new ChatHeadController(null, "HM", "System", "Welcome to hmdlrNet!");
         try {
             recentChatsContainer.getChildren().add(chatHeadController);
         }

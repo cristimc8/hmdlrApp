@@ -1,5 +1,7 @@
 package com.heimdallr.hmdlrapp.models;
 
+import java.util.Objects;
+
 public class User extends BaseEntity<Integer> {
     private String firstName;
     private String lastName;
@@ -85,5 +87,19 @@ public class User extends BaseEntity<Integer> {
     @Override
     public String toString() {
         return "username: " + getUsername();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        User user = (User) o;
+        return Objects.equals(firstName, user.firstName) && Objects.equals(lastName, user.lastName) && Objects.equals(email, user.email) && Objects.equals(username, user.username) && Objects.equals(hash, user.hash);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), firstName, lastName, email, username, hash);
     }
 }
