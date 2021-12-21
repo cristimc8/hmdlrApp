@@ -102,6 +102,9 @@ public class RequestsController extends Subscriber implements CustomController {
         List<User> usersRequesting = new ArrayList<>();
 
         usersRequesting = friendRequests.stream()
+                .filter(request -> {
+                    return request.getSenderId() != this.currentUser.getId();
+                })
                 .map(request -> {
                     return userService.findById(differentIdFromYours(request.getSenderId(), request.getReceiverId()));
                 })
