@@ -52,7 +52,7 @@ public class GroupChatsRepository implements RepoInterface<GroupChat, String> {
         String cmd = "SELECT * FROM group_chats WHERE participants LIKE '%' || ? || '%'";
         try {
             PreparedStatement preparedStatement = dbInstance.prepareStatement(cmd);
-            preparedStatement.setString(1, "<>" + String.valueOf(uid) + "<>");
+            preparedStatement.setString(1, "," + String.valueOf(uid) + ",");
             ResultSet resultSet = preparedStatement.executeQuery();
             while(resultSet.next()) {
                 String gcId = resultSet.getString("group_chat_id");

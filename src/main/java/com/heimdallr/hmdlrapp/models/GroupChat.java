@@ -67,22 +67,22 @@ public class GroupChat extends BaseEntity<String> {
     }
 
     /**
-     * Returns the list of participants as a '<>' delimited String.
-     * @return list of participants ids delimited with <> separator
+     * Returns the list of participants as a ',' delimited String.
+     * @return list of participants ids delimited with , separator
      */
     public String getParticipantsAsString() {
         StringBuilder stringBuilder = new StringBuilder();
         for (Integer elem : this.getParticipants()) {
-            stringBuilder.append(elem).append("<>");
+            stringBuilder.append(elem).append(",");
         }
 
-        stringBuilder.deleteCharAt(stringBuilder.length() - 1);
-
-        return stringBuilder.toString();
+        return "," + stringBuilder.toString();
     }
 
     public void setParticipants(String participants) {
-        this.participants = Stream.of(participants.split("<>"))
+        participants = participants.substring(1);
+        participants = participants.substring(0, participants.length() - 1);
+        this.participants = Stream.of(participants.split(","))
                 .map(Integer::valueOf)
                 .collect(Collectors.toList());
     }

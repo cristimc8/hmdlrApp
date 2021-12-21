@@ -15,4 +15,6 @@ module com.heimdallr.hmdlrapp {
     opens com.heimdallr.hmdlrapp.controllers.main to javafx.fxml;
     opens com.heimdallr.hmdlrapp.utils to javafx.fxml;
     exports com.heimdallr.hmdlrapp.utils;
+    opens com.heimdallr.hmdlrapp.controllers.main.popups;
+    exports com.heimdallr.hmdlrapp.controllers.main.popups;
 }

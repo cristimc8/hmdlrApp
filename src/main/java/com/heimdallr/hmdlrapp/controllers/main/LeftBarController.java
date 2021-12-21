@@ -2,6 +2,8 @@ package com.heimdallr.hmdlrapp.controllers.main;
 
 import com.heimdallr.hmdlrapp.controllers.CustomController;
 import com.heimdallr.hmdlrapp.exceptions.ServiceNotRegisteredException;
+import com.heimdallr.hmdlrapp.models.BaseEntity;
+import com.heimdallr.hmdlrapp.models.GroupChat;
 import com.heimdallr.hmdlrapp.models.Message;
 import com.heimdallr.hmdlrapp.services.DI.HmdlrDI;
 import com.heimdallr.hmdlrapp.services.GroupChatsService;
@@ -23,13 +25,17 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class LeftBarController extends Subscriber implements CustomController {
     private UserService userService;
     private MessagesService messagesService;
     private GroupChatsService groupChatsService;
     private EventDispatcher eventDispatcher;
+
+    private String query = "";
 
     VBox recentChatsContainer;
     ImageView burgerMenuButton;
@@ -71,12 +77,15 @@ public class LeftBarController extends Subscriber implements CustomController {
     }
 
     @Override
-    protected void newContent() {
+    protected void newContent(String info) {
         this.loadMessages();
     }
 
     private void setEventListeners() {
-
+        searchTextBox.textProperty().addListener((observable, oldValue, newValue) -> {
+            this.query = searchTextBox.getText();
+            this.eventDispatcher.dispatch(Channel.onNewMessage, null);
+        });
     }
 
 
@@ -139,7 +148,23 @@ public class LeftBarController extends Subscriber implements CustomController {
     }
 
     private List<Message> getAllUserMessages() {
-        return messagesService.getAllUserPreviews(userService.getCurrentUser());
+        List<GroupChat> userGroups = groupChatsService.getAllForUser(userService.getCurrentUser());
+        List<Message> messages = messagesService.getAllUserPreviews(userService.getCurrentUser(), userGroups);
+        List<Message> filtered = new ArrayList<>();
+
+        messages.forEach(message -> {
+            if(message.getGroupId() == null) {
+                int id = getDifferentIdFromMessage(message);
+                if (userService.findById(id).getUsername().contains(query))
+                    filtered.add(message);
+            }
+            else {
+                if(groupChatsService.findById(message.getGroupId()).getAlias().contains(query))
+                    filtered.add(message);
+            }
+        });
+
+        return filtered;
     }
 
     private void loadUserMessagesInGUI(List<Message> userMessages) {
