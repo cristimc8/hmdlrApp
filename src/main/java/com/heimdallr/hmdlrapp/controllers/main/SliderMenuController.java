@@ -27,7 +27,9 @@ public class SliderMenuController implements CustomController {
     private Label lettersLabel;
     private HBox allUsersRow;
     private BorderPane allUsersPopupContainer;
+    private BorderPane friendsPopupContainer;
     private BorderPane parent;
+    private HBox yourFriendsRow;
 
     private UserService userService;
 
@@ -37,7 +39,9 @@ public class SliderMenuController implements CustomController {
                                 Label lettersLabel,
                                 HBox allUsersRow,
                                 BorderPane allUsersPopupContainer,
-                                BorderPane mainChildrenComponents) {
+                                BorderPane mainChildrenComponents,
+                                HBox yourFriendsRow,
+                                BorderPane friendsPopupContainer) {
         this.sliderMenu = sliderMenu;
         this.usernameLabel = usernameLabel;
         this.nameLabel = nameLabel;
@@ -45,6 +49,8 @@ public class SliderMenuController implements CustomController {
         this.allUsersRow = allUsersRow;
         this.allUsersPopupContainer = allUsersPopupContainer;
         this.parent = mainChildrenComponents;
+        this.yourFriendsRow = yourFriendsRow;
+        this.friendsPopupContainer = friendsPopupContainer;
 
         try {
             this.eventDispatcher = (EventDispatcher) HmdlrDI.getContainer().getService(EventDispatcher.class);
@@ -84,5 +90,24 @@ public class SliderMenuController implements CustomController {
                 }, 150);
             }
         });
+
+        yourFriendsRow.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                eventDispatcher.dispatch(Channel.guiVisibleFriendsController, null);
+                friendsPopupContainer.setVisible(true);
+                parent.setOpacity(0.12);
+
+                TranslateTransition closeNav = new TranslateTransition(new Duration(150), sliderMenu);
+                closeNav.setToX(-(sliderMenu.getWidth()));
+                closeNav.play();
+                Async.setTimeout(() -> {
+                    sliderMenu.setVisible(false);
+//                    parent.setOpacity(1);
+//                        coveringBorderInjectable.setPickOnBounds(false);
+                }, 150);
+            }
+        });
+
     }
 }

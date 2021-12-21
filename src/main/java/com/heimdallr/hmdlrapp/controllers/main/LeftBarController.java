@@ -23,6 +23,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class LeftBarController extends Subscriber implements CustomController {
@@ -30,6 +31,8 @@ public class LeftBarController extends Subscriber implements CustomController {
     private MessagesService messagesService;
     private GroupChatsService groupChatsService;
     private EventDispatcher eventDispatcher;
+
+    private String query = "";
 
     VBox recentChatsContainer;
     ImageView burgerMenuButton;
@@ -76,7 +79,10 @@ public class LeftBarController extends Subscriber implements CustomController {
     }
 
     private void setEventListeners() {
-
+        searchTextBox.textProperty().addListener((observable, oldValue, newValue) -> {
+            this.query = searchTextBox.getText();
+            this.eventDispatcher.dispatch(Channel.onNewMessage, null);
+        });
     }
 
 
@@ -139,7 +145,16 @@ public class LeftBarController extends Subscriber implements CustomController {
     }
 
     private List<Message> getAllUserMessages() {
-        return messagesService.getAllUserPreviews(userService.getCurrentUser());
+        List<Message> messages = messagesService.getAllUserPreviews(userService.getCurrentUser());
+        List<Message> filtered = new ArrayList<>();
+
+        messages.forEach(message -> {
+            int id = getDifferentIdFromMessage(message);
+            if(userService.findById(id).getUsername().contains(query))
+                filtered.add(message);
+        });
+
+        return filtered;
     }
 
     private void loadUserMessagesInGUI(List<Message> userMessages) {

@@ -1,6 +1,7 @@
 package com.heimdallr.hmdlrapp.controllers.main;
 
 import com.heimdallr.hmdlrapp.controllers.main.popups.AllUsersController;
+import com.heimdallr.hmdlrapp.controllers.main.popups.FriendsController;
 import com.heimdallr.hmdlrapp.exceptions.*;
 import com.heimdallr.hmdlrapp.models.Message;
 import com.heimdallr.hmdlrapp.services.DI.HmdlrDI;
@@ -67,6 +68,9 @@ public class MainController extends Subscriber {
     HBox allUsersRow;
 
     @FXML
+    HBox yourFriendsRow;
+
+    @FXML
     BorderPane allUsersPopupContainer;
 
     @FXML
@@ -80,6 +84,18 @@ public class MainController extends Subscriber {
 
     @FXML
     TextField searchTextBox;
+
+    @FXML
+    BorderPane friendsPopupContainer;
+
+    @FXML
+    ImageView closeFriendsPopupButton;
+
+    @FXML
+    TextField scrollableFriendsSearch;
+
+    @FXML
+    VBox scrollableFriendsContainer;
 
     @FXML
     protected void initialize() {
@@ -105,6 +121,7 @@ public class MainController extends Subscriber {
         this.assignToSliderMenu();
         this.assignToAllUsersPopup();
         this.assignToLeftBar();
+        this.assignToFriends();
     }
 
     private void assignToSliderMenu() {
@@ -115,7 +132,9 @@ public class MainController extends Subscriber {
                 lettersLabel,
                 allUsersRow,
                 allUsersPopupContainer,
-                mainChildrenComponents
+                mainChildrenComponents,
+                yourFriendsRow,
+                friendsPopupContainer
                 );
         sliderMenuController.initialize();
     }
@@ -142,5 +161,16 @@ public class MainController extends Subscriber {
                 closeSliderMenuButton
         );
         leftBarController.initialize();
+    }
+
+    private void assignToFriends() {
+        FriendsController friendsController = new FriendsController(
+                friendsPopupContainer,
+                closeFriendsPopupButton,
+                scrollableFriendsSearch,
+                scrollableFriendsContainer,
+                mainChildrenComponents
+        );
+        friendsController.initialize();
     }
 }
