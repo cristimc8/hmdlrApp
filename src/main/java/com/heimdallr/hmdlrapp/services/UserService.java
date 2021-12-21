@@ -8,6 +8,7 @@ import com.heimdallr.hmdlrapp.services.DI.Service;
 import com.heimdallr.hmdlrapp.utils.HmdlrCryptio;
 import com.heimdallr.hmdlrapp.utils.Validators;
 
+import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
@@ -40,9 +41,14 @@ public class UserService {
         return this.currentUser;
     }
 
+    public List<User> getAllUsers() {
+        return this.usersRepository.findAll();
+    }
+
     /**
      * Returns the preview letters of a user.
      * The initials of his names.
+     *
      * @param user User to extract info from
      * @return The chatHead preview letters
      */

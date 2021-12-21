@@ -15,6 +15,7 @@ import java.util.List;
 @Service(AssociatedRepo = FriendRequestRepository.class)
 public class FriendRequestService {
     private FriendRequestRepository friendRequestRepository;
+    private EventDispatcher eventDispatcher;
 
     /**
      * Private default constructor
@@ -24,6 +25,20 @@ public class FriendRequestService {
      */
     private FriendRequestService(Object friendRequestRepo) {
         this.friendRequestRepository = (FriendRequestRepository) friendRequestRepo;
+
+        try {
+            eventDispatcher = ((EventDispatcher) HmdlrDI.getContainer().getService(EventDispatcher.class));
+        } catch (ServiceNotRegisteredException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public FriendRequest findForTwoUsers(User userOne, User userTwo) {
+        return this.findForTwoUsers(userOne.getId(), userTwo.getId());
+    }
+
+    public FriendRequest findForTwoUsers(int uidOne, int uidTwo) {
+        return this.friendRequestRepository.findForTwoUsers(uidOne, uidTwo);
     }
 
     /**
@@ -63,25 +78,15 @@ public class FriendRequestService {
                                 Constants.sayHi
                         );
 
-                notifySubs();
+                eventDispatcher.dispatch(Channel.onNewMessage, null);
+                eventDispatcher.dispatch(Channel.onFriendshipsChanged, null);
+
             } catch (ServiceNotRegisteredException e) {
                 e.printStackTrace();
             }
         }
 
         friendRequestRepository.updateOne(friendRequest, friendRequest);
-    }
-
-    /**
-     * Notifies subscribers that a new message arrived(or was sent)
-     */
-    private void notifySubs() {
-        try {
-            ((EventDispatcher) HmdlrDI.getContainer().getService(EventDispatcher.class))
-                    .dispatch(Channel.onNewMessage, null);
-        } catch (ServiceNotRegisteredException e) {
-            e.printStackTrace();
-        }
     }
 
     /**
@@ -100,6 +105,8 @@ public class FriendRequestService {
                 uidOne,
                 uidTwo
         );
+
+        eventDispatcher.dispatch(Channel.onFriendshipsChanged, null);
 
         friendRequestRepository.addOne(friendRequest);
     }

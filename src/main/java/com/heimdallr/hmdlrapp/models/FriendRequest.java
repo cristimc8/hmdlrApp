@@ -26,6 +26,8 @@ public class FriendRequest extends BaseEntity<Integer> {
             case "pending" -> setFriendshipRequestStatus(Constants.FriendshipRequestStatus.PENDING);
             case "approved" -> setFriendshipRequestStatus(Constants.FriendshipRequestStatus.APPROVED);
             case "rejected" -> setFriendshipRequestStatus(Constants.FriendshipRequestStatus.REJECTED);
+            case "incoming" -> setFriendshipRequestStatus(Constants.FriendshipRequestStatus.INCOMING);
+            case "canceled" -> setFriendshipRequestStatus(Constants.FriendshipRequestStatus.CANCELED);
         }
     }
 
@@ -83,6 +85,12 @@ public class FriendRequest extends BaseEntity<Integer> {
             }
             case PENDING -> {
                 status = "pending";
+            }
+            case CANCELED -> {
+                status = "canceled";
+            }
+            case INCOMING -> {
+                status = "incoming";
             }
         }
         return status;

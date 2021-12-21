@@ -22,6 +22,12 @@ public class Friendship extends BaseEntity<Integer> {
         setTimestamp(timestamp);
     }
 
+    public Friendship(Integer id, int userOne, int userTwo) {
+        super(id);
+        setUserOne(userOne);
+        setUserTwo(userTwo);
+    }
+
     public int getUserOne() {
         return userOne;
     }

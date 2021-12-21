@@ -19,11 +19,11 @@ public class ServicesConfig {
         List<Class<?>> servicesToInit = List.of(
                 DBConfig.class,
                 EventDispatcher.class,
+                MessagesService.class,
                 UserService.class,
                 FriendshipsService.class,
                 FriendRequestService.class,
-                GroupChatsService.class,
-                MessagesService.class);
+                GroupChatsService.class);
         hmdlrDI.initialize(servicesToInit);
     }
 }

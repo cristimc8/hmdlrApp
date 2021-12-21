@@ -24,6 +24,32 @@ public class FriendRequestRepository implements RepoInterface<FriendRequest, Int
         }
     }
 
+    public FriendRequest findForTwoUsers(int uidOne, int uidTwo) {
+        String cmd = "SELECT * FROM friend_requests WHERE " +
+                "(sender_id = ? AND receiver_id = ?)" +
+                "OR (sender_id = ? AND receiver_id = ?)" +
+                "ORDER BY friend_request_id DESC LIMIT 1";
+        try {
+            PreparedStatement ps = dbInstance.prepareStatement(cmd);
+            ps.setInt(1, uidOne);
+            ps.setInt(2, uidTwo);
+            ps.setInt(3, uidTwo);
+            ps.setInt(4, uidOne);
+            ResultSet resultSet = ps.executeQuery();
+            if (resultSet.next()) {
+                int id = resultSet.getInt("friend_request_id");
+                int senderId = resultSet.getInt("sender_id");
+                int receiverId = resultSet.getInt("receiver_id");
+                Timestamp timestamp = resultSet.getTimestamp("timestamp");
+                String status = resultSet.getString("status");
+                return new FriendRequest(id, senderId, receiverId, timestamp, status);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public List<FriendRequest> findAllForUser(int uid) {
         List<FriendRequest> friendRequests = new ArrayList<>();
         String cmd = "SELECT * FROM friend_requests WHERE receiver_id = ? OR sender_id = ?";

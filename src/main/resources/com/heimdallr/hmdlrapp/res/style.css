@@ -25,3 +25,11 @@
     -fx-pref-height: 50;
     -fx-background-radius: 50%;
 }
+
+.scroll-pane > .viewport {
+    -fx-background-color: transparent;
+}
+
+.scroll-pane {
+    -fx-background-color: transparent;
+}

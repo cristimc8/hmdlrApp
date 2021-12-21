@@ -18,6 +18,7 @@ public class FriendshipsService {
     FriendshipsRepository friendshipsRepository;
     UserService userService;
     MessagesService messagesService;
+    EventDispatcher eventDispatcher;
 
     /**
      * Private default constructor
@@ -29,9 +30,26 @@ public class FriendshipsService {
         this.friendshipsRepository = (FriendshipsRepository) friendshipsRepo;
         try {
             this.userService = (UserService) HmdlrDI.getContainer().getService(UserService.class);
+            this.messagesService = (MessagesService) HmdlrDI.getContainer().getService(MessagesService.class);
+            this.eventDispatcher = ((EventDispatcher) HmdlrDI.getContainer().getService(EventDispatcher.class));
         } catch (ServiceNotRegisteredException e) {
             e.printStackTrace();
         }
+    }
+
+    public void createFriendship(User userOne, User userTwo) {
+        this.createFriendship(userOne.getId(), userTwo.getId());
+    }
+
+    public void createFriendship(int uidOne, int uidTwo) {
+        Friendship friendship = new Friendship(
+                friendshipsRepository.getNextAvailableId(),
+                uidOne,
+                uidTwo
+        );
+        friendshipsRepository.addOne(friendship);
+        eventDispatcher.dispatch(Channel.onNewMessage, null);
+        eventDispatcher.dispatch(Channel.onFriendshipsChanged, null);
     }
 
     /**
@@ -59,12 +77,8 @@ public class FriendshipsService {
      * Notifies subscribers that a new message arrived(or was sent)
      */
     private void notifySubs() {
-        try {
-            ((EventDispatcher) HmdlrDI.getContainer().getService(EventDispatcher.class))
-                    .dispatch(Channel.onNewMessage, null);
-        } catch (ServiceNotRegisteredException e) {
-            e.printStackTrace();
-        }
+        eventDispatcher.dispatch(Channel.onNewMessage, null);
+        eventDispatcher.dispatch(Channel.onFriendshipsChanged, null);
     }
 
     /**

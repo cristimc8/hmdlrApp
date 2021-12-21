@@ -6,6 +6,8 @@ public class Constants {
     public static enum FriendshipRequestStatus {
         PENDING,
         APPROVED,
-        REJECTED
+        REJECTED,
+        INCOMING,
+        CANCELED
     }
 }

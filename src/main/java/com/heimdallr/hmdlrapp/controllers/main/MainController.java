@@ -2,7 +2,6 @@ package com.heimdallr.hmdlrapp.controllers.main;
 
 import com.heimdallr.hmdlrapp.exceptions.*;
 import com.heimdallr.hmdlrapp.models.Message;
-import com.heimdallr.hmdlrapp.models.User;
 import com.heimdallr.hmdlrapp.services.DI.HmdlrDI;
 import com.heimdallr.hmdlrapp.services.GroupChatsService;
 import com.heimdallr.hmdlrapp.services.MessagesService;
@@ -13,7 +12,6 @@ import com.heimdallr.hmdlrapp.services.pubSub.Subscriber;
 import com.heimdallr.hmdlrapp.utils.Async;
 import javafx.animation.TranslateTransition;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -21,6 +19,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 
@@ -58,8 +57,21 @@ public class MainController extends Subscriber {
 
     @FXML
     Label usernameLabel;
+
     @FXML
     Label lettersLabel;
+
+    @FXML
+    HBox allUsersRow;
+
+    @FXML
+    BorderPane allUsersPopupContainer;
+
+    @FXML
+    ImageView closeAllUsersPopupButton;
+
+    @FXML
+    VBox scrollableUsersContainer;
 
     @FXML
     protected void initialize() {
@@ -92,7 +104,12 @@ public class MainController extends Subscriber {
                 sliderMenu,
                 usernameLabel,
                 nameLabel,
-                lettersLabel
+                lettersLabel,
+                allUsersRow,
+                allUsersPopupContainer,
+                mainChildrenComponents,
+                closeAllUsersPopupButton,
+                scrollableUsersContainer
                 );
         sliderMenuController.setGUIForUser();
     }
@@ -150,7 +167,7 @@ public class MainController extends Subscriber {
     private void clearMessagesArea() {
         try {
             ObservableList<javafx.scene.Node> children = this.recentChatsContainer.getChildren();
-            children.remove(1, children.size() - 1);
+            children.remove(1, children.size());
         } catch (Exception ignored) {
         }
     }
