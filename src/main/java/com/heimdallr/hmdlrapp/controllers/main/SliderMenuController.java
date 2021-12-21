@@ -1,9 +1,9 @@
 package com.heimdallr.hmdlrapp.controllers.main;
 
 
+import com.heimdallr.hmdlrapp.controllers.CustomController;
 import com.heimdallr.hmdlrapp.exceptions.ServiceNotRegisteredException;
 import com.heimdallr.hmdlrapp.services.DI.HmdlrDI;
-import com.heimdallr.hmdlrapp.services.FriendshipsService;
 import com.heimdallr.hmdlrapp.services.UserService;
 import com.heimdallr.hmdlrapp.services.pubSub.Channel;
 import com.heimdallr.hmdlrapp.services.pubSub.EventDispatcher;
@@ -18,7 +18,7 @@ import javafx.scene.layout.HBox;
 import javafx.util.Duration;
 
 
-public class SliderMenuController {
+public class SliderMenuController implements CustomController {
     private EventDispatcher eventDispatcher;
 
     private AnchorPane sliderMenu;
@@ -52,9 +52,12 @@ public class SliderMenuController {
         } catch (ServiceNotRegisteredException e) {
             e.printStackTrace();
         }
+    }
 
+    @Override
+    public void initialize() {
+        setGUIForUser();
         this.setEventListeners();
-
     }
 
     public void setGUIForUser() {

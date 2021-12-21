@@ -79,6 +79,9 @@ public class MainController extends Subscriber {
     TextField scrollableUsersSearch;
 
     @FXML
+    TextField searchTextBox;
+
+    @FXML
     protected void initialize() {
         try {
             this.userService = (UserService) HmdlrDI.getContainer().getService(UserService.class);
@@ -90,19 +93,18 @@ public class MainController extends Subscriber {
         }
 
         this.eventDispatcher.subscribeTo(this, Channel.onNewMessage);
-        this.loadMessages();
-        this.prepareSlideMenuAnimation();
         this.assignComponentsToControllers();
     }
 
     @Override
     protected void newContent() {
-        this.loadMessages();
+//        this.loadMessages();
     }
 
     private void assignComponentsToControllers() {
         this.assignToSliderMenu();
         this.assignToAllUsersPopup();
+        this.assignToLeftBar();
     }
 
     private void assignToSliderMenu() {
@@ -115,7 +117,7 @@ public class MainController extends Subscriber {
                 allUsersPopupContainer,
                 mainChildrenComponents
                 );
-        sliderMenuController.setGUIForUser();
+        sliderMenuController.initialize();
     }
 
     private void assignToAllUsersPopup() {
@@ -130,124 +132,15 @@ public class MainController extends Subscriber {
         allUsersController.initialize();
     }
 
-    private void prepareSlideMenuAnimation() {
-        TranslateTransition openNav = new TranslateTransition(new Duration(150), sliderMenu);
-        openNav.setToX(0);
-        TranslateTransition closeNav = new TranslateTransition(new Duration(150), sliderMenu);
-        burgerMenuButton.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                sliderMenu.setVisible(true);
-
-                // Animation
-                if (sliderMenu.getTranslateX() != 0) {
-                    openNav.play();
-                    mainChildrenComponents.setOpacity(0.12);
-//                    coveringBorderInjectable.setPickOnBounds(true);
-                } else {
-                    closeNav.setToX(-(sliderMenu.getWidth()));
-                    closeNav.play();
-                    Async.setTimeout(() -> {
-                        sliderMenu.setVisible(false);
-                        mainChildrenComponents.setOpacity(1);
-//                        coveringBorderInjectable.setPickOnBounds(false);
-                    }, 150);
-
-                }
-            }
-        });
-
-        closeSliderMenuButton.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                // Animation
-                closeNav.setToX(-(sliderMenu.getWidth()));
-                closeNav.play();
-                Async.setTimeout(() -> {
-                    sliderMenu.setVisible(false);
-                    mainChildrenComponents.setOpacity(1);
-                }, 150);
-            }
-        });
-    }
-
-    /**
-     * Queries all user's messages(previews) and then loads them in the GUI.
-     */
-    private void loadMessages() {
-        this.clearMessagesArea();
-        List<Message> allMessages = this.getAllUserMessages();
-        this.loadUserMessagesInGUI(allMessages);
-    }
-
-    private void clearMessagesArea() {
-        try {
-            ObservableList<javafx.scene.Node> children = this.recentChatsContainer.getChildren();
-            children.remove(1, children.size());
-        } catch (Exception ignored) {
-        }
-    }
-
-    private List<Message> getAllUserMessages() {
-        return messagesService.getAllUserPreviews(userService.getCurrentUser());
-    }
-
-    private void loadUserMessagesInGUI(List<Message> userMessages) {
-        userMessages.forEach(this::addMessageToGUI);
-    }
-
-    private void addMessageToGUI(Message message) {
-        ChatHeadController chatHeadController = new ChatHeadController(
-                null,
-                getChatHeadPreviewLetters(message),
-                getFriendOrGroupName(message),
-                message.getMessageBody()
+    private void assignToLeftBar() {
+        LeftBarController leftBarController = new LeftBarController(
+                recentChatsContainer,
+                burgerMenuButton,
+                searchTextBox,
+                mainChildrenComponents,
+                sliderMenu,
+                closeSliderMenuButton
         );
-        try {
-            recentChatsContainer.getChildren().add(chatHeadController);
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
-    }
-
-    /**
-     * Returns the id of either the sender or receiver of a message,
-     * id that is different from the currently logged-in user.
-     *
-     * @param message Message to extract info from
-     * @return The id of the user
-     */
-    private int getDifferentIdFromMessage(Message message) {
-        return message.getReceiverId() != userService.getCurrentUser().getId() ?
-                message.getReceiverId() :
-                message.getSenderId();
-    }
-
-    /**
-     * Returns the chat head associated name, either a friend's username or
-     * a group's alias.
-     *
-     * @param message Message to extract info from
-     * @return The chat head associated name String
-     */
-    private String getFriendOrGroupName(Message message) {
-        if (message.getGroupId() != null)
-            return groupChatsService.findById(message.getGroupId()).getAlias();
-        return userService.findById(getDifferentIdFromMessage(message)).getDisplayUsername();
-    }
-
-    /**
-     * Returns the chatHead's preview letters (if no image is assigned)
-     * For a group, we return the first and last letter of the group's alias (or the first)
-     * For a user, the initials of the user's names.
-     *
-     * @param message Message to extract info from
-     * @return The chatHead's preview letters
-     */
-    private String getChatHeadPreviewLetters(Message message) {
-        if (message.getGroupId() != null)
-            return groupChatsService.getChatHeadPreviewLetters(message.getGroupId());
-        // else return the user's names initials
-        return userService.getChatHeadPreviewLetters(getDifferentIdFromMessage(message));
+        leftBarController.initialize();
     }
 }
