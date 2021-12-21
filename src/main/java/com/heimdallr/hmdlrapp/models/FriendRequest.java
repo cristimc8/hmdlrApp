@@ -9,6 +9,7 @@ public class FriendRequest extends BaseEntity<Integer> {
     private int receiverId;
     private Timestamp timestamp;
     private Constants.FriendshipRequestStatus friendshipRequestStatus;
+    private boolean accepted;
 
     /**
      * Base entity default constructor, receives the entity ID and saves
@@ -17,16 +18,16 @@ public class FriendRequest extends BaseEntity<Integer> {
      * @param id entity id
      */
     public FriendRequest(Integer id, int senderId, int receiverId,
-                         Timestamp timestamp, String friendRequestStatus) {
+                         Timestamp timestamp, String friendRequestStatus, boolean accepted) {
         super(id);
         setSenderId(senderId);
         setReceiverId(receiverId);
         setTimestamp(timestamp);
+        setAccepted(accepted);
         switch (friendRequestStatus) {
             case "pending" -> setFriendshipRequestStatus(Constants.FriendshipRequestStatus.PENDING);
             case "approved" -> setFriendshipRequestStatus(Constants.FriendshipRequestStatus.APPROVED);
             case "rejected" -> setFriendshipRequestStatus(Constants.FriendshipRequestStatus.REJECTED);
-            case "incoming" -> setFriendshipRequestStatus(Constants.FriendshipRequestStatus.INCOMING);
             case "canceled" -> setFriendshipRequestStatus(Constants.FriendshipRequestStatus.CANCELED);
         }
     }
@@ -44,6 +45,7 @@ public class FriendRequest extends BaseEntity<Integer> {
         super(id);
         setSenderId(senderId);
         setReceiverId(receiverId);
+        setAccepted(false);
     }
 
     public int getSenderId() {
@@ -89,14 +91,19 @@ public class FriendRequest extends BaseEntity<Integer> {
             case CANCELED -> {
                 status = "canceled";
             }
-            case INCOMING -> {
-                status = "incoming";
-            }
         }
         return status;
     }
 
     public void setFriendshipRequestStatus(Constants.FriendshipRequestStatus friendshipRequestStatus) {
         this.friendshipRequestStatus = friendshipRequestStatus;
+    }
+
+    public boolean isAccepted() {
+        return accepted;
+    }
+
+    public void setAccepted(boolean accepted) {
+        this.accepted = accepted;
     }
 }

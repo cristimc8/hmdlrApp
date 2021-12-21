@@ -1,5 +1,6 @@
 package com.heimdallr.hmdlrapp.controllers.main;
 
+import com.heimdallr.hmdlrapp.controllers.main.popups.AllUsersController;
 import com.heimdallr.hmdlrapp.exceptions.*;
 import com.heimdallr.hmdlrapp.models.Message;
 import com.heimdallr.hmdlrapp.services.DI.HmdlrDI;
@@ -15,6 +16,7 @@ import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
@@ -74,6 +76,9 @@ public class MainController extends Subscriber {
     VBox scrollableUsersContainer;
 
     @FXML
+    TextField scrollableUsersSearch;
+
+    @FXML
     protected void initialize() {
         try {
             this.userService = (UserService) HmdlrDI.getContainer().getService(UserService.class);
@@ -97,6 +102,7 @@ public class MainController extends Subscriber {
 
     private void assignComponentsToControllers() {
         this.assignToSliderMenu();
+        this.assignToAllUsersPopup();
     }
 
     private void assignToSliderMenu() {
@@ -107,11 +113,21 @@ public class MainController extends Subscriber {
                 lettersLabel,
                 allUsersRow,
                 allUsersPopupContainer,
-                mainChildrenComponents,
-                closeAllUsersPopupButton,
-                scrollableUsersContainer
+                mainChildrenComponents
                 );
         sliderMenuController.setGUIForUser();
+    }
+
+    private void assignToAllUsersPopup() {
+        AllUsersController allUsersController = new AllUsersController(
+                closeAllUsersPopupButton,
+                scrollableUsersSearch,
+                scrollableUsersContainer,
+                mainChildrenComponents,
+                allUsersPopupContainer
+        );
+
+        allUsersController.initialize();
     }
 
     private void prepareSlideMenuAnimation() {

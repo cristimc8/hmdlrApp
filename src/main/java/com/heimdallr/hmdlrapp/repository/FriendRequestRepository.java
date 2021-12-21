@@ -26,8 +26,9 @@ public class FriendRequestRepository implements RepoInterface<FriendRequest, Int
 
     public FriendRequest findForTwoUsers(int uidOne, int uidTwo) {
         String cmd = "SELECT * FROM friend_requests WHERE " +
-                "(sender_id = ? AND receiver_id = ?)" +
-                "OR (sender_id = ? AND receiver_id = ?)" +
+                "accepted = false AND status != 'canceled' AND" +
+                "((sender_id = ? AND receiver_id = ?)" +
+                "OR (sender_id = ? AND receiver_id = ?))" +
                 "ORDER BY friend_request_id DESC LIMIT 1";
         try {
             PreparedStatement ps = dbInstance.prepareStatement(cmd);
@@ -42,7 +43,8 @@ public class FriendRequestRepository implements RepoInterface<FriendRequest, Int
                 int receiverId = resultSet.getInt("receiver_id");
                 Timestamp timestamp = resultSet.getTimestamp("timestamp");
                 String status = resultSet.getString("status");
-                return new FriendRequest(id, senderId, receiverId, timestamp, status);
+                boolean accepted = resultSet.getBoolean("accepted");
+                return new FriendRequest(id, senderId, receiverId, timestamp, status, accepted);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -64,8 +66,9 @@ public class FriendRequestRepository implements RepoInterface<FriendRequest, Int
                 int receiverId = resultSet.getInt("receiver_id");
                 Timestamp timestamp = resultSet.getTimestamp("timestamp");
                 String status = resultSet.getString("status");
+                boolean accepted = resultSet.getBoolean("accepted");
 
-                friendRequests.add(new FriendRequest(id, senderId, receiverId, timestamp, status));
+                friendRequests.add(new FriendRequest(id, senderId, receiverId, timestamp, status, accepted));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -86,7 +89,8 @@ public class FriendRequestRepository implements RepoInterface<FriendRequest, Int
                 int receiverId = resultSet.getInt("receiver_id");
                 Timestamp timestamp = resultSet.getTimestamp("timestamp");
                 String status = resultSet.getString("status");
-                return new FriendRequest(id, senderId, receiverId, timestamp, status);
+                boolean accepted = resultSet.getBoolean("accepted");
+                return new FriendRequest(id, senderId, receiverId, timestamp, status, accepted);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -133,8 +137,9 @@ public class FriendRequestRepository implements RepoInterface<FriendRequest, Int
                 int receiverId = resultSet.getInt("receiver_id");
                 Timestamp timestamp = resultSet.getTimestamp("timestamp");
                 String status = resultSet.getString("status");
+                boolean accepted = resultSet.getBoolean("accepted");
 
-                friendRequests.add(new FriendRequest(id, senderId, receiverId, timestamp, status));
+                friendRequests.add(new FriendRequest(id, senderId, receiverId, timestamp, status, accepted));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -149,11 +154,12 @@ public class FriendRequestRepository implements RepoInterface<FriendRequest, Int
         if (this.findById(originalId) != null) {
 
             // All good, proceed with update
-            String cmd = "UPDATE friend_requests SET status = ? WHERE friend_request_id = ?";
+            String cmd = "UPDATE friend_requests SET status = ?, accepted = ? WHERE friend_request_id = ?";
             try {
                 PreparedStatement preparedStatement = dbInstance.prepareStatement(cmd);
                 preparedStatement.setString(1, changed.getFriendRequestStatusAsString());
-                preparedStatement.setInt(2, original.getId());
+                preparedStatement.setBoolean(2, changed.isAccepted());
+                preparedStatement.setInt(3, original.getId());
 
                 preparedStatement.executeUpdate();
             } catch (SQLException e) {

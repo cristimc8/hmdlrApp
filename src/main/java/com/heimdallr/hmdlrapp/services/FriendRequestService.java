@@ -70,6 +70,8 @@ public class FriendRequestService {
         friendRequest.setFriendshipRequestStatus(friendshipRequestStatus);
 
         if (friendshipRequestStatus == Constants.FriendshipRequestStatus.APPROVED) {
+            // set accepted boolean true
+            friendRequest.setAccepted(true);
             try {
                 ((MessagesService) HmdlrDI.getContainer().getService(MessagesService.class))
                         .sendMessage(
