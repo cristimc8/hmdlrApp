@@ -1,14 +1,11 @@
 package com.heimdallr.hmdlrapp.services;
 
-import com.heimdallr.hmdlrapp.exceptions.ServiceNotRegisteredException;
+import com.heimdallr.hmdlrapp.models.BaseEntity;
 import com.heimdallr.hmdlrapp.models.GroupChat;
 import com.heimdallr.hmdlrapp.models.Message;
 import com.heimdallr.hmdlrapp.models.User;
 import com.heimdallr.hmdlrapp.repository.MessagesRepository;
-import com.heimdallr.hmdlrapp.services.DI.HmdlrDI;
 import com.heimdallr.hmdlrapp.services.DI.Service;
-import com.heimdallr.hmdlrapp.services.pubSub.Channel;
-import com.heimdallr.hmdlrapp.services.pubSub.EventDispatcher;
 
 import java.util.List;
 
@@ -33,12 +30,13 @@ public class MessagesService {
         this.messagesRepository.deleteAllBetweenTwoUsers(uidOne, uidTwo);
     }
 
-    public List<Message> getAllUserPreviews(User user) {
-        return this.getAllUserPreviews(user.getId());
+    public List<Message> getAllUserPreviews(User user, List<GroupChat> userGroups) {
+        List<String> userGroupsStringList = userGroups.stream().map(BaseEntity::getId).toList();
+        return this.getAllUserPreviews(user.getId(), userGroupsStringList);
     }
 
-    public List<Message> getAllUserPreviews(int uid) {
-        return this.messagesRepository.getAllPreviewsForUser(uid);
+    public List<Message> getAllUserPreviews(int uid, List<String> userGroups) {
+        return this.messagesRepository.getAllPreviewsForUser(uid, userGroups);
     }
 
     public List<Message> getAllUserMessages(User user) {

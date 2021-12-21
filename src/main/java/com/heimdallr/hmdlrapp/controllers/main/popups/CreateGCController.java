@@ -3,14 +3,18 @@ package com.heimdallr.hmdlrapp.controllers.main.popups;
 import com.heimdallr.hmdlrapp.controllers.CustomController;
 import com.heimdallr.hmdlrapp.controllers.main.ProfileHeadController;
 import com.heimdallr.hmdlrapp.exceptions.ServiceNotRegisteredException;
+import com.heimdallr.hmdlrapp.models.GroupChat;
 import com.heimdallr.hmdlrapp.models.User;
 import com.heimdallr.hmdlrapp.models.dtos.UserFriendshipDTO;
 import com.heimdallr.hmdlrapp.services.DI.HmdlrDI;
 import com.heimdallr.hmdlrapp.services.FriendshipsService;
+import com.heimdallr.hmdlrapp.services.GroupChatsService;
+import com.heimdallr.hmdlrapp.services.MessagesService;
 import com.heimdallr.hmdlrapp.services.UserService;
 import com.heimdallr.hmdlrapp.services.pubSub.Channel;
 import com.heimdallr.hmdlrapp.services.pubSub.EventDispatcher;
 import com.heimdallr.hmdlrapp.services.pubSub.Subscriber;
+import com.heimdallr.hmdlrapp.utils.Constants;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
@@ -27,6 +31,8 @@ public class CreateGCController extends Subscriber implements CustomController {
     private EventDispatcher eventDispatcher;
     private UserService userService;
     private FriendshipsService friendshipsService;
+    private GroupChatsService groupChatsService;
+    private MessagesService messagesService;
 
     BorderPane createGCPopupContainer;
     ImageView closeCreateGCPopup;
@@ -63,6 +69,8 @@ public class CreateGCController extends Subscriber implements CustomController {
             this.eventDispatcher = (EventDispatcher) HmdlrDI.getContainer().getService(EventDispatcher.class);
             this.userService = (UserService) HmdlrDI.getContainer().getService(UserService.class);
             this.friendshipsService = (FriendshipsService) HmdlrDI.getContainer().getService(FriendshipsService.class);
+            this.groupChatsService = (GroupChatsService) HmdlrDI.getContainer().getService(GroupChatsService.class);
+            this.messagesService = (MessagesService) HmdlrDI.getContainer().getService(MessagesService.class);
         } catch (ServiceNotRegisteredException e) {
             e.printStackTrace();
         }
@@ -70,6 +78,7 @@ public class CreateGCController extends Subscriber implements CustomController {
 
     @Override
     public void initialize() {
+        finishCreateGCActionButton.setDisable(true);
         this.setListeners();
         this.eventDispatcher.subscribeTo(this, Channel.guiVisibleGCController);
         this.eventDispatcher.subscribeTo(this, Channel.groupContentChanged);
@@ -77,7 +86,7 @@ public class CreateGCController extends Subscriber implements CustomController {
 
     @Override
     protected void newContent(String info) {
-        if(info != null) {
+        if (info != null) {
             User receivedUser = userService.findByUsername(info);
 
             // will receive the username we want to add / remove from group
@@ -88,6 +97,8 @@ public class CreateGCController extends Subscriber implements CustomController {
             }
         }
         this.loadAllUsersAndTheFriendships();
+        if (this.joint.size() < 2) finishCreateGCActionButton.setDisable(true);
+        else if (!chatAliasTextBox.getText().isBlank()) finishCreateGCActionButton.setDisable(false);
     }
 
     private void setListeners() {
@@ -104,10 +115,32 @@ public class CreateGCController extends Subscriber implements CustomController {
             this.eventDispatcher.dispatch(Channel.guiVisibleGCController, null);
         });
 
+        chatAliasTextBox.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (chatAliasTextBox.getText().isBlank())
+                finishCreateGCActionButton.setDisable(true);
+            else if(this.joint.size() > 1)
+                finishCreateGCActionButton.setDisable(false);
+        });
+
         finishCreateGCActionButton.setOnAction(e -> {
             // Create GC
-
+            List<User> profileHeads = new ArrayList<>(List.of(userService.getCurrentUser()));
+            profileHeads.addAll(joint);
+            GroupChat groupChat = this.groupChatsService.createOne(chatAliasTextBox.getText(), profileHeads);
+            this.messagesService.sendMessage(
+                    1,
+                    groupChat.getId(),
+                    Constants.breakIceGroup
+            );
+            eraseInMemoryGroup();
         });
+    }
+
+    private void eraseInMemoryGroup() {
+        this.joint.clear();
+        this.chatAliasTextBox.setText("");
+        this.createGCPopupContainer.setVisible(false);
+        this.parent.setOpacity(1);
     }
 
     private void loadAllUsersAndTheFriendships() {
@@ -139,15 +172,16 @@ public class CreateGCController extends Subscriber implements CustomController {
 
         try {
             scrollableMembersContainer.getChildren().clear();
-        } catch (Exception ignored){}
+        } catch (Exception ignored) {
+        }
         List<User> profileHeads = new ArrayList<>(List.of(userService.getCurrentUser()));
         profileHeads.addAll(joint);
-        for(User user : profileHeads) {
+        for (User user : profileHeads) {
             ProfileHeadController profileHeadController = new ProfileHeadController(null, userService.getChatHeadPreviewLetters(user));
             try {
                 scrollableMembersContainer.getChildren().add(profileHeadController);
+            } catch (Exception ignored) {
             }
-            catch (Exception ignored) {}
         }
     }
 

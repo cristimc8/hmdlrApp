@@ -2,6 +2,8 @@ package com.heimdallr.hmdlrapp.controllers.main;
 
 import com.heimdallr.hmdlrapp.controllers.CustomController;
 import com.heimdallr.hmdlrapp.exceptions.ServiceNotRegisteredException;
+import com.heimdallr.hmdlrapp.models.BaseEntity;
+import com.heimdallr.hmdlrapp.models.GroupChat;
 import com.heimdallr.hmdlrapp.models.Message;
 import com.heimdallr.hmdlrapp.services.DI.HmdlrDI;
 import com.heimdallr.hmdlrapp.services.GroupChatsService;
@@ -25,6 +27,7 @@ import javafx.util.Duration;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class LeftBarController extends Subscriber implements CustomController {
     private UserService userService;
@@ -145,13 +148,20 @@ public class LeftBarController extends Subscriber implements CustomController {
     }
 
     private List<Message> getAllUserMessages() {
-        List<Message> messages = messagesService.getAllUserPreviews(userService.getCurrentUser());
+        List<GroupChat> userGroups = groupChatsService.getAllForUser(userService.getCurrentUser());
+        List<Message> messages = messagesService.getAllUserPreviews(userService.getCurrentUser(), userGroups);
         List<Message> filtered = new ArrayList<>();
 
         messages.forEach(message -> {
-            int id = getDifferentIdFromMessage(message);
-            if(userService.findById(id).getUsername().contains(query))
-                filtered.add(message);
+            if(message.getGroupId() == null) {
+                int id = getDifferentIdFromMessage(message);
+                if (userService.findById(id).getUsername().contains(query))
+                    filtered.add(message);
+            }
+            else {
+                if(groupChatsService.findById(message.getGroupId()).getAlias().contains(query))
+                    filtered.add(message);
+            }
         });
 
         return filtered;

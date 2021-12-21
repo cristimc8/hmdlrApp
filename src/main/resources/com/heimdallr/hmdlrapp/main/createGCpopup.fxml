@@ -14,11 +14,11 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="564.0" maxWidth="489.0" prefHeight="564.0" prefWidth="489.0" style="-fx-background-color: #17212b; -fx-background-radius: 5;" stylesheets="@../res/style.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="564.0" maxWidth="489.0" prefHeight="564.0" prefWidth="489.0" style="-fx-background-color: transparent; -fx-background-radius: 5;" stylesheets="@../res/style.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <BorderPane prefHeight="564.1705113745809" prefWidth="489.1700002612688" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <left>
-            <BorderPane prefHeight="564.0" prefWidth="389.0" BorderPane.alignment="CENTER">
+            <BorderPane prefHeight="564.0" prefWidth="395.0" style="-fx-background-color: #17212b;" BorderPane.alignment="CENTER">
                <top>
                   <VBox spacing="15.0" BorderPane.alignment="CENTER">
                      <children>
@@ -110,14 +110,17 @@
                      </padding>
                   </VBox>
                </bottom>
+               <padding>
+                  <Insets bottom="5.0" left="10.0" right="10.0" top="5.0" />
+               </padding>
             </BorderPane>
          </left>
          <right>
-            <BorderPane maxWidth="80.0" prefHeight="200.0" style="-fx-background-color: #0e1621; -fx-background-radius: 5;" BorderPane.alignment="CENTER">
+            <BorderPane maxWidth="80.0" prefHeight="200.0" style="-fx-background-color: transparent; -fx-background-radius: 5;" BorderPane.alignment="CENTER">
                <center>
-                  <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" BorderPane.alignment="CENTER">
+                  <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" style="-fx-background-color: transparent;" BorderPane.alignment="CENTER">
                      <content>
-                        <VBox fx:id="scrollableMembersContainer" alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" spacing="15.0">
+                        <VBox fx:id="scrollableMembersContainer" alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" spacing="15.0" style="-fx-background-color: transparent;">
                            <padding>
                               <Insets bottom="5.0" left="5.0" right="5.0" top="10.0" />
                            </padding>
