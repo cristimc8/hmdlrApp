@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -12,7 +13,7 @@
 
 <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="532.0" prefWidth="450.0" style="-fx-background-color: #17212b;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.heimdallr.hmdlrapp.controllers.main.MainController">
    <children>
-      <VBox fx:id="recentChatsContainer" layoutX="15.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <VBox fx:id="recentChatsContainer" layoutX="15.0" prefHeight="532.0" prefWidth="450.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <BorderPane>
                <top>
@@ -26,6 +27,9 @@
                                        <image>
                                           <Image url="@../res/burgerMenuBars.png" />
                                        </image>
+                                       <cursor>
+                                          <Cursor fx:constant="HAND" />
+                                       </cursor>
                                     </ImageView>
                                     <TextField fx:id="searchTextBox" promptText="Search" styleClass="hmdlrTextBox" stylesheets="@../res/style.css" HBox.hgrow="ALWAYS">
                                        <font>

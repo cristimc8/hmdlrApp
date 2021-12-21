@@ -19,42 +19,49 @@
          <left>
             <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="532.0" prefWidth="450.0" style="-fx-background-color: #17212b;" BorderPane.alignment="CENTER">
                <children>
-                  <VBox fx:id="recentChatsContainer" layoutX="15.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                     <children>
-                        <BorderPane>
-                           <top>
-                              <AnchorPane style="-fx-background-color: transparent;" BorderPane.alignment="CENTER">
-                                 <children>
-                                    <BorderPane prefHeight="53.0" prefWidth="517.0" style="-fx-background-color: transparent;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                       <center>
-                                          <HBox alignment="CENTER_LEFT" spacing="25.0" BorderPane.alignment="CENTER">
-                                             <children>
-                                                <ImageView fx:id="burgerMenuButton" fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
-                                                   <image>
-                                                      <Image url="@res/burgerMenuBars.png" />
-                                                   </image>
-                                                   <cursor>
-                                                      <Cursor fx:constant="HAND" />
-                                                   </cursor>
-                                                </ImageView>
-                                                <TextField fx:id="searchTextBox" promptText="Search" styleClass="hmdlrTextBox" HBox.hgrow="ALWAYS">
-                                                   <font>
-                                                      <Font name="Garuda" size="14.0" />
-                                                   </font>
-                                                </TextField>
-                                             </children>
-                                          </HBox>
-                                       </center>
-                                    </BorderPane>
-                                 </children>
-                              </AnchorPane>
-                           </top>
-                        </BorderPane>
-                     </children>
-                  </VBox>
+                  <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" layoutX="15.0" prefHeight="737.5050259475688" prefWidth="450.5030666798725" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <padding>
+                        <Insets left="5.0" right="5.0" />
+                     </padding>
+                     <content>
+                        <VBox fx:id="recentChatsContainer" prefHeight="532.0" prefWidth="450.0">
+                           <children>
+                              <BorderPane>
+                                 <top>
+                                    <AnchorPane style="-fx-background-color: transparent;" stylesheets="@res/style.css" BorderPane.alignment="CENTER">
+                                       <children>
+                                          <BorderPane prefHeight="53.0" prefWidth="517.0" style="-fx-background-color: transparent;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                             <center>
+                                                <HBox alignment="CENTER_LEFT" spacing="25.0" BorderPane.alignment="CENTER">
+                                                   <children>
+                                                      <ImageView fx:id="burgerMenuButton" fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                                                         <image>
+                                                            <Image url="@res/burgerMenuBars.png" />
+                                                         </image>
+                                                         <cursor>
+                                                            <Cursor fx:constant="HAND" />
+                                                         </cursor>
+                                                      </ImageView>
+                                                      <TextField fx:id="searchTextBox" promptText="Search" styleClass="hmdlrTextBox" stylesheets="@res/style.css" HBox.hgrow="ALWAYS">
+                                                         <font>
+                                                            <Font name="Garuda" size="14.0" />
+                                                         </font>
+                                                      </TextField>
+                                                   </children>
+                                                </HBox>
+                                             </center>
+                                          </BorderPane>
+                                       </children>
+                                    </AnchorPane>
+                                 </top>
+                              </BorderPane>
+                           </children>
+                        </VBox>
+                     </content>
+                  </ScrollPane>
                </children>
                <padding>
-                  <Insets left="15.0" right="15.0" />
+                  <Insets left="12.0" right="12.0" />
                </padding>
             </AnchorPane>
          </left>
@@ -104,7 +111,7 @@
       </AnchorPane>
       <BorderPane fx:id="coveringBorderInjectable" layoutX="10.0" layoutY="10.0" pickOnBounds="false" prefHeight="737.0" prefWidth="1304.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <left>
-            <AnchorPane fx:id="sliderMenu" style="-fx-background-color: #17212b;" translateX="-355.0" visible="false" BorderPane.alignment="CENTER">
+            <AnchorPane fx:id="sliderMenu" prefHeight="737.0" prefWidth="354.0" style="-fx-background-color: #17212b;" translateX="-355.0" visible="false" BorderPane.alignment="CENTER">
                <children>
                   <VBox fx:id="recentChatsContainer1" layoutX="15.0" prefHeight="737.0" prefWidth="354.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
@@ -129,7 +136,7 @@
                                     </VBox>
                                  </right>
                                  <left>
-                                    <VBox spacing="15.0" BorderPane.alignment="CENTER">
+                                    <VBox spacing="10.0" BorderPane.alignment="CENTER">
                                        <children>
                                           <AnchorPane fx:id="profilePictureCircle" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" styleClass="profilePicture" stylesheets="@res/style.css">
                                              <children>
@@ -176,7 +183,7 @@
                               <Insets bottom="15.0" left="15.0" right="15.0" />
                            </padding>
                         </BorderPane>
-                        <HBox alignment="CENTER_LEFT" spacing="20.0">
+                        <HBox fx:id="yourFriendsRow" alignment="CENTER_LEFT" spacing="20.0">
                            <children>
                               <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
@@ -216,7 +223,27 @@
                               <Cursor fx:constant="HAND" />
                            </cursor>
                         </HBox>
-                        <HBox alignment="CENTER_LEFT" spacing="20.0">
+                        <HBox fx:id="friendRequestsRow" alignment="CENTER_LEFT" spacing="20.0">
+                           <children>
+                              <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@res/rss.png" />
+                                 </image>
+                              </ImageView>
+                              <Label text="Friend requests" textFill="#ded7d7">
+                                 <font>
+                                    <Font name="Garuda Bold" size="18.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                           <padding>
+                              <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+                           </padding>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                        </HBox>
+                        <HBox fx:id="createGCRow" alignment="CENTER_LEFT" spacing="20.0">
                            <children>
                               <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
                                  <image>

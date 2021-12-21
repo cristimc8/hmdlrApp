@@ -1,5 +1,6 @@
 package com.heimdallr.hmdlrapp.controllers.main.popups;
 
+import com.heimdallr.hmdlrapp.controllers.CustomController;
 import com.heimdallr.hmdlrapp.controllers.main.UserRowController;
 import com.heimdallr.hmdlrapp.exceptions.ServiceNotRegisteredException;
 import com.heimdallr.hmdlrapp.models.User;
@@ -22,7 +23,7 @@ import java.util.Objects;
 /**
  * Controller class for the all-users popup component
  */
-public class AllUsersController extends Subscriber {
+public class AllUsersController extends Subscriber implements CustomController {
     private EventDispatcher eventDispatcher;
     private UserService userService;
     private FriendshipsService friendshipsService;
@@ -61,6 +62,7 @@ public class AllUsersController extends Subscriber {
         loadAllUsersAndTheFriendships();
     }
 
+    @Override
     public void initialize() {
         this.setListeners();
         this.eventDispatcher.subscribeTo(this, Channel.guiVisibleAllUsersController);
