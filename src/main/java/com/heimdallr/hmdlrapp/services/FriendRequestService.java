@@ -41,6 +41,14 @@ public class FriendRequestService {
         return this.friendRequestRepository.findForTwoUsers(uidOne, uidTwo);
     }
 
+    public List<FriendRequest> findAllActiveForUser(User user) {
+        return this.findAllActiveForUser(user.getId());
+    }
+
+    public List<FriendRequest> findAllActiveForUser(int uid) {
+        return this.friendRequestRepository.findAllActiveForUser(uid);
+    }
+
     /**
      * Gets all the friend requests (even past ones) for a certain user.
      *

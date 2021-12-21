@@ -60,7 +60,7 @@ public class AllUsersController extends Subscriber implements CustomController {
     }
 
     @Override
-    protected void newContent() {
+    protected void newContent(String info) {
         loadAllUsersAndTheFriendships();
     }
 

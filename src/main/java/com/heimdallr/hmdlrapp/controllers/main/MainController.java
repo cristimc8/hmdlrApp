@@ -1,7 +1,9 @@
 package com.heimdallr.hmdlrapp.controllers.main;
 
 import com.heimdallr.hmdlrapp.controllers.main.popups.AllUsersController;
+import com.heimdallr.hmdlrapp.controllers.main.popups.CreateGCController;
 import com.heimdallr.hmdlrapp.controllers.main.popups.FriendsController;
+import com.heimdallr.hmdlrapp.controllers.main.popups.RequestsController;
 import com.heimdallr.hmdlrapp.exceptions.*;
 import com.heimdallr.hmdlrapp.models.Message;
 import com.heimdallr.hmdlrapp.services.DI.HmdlrDI;
@@ -11,22 +13,16 @@ import com.heimdallr.hmdlrapp.services.UserService;
 import com.heimdallr.hmdlrapp.services.pubSub.Channel;
 import com.heimdallr.hmdlrapp.services.pubSub.EventDispatcher;
 import com.heimdallr.hmdlrapp.services.pubSub.Subscriber;
-import com.heimdallr.hmdlrapp.utils.Async;
-import javafx.animation.TranslateTransition;
-import javafx.collections.ObservableList;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.util.Duration;
 
-import java.util.List;
 
 public class MainController extends Subscriber {
     private UserService userService;
@@ -71,6 +67,12 @@ public class MainController extends Subscriber {
     HBox yourFriendsRow;
 
     @FXML
+    HBox friendRequestsRow;
+
+    @FXML
+    HBox createGCRow;
+
+    @FXML
     BorderPane allUsersPopupContainer;
 
     @FXML
@@ -98,6 +100,41 @@ public class MainController extends Subscriber {
     VBox scrollableFriendsContainer;
 
     @FXML
+    BorderPane requestsPopupContainer;
+
+    @FXML
+    ImageView closeRequestsPopupButton;
+
+    @FXML
+    VBox scrollableRequestsContainer;
+
+    @FXML
+    TextField scrollableRequestsSearchBar;
+
+
+    // Create GC
+    @FXML
+    BorderPane createGCPopupContainer;
+
+    @FXML
+    ImageView closeCreateGCPopup;
+
+    @FXML
+    TextField chatAliasTextBox;
+
+    @FXML
+    Button finishCreateGCActionButton;
+
+    @FXML
+    VBox scrollableGCFriendsContainer;
+
+    @FXML
+    VBox scrollableMembersContainer;
+
+    @FXML
+    TextField scrollableSearchMembersTextBox;
+
+    @FXML
     protected void initialize() {
         try {
             this.userService = (UserService) HmdlrDI.getContainer().getService(UserService.class);
@@ -113,7 +150,7 @@ public class MainController extends Subscriber {
     }
 
     @Override
-    protected void newContent() {
+    protected void newContent(String info) {
 //        this.loadMessages();
     }
 
@@ -122,6 +159,8 @@ public class MainController extends Subscriber {
         this.assignToAllUsersPopup();
         this.assignToLeftBar();
         this.assignToFriends();
+        this.assignToRequests();
+        this.assignToCreateGC();
     }
 
     private void assignToSliderMenu() {
@@ -134,8 +173,12 @@ public class MainController extends Subscriber {
                 allUsersPopupContainer,
                 mainChildrenComponents,
                 yourFriendsRow,
-                friendsPopupContainer
-                );
+                friendsPopupContainer,
+                requestsPopupContainer,
+                friendRequestsRow,
+                createGCRow,
+                createGCPopupContainer
+        );
         sliderMenuController.initialize();
     }
 
@@ -172,5 +215,30 @@ public class MainController extends Subscriber {
                 mainChildrenComponents
         );
         friendsController.initialize();
+    }
+
+    private void assignToRequests() {
+        RequestsController requestsController = new RequestsController(
+                requestsPopupContainer,
+                closeRequestsPopupButton,
+                scrollableRequestsSearchBar,
+                scrollableRequestsContainer,
+                mainChildrenComponents
+        );
+        requestsController.initialize();
+    }
+
+    private void assignToCreateGC() {
+        CreateGCController createGCController = new CreateGCController(
+                createGCPopupContainer,
+                closeCreateGCPopup,
+                chatAliasTextBox,
+                finishCreateGCActionButton,
+                scrollableGCFriendsContainer,
+                scrollableMembersContainer,
+                mainChildrenComponents,
+                scrollableSearchMembersTextBox
+        );
+        createGCController.initialize();
     }
 }

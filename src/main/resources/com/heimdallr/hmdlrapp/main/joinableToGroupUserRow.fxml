@@ -50,7 +50,7 @@
             <Cursor fx:constant="HAND" />
          </cursor>
          <right>
-            <Button fx:id="friendActionButton" mnemonicParsing="false" styleClass="hmdlrButton" text="Add friend" textAlignment="CENTER" textFill="WHITE" BorderPane.alignment="CENTER">
+            <Button fx:id="addToGroupActionButton" mnemonicParsing="false" styleClass="hmdlrButton" text="Add" textAlignment="CENTER" textFill="WHITE" BorderPane.alignment="CENTER">
                <font>
                   <Font name="Garuda" size="18.0" />
                </font>

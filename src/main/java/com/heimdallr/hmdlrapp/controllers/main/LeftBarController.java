@@ -74,7 +74,7 @@ public class LeftBarController extends Subscriber implements CustomController {
     }
 
     @Override
-    protected void newContent() {
+    protected void newContent(String info) {
         this.loadMessages();
     }
 

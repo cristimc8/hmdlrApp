@@ -31,7 +31,7 @@ public class EventDispatcher {
     public void dispatch(Channel channel, String info) {
         for (Subscriber subscriber : this.subscriberChannelHashMap.keySet()) {
             if (isSubscribedTo(subscriber, channel)) {
-                subscriber.newContent();
+                subscriber.newContent(info);
             }
         }
     }

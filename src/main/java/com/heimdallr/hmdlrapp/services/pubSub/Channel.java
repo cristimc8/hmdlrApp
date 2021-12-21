@@ -3,6 +3,9 @@ package com.heimdallr.hmdlrapp.services.pubSub;
 public enum Channel {
     onNewMessage,
     onFriendshipsChanged,
+    groupContentChanged,
     guiVisibleAllUsersController,
-    guiVisibleFriendsController
+    guiVisibleFriendsController,
+    guiVisibleRequestsController,
+    guiVisibleGCController
 }
