@@ -1,6 +1,7 @@
 package com.heimdallr.hmdlrapp.controllers.main.popups;
 
 import com.heimdallr.hmdlrapp.controllers.CustomController;
+import com.heimdallr.hmdlrapp.controllers.main.ProfileHeadController;
 import com.heimdallr.hmdlrapp.exceptions.ServiceNotRegisteredException;
 import com.heimdallr.hmdlrapp.models.User;
 import com.heimdallr.hmdlrapp.models.dtos.UserFriendshipDTO;
@@ -105,6 +106,7 @@ public class CreateGCController extends Subscriber implements CustomController {
 
         finishCreateGCActionButton.setOnAction(e -> {
             // Create GC
+
         });
     }
 
@@ -133,6 +135,19 @@ public class CreateGCController extends Subscriber implements CustomController {
             } catch (Exception e) {
                 System.out.println(e.getMessage());
             }
+        }
+
+        try {
+            scrollableMembersContainer.getChildren().clear();
+        } catch (Exception ignored){}
+        List<User> profileHeads = new ArrayList<>(List.of(userService.getCurrentUser()));
+        profileHeads.addAll(joint);
+        for(User user : profileHeads) {
+            ProfileHeadController profileHeadController = new ProfileHeadController(null, userService.getChatHeadPreviewLetters(user));
+            try {
+                scrollableMembersContainer.getChildren().add(profileHeadController);
+            }
+            catch (Exception ignored) {}
         }
     }
 
