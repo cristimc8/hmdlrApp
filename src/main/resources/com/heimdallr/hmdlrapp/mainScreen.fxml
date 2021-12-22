@@ -2,7 +2,6 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
-<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextField?>
@@ -20,65 +19,66 @@
          <left>
             <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="532.0" prefWidth="450.0" style="-fx-background-color: #17212b;" BorderPane.alignment="CENTER">
                <children>
-                  <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" layoutX="15.0" prefHeight="737.5050259475688" prefWidth="450.5030666798725" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                     <padding>
-                        <Insets left="5.0" right="5.0" />
-                     </padding>
-                     <content>
-                        <VBox fx:id="recentChatsContainer" prefHeight="532.0" prefWidth="450.0">
-                           <children>
-                              <BorderPane>
-                                 <top>
-                                    <AnchorPane style="-fx-background-color: transparent;" stylesheets="@res/style.css" BorderPane.alignment="CENTER">
-                                       <children>
-                                          <BorderPane prefHeight="53.0" prefWidth="517.0" style="-fx-background-color: transparent;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                             <center>
-                                                <HBox alignment="CENTER_LEFT" spacing="25.0" BorderPane.alignment="CENTER">
-                                                   <children>
-                                                      <ImageView fx:id="burgerMenuButton" fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
-                                                         <image>
-                                                            <Image url="@res/burgerMenuBars.png" />
-                                                         </image>
-                                                         <cursor>
-                                                            <Cursor fx:constant="HAND" />
-                                                         </cursor>
-                                                      </ImageView>
-                                                      <TextField fx:id="searchTextBox" promptText="Search" styleClass="hmdlrTextBox" stylesheets="@res/style.css" HBox.hgrow="ALWAYS">
-                                                         <font>
-                                                            <Font name="Garuda" size="14.0" />
-                                                         </font>
-                                                      </TextField>
-                                                   </children>
-                                                </HBox>
-                                             </center>
-                                          </BorderPane>
-                                       </children>
-                                    </AnchorPane>
-                                 </top>
-                              </BorderPane>
-                           </children>
-                        </VBox>
-                     </content>
-                  </ScrollPane>
+                  <VBox fx:id="recentChatsContainer" layoutX="15.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <children>
+                        <BorderPane>
+                           <top>
+                              <AnchorPane style="-fx-background-color: transparent;" BorderPane.alignment="CENTER">
+                                 <children>
+                                    <BorderPane prefHeight="53.0" prefWidth="517.0" style="-fx-background-color: transparent;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                       <center>
+                                          <HBox alignment="CENTER_LEFT" spacing="25.0" BorderPane.alignment="CENTER">
+                                             <children>
+                                                <ImageView fx:id="burgerMenuButton" fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                                                   <image>
+                                                      <Image url="@res/burgerMenuBars.png" />
+                                                   </image>
+                                                   <cursor>
+                                                      <Cursor fx:constant="HAND" />
+                                                   </cursor>
+                                                </ImageView>
+                                                <TextField fx:id="searchTextBox" promptText="Search" styleClass="hmdlrTextBox" HBox.hgrow="ALWAYS">
+                                                   <font>
+                                                      <Font name="Garuda" size="14.0" />
+                                                   </font>
+                                                </TextField>
+                                             </children>
+                                          </HBox>
+                                       </center>
+                                    </BorderPane>
+                                 </children>
+                              </AnchorPane>
+                           </top>
+                        </BorderPane>
+                     </children>
+                  </VBox>
                </children>
                <padding>
-                  <Insets left="12.0" right="12.0" />
+                  <Insets left="15.0" right="15.0" />
                </padding>
             </AnchorPane>
          </left>
          <center>
-            <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" style="-fx-background-color: #1c2c3b; -fx-background-radius: 25;" BorderPane.alignment="CENTER">
-               <center>
-                  <Label alignment="CENTER" text="Select a chat and start messaging!" textAlignment="CENTER" textFill="WHITE" wrapText="true" BorderPane.alignment="CENTER">
-                     <font>
-                        <Font name="Garuda" size="15.0" />
-                     </font>
-                  </Label>
-               </center>
-               <padding>
-                  <Insets left="12.0" right="12.0" />
-               </padding>
-            </BorderPane>
+            <AnchorPane fx:id="chatSpaceContainer" BorderPane.alignment="CENTER">
+               <children>
+                  <BorderPane prefHeight="737.5050259475688" prefWidth="854.1724876793876" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <center>
+                        <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" style="-fx-background-color: #1c2c3b; -fx-background-radius: 25;">
+                           <center>
+                              <Label alignment="CENTER" text="Select a chat and start messaging!" textAlignment="CENTER" textFill="WHITE" wrapText="true" BorderPane.alignment="CENTER">
+                                 <font>
+                                    <Font name="Garuda" size="15.0" />
+                                 </font>
+                              </Label>
+                           </center>
+                           <padding>
+                              <Insets left="12.0" right="12.0" />
+                           </padding>
+                        </BorderPane>
+                     </center>
+                  </BorderPane>
+               </children>
+            </AnchorPane>
          </center>
       </BorderPane>
       <AnchorPane fx:id="loadingComponent" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="691.0" prefWidth="937.0" style="-fx-background-color: transparent;" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -332,263 +332,6 @@
                            </content>
                         </ScrollPane>
                      </center>
-                  </BorderPane>
-               </children>
-            </AnchorPane>
-         </center>
-      </BorderPane>
-      <BorderPane fx:id="friendsPopupContainer" layoutX="10.0" layoutY="10.0" pickOnBounds="false" prefHeight="737.0" prefWidth="1304.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-         <center>
-            <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="564.0" prefWidth="389.0" style="-fx-background-color: #17212b; -fx-background-radius: 5;" stylesheets="@res/style.css" BorderPane.alignment="CENTER">
-               <children>
-                  <BorderPane prefHeight="564.0" prefWidth="389.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                     <top>
-                        <VBox spacing="15.0" BorderPane.alignment="CENTER">
-                           <children>
-                              <BorderPane>
-                                 <left>
-                                    <Label text="Friends" textFill="WHITE" BorderPane.alignment="CENTER">
-                                       <font>
-                                          <Font name="Garuda Bold" size="22.0" />
-                                       </font>
-                                    </Label>
-                                 </left>
-                                 <right>
-                                    <ImageView fx:id="closeFriendsPopupButton" fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
-                                       <image>
-                                          <Image url="@res/close.png" />
-                                       </image>
-                                       <cursor>
-                                          <Cursor fx:constant="HAND" />
-                                       </cursor>
-                                    </ImageView>
-                                 </right>
-                              </BorderPane>
-                              <BorderPane>
-                                 <top>
-                                    <HBox alignment="CENTER" spacing="10.0" BorderPane.alignment="CENTER">
-                                       <children>
-                                          <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
-                                             <image>
-                                                <Image url="@res/search.png" />
-                                             </image>
-                                          </ImageView>
-                                          <TextField fx:id="scrollableFriendsSearch" prefHeight="39.0" prefWidth="363.0" promptText="Search" styleClass="hmdlrTextBox">
-                                             <font>
-                                                <Font name="Garuda" size="15.0" />
-                                             </font>
-                                          </TextField>
-                                       </children>
-                                    </HBox>
-                                 </top>
-                              </BorderPane>
-                           </children>
-                           <padding>
-                              <Insets bottom="10.0" left="15.0" right="15.0" top="5.0" />
-                           </padding>
-                        </VBox>
-                     </top>
-                     <center>
-                        <ScrollPane fitToWidth="true" prefHeight="200.0" prefWidth="200.0" vbarPolicy="NEVER" BorderPane.alignment="CENTER">
-                           <content>
-                              <VBox fx:id="scrollableFriendsContainer">
-                                 <padding>
-                                    <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
-                                 </padding>
-                              </VBox>
-                           </content>
-                        </ScrollPane>
-                     </center>
-                  </BorderPane>
-               </children>
-            </AnchorPane>
-         </center>
-      </BorderPane>
-      <BorderPane fx:id="requestsPopupContainer" layoutX="20.0" layoutY="20.0" pickOnBounds="false" prefHeight="737.0" prefWidth="1304.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-         <center>
-            <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="620.0" prefWidth="546.0" style="-fx-background-color: #17212b; -fx-background-radius: 5;" stylesheets="@res/style.css" BorderPane.alignment="CENTER">
-               <children>
-                  <BorderPane prefHeight="564.0" prefWidth="389.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                     <top>
-                        <VBox spacing="15.0" BorderPane.alignment="CENTER">
-                           <children>
-                              <BorderPane>
-                                 <left>
-                                    <Label text="Friend requests" textFill="WHITE" BorderPane.alignment="CENTER">
-                                       <font>
-                                          <Font name="Garuda Bold" size="22.0" />
-                                       </font>
-                                    </Label>
-                                 </left>
-                                 <right>
-                                    <ImageView fx:id="closeRequestsPopupButton" fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
-                                       <image>
-                                          <Image url="@res/close.png" />
-                                       </image>
-                                       <cursor>
-                                          <Cursor fx:constant="HAND" />
-                                       </cursor>
-                                    </ImageView>
-                                 </right>
-                              </BorderPane>
-                              <BorderPane>
-                                 <top>
-                                    <HBox alignment="CENTER" spacing="10.0" BorderPane.alignment="CENTER">
-                                       <children>
-                                          <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
-                                             <image>
-                                                <Image url="@res/search.png" />
-                                             </image>
-                                          </ImageView>
-                                          <TextField fx:id="scrollableRequestsSearchBar" prefHeight="39.0" prefWidth="514.0" promptText="Search" styleClass="hmdlrTextBox">
-                                             <font>
-                                                <Font name="Garuda" size="15.0" />
-                                             </font>
-                                          </TextField>
-                                       </children>
-                                    </HBox>
-                                 </top>
-                              </BorderPane>
-                           </children>
-                           <padding>
-                              <Insets bottom="10.0" left="15.0" right="15.0" top="5.0" />
-                           </padding>
-                        </VBox>
-                     </top>
-                     <center>
-                        <ScrollPane fitToWidth="true" prefHeight="200.0" prefWidth="200.0" vbarPolicy="NEVER" BorderPane.alignment="CENTER">
-                           <content>
-                              <VBox fx:id="scrollableRequestsContainer">
-                                 <padding>
-                                    <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
-                                 </padding>
-                              </VBox>
-                           </content>
-                        </ScrollPane>
-                     </center>
-                  </BorderPane>
-               </children>
-            </AnchorPane>
-         </center>
-      </BorderPane>
-      <BorderPane fx:id="createGCPopupContainer" layoutX="30.0" layoutY="30.0" pickOnBounds="false" prefHeight="737.0" prefWidth="1304.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-         <center>
-            <AnchorPane maxHeight="564.0" maxWidth="489.0" prefHeight="564.0" prefWidth="489.0" style="-fx-background-color: transparent; -fx-background-radius: 5;" stylesheets="@res/style.css" BorderPane.alignment="CENTER">
-               <children>
-                  <BorderPane prefHeight="564.1705113745809" prefWidth="489.1700002612688" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                     <left>
-                        <BorderPane prefHeight="564.0" prefWidth="395.0" style="-fx-background-color: #17212b;" BorderPane.alignment="CENTER">
-                           <top>
-                              <VBox spacing="15.0" BorderPane.alignment="CENTER">
-                                 <children>
-                                    <BorderPane>
-                                       <left>
-                                          <Label text="Create a group chat" textFill="WHITE" BorderPane.alignment="CENTER">
-                                             <font>
-                                                <Font name="Garuda Bold" size="22.0" />
-                                             </font>
-                                          </Label>
-                                       </left>
-                                       <right>
-                                          <ImageView fx:id="closeCreateGCPopup" fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
-                                             <image>
-                                                <Image url="@res/close.png" />
-                                             </image>
-                                             <cursor>
-                                                <Cursor fx:constant="HAND" />
-                                             </cursor>
-                                          </ImageView>
-                                       </right>
-                                    </BorderPane>
-                                    <BorderPane>
-                                       <top>
-                                          <VBox alignment="CENTER" BorderPane.alignment="CENTER">
-                                             <children>
-                                                <TextField fx:id="chatAliasTextBox" prefHeight="39.0" prefWidth="514.0" promptText="Chat's alias" styleClass="hmdlrTextBox">
-                                                   <font>
-                                                      <Font name="Garuda" size="15.0" />
-                                                   </font>
-                                                </TextField>
-                                                <Label text="Add participants" textFill="WHITE">
-                                                   <font>
-                                                      <Font name="Garuda Bold" size="18.0" />
-                                                   </font>
-                                                </Label>
-                                             </children>
-                                          </VBox>
-                                       </top>
-                                    </BorderPane>
-                                 </children>
-                                 <padding>
-                                    <Insets bottom="10.0" left="15.0" right="15.0" top="5.0" />
-                                 </padding>
-                              </VBox>
-                           </top>
-                           <center>
-                              <ScrollPane fitToWidth="true" prefHeight="200.0" prefWidth="200.0" vbarPolicy="NEVER" BorderPane.alignment="CENTER">
-                                 <content>
-                                    <VBox fx:id="scrollableGCFriendsContainer">
-                                       <padding>
-                                          <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
-                                       </padding>
-                                    </VBox>
-                                 </content>
-                                 <BorderPane.margin>
-                                    <Insets bottom="5.0" />
-                                 </BorderPane.margin>
-                              </ScrollPane>
-                           </center>
-                           <bottom>
-                              <VBox alignment="CENTER" spacing="10.0">
-                                 <children>
-                                    <HBox alignment="CENTER" spacing="10.0">
-                                       <children>
-                                          <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
-                                             <image>
-                                                <Image url="@res/search.png" />
-                                             </image>
-                                          </ImageView>
-                                          <TextField fx:id="scrollableSearchMembersTextBox" prefHeight="39.0" prefWidth="363.0" promptText="Search" styleClass="hmdlrTextBox">
-                                             <font>
-                                                <Font name="Garuda" size="15.0" />
-                                             </font>
-                                          </TextField>
-                                       </children>
-                                    </HBox>
-                                    <Button fx:id="finishCreateGCActionButton" mnemonicParsing="false" styleClass="hmdlrButton" text="Finish &amp; Create" textAlignment="CENTER" textFill="WHITE">
-                                       <font>
-                                          <Font name="Garuda" size="18.0" />
-                                       </font>
-                                    </Button>
-                                 </children>
-                                 <BorderPane.margin>
-                                    <Insets />
-                                 </BorderPane.margin>
-                                 <padding>
-                                    <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
-                                 </padding>
-                              </VBox>
-                           </bottom>
-                           <padding>
-                              <Insets bottom="5.0" left="10.0" right="10.0" top="5.0" />
-                           </padding>
-                        </BorderPane>
-                     </left>
-                     <right>
-                        <BorderPane maxWidth="80.0" prefHeight="200.0" style="-fx-background-color: transparent; -fx-background-radius: 5;" BorderPane.alignment="CENTER">
-                           <center>
-                              <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" style="-fx-background-color: transparent;" BorderPane.alignment="CENTER">
-                                 <content>
-                                    <VBox fx:id="scrollableMembersContainer" alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" spacing="15.0" style="-fx-background-color: transparent;">
-                                       <padding>
-                                          <Insets bottom="5.0" left="5.0" right="5.0" top="10.0" />
-                                       </padding>
-                                    </VBox>
-                                 </content>
-                              </ScrollPane>
-                           </center>
-                        </BorderPane>
-                     </right>
                   </BorderPane>
                </children>
             </AnchorPane>
