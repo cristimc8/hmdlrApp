@@ -17,6 +17,22 @@ public class MessagesService {
         this.messagesRepository = (MessagesRepository) messagesRepo;
     }
 
+    public List<Message> findAllBetweenUsers(User userOne, User userTwo) {
+        return this.findAllBetweenUsers(userOne.getId(), userTwo.getId());
+    }
+
+    public List<Message> findAllBetweenUsers(int uidOne, int uidTwo) {
+        return this.messagesRepository.getAllBetweenUsers(uidOne, uidTwo);
+    }
+
+    public List<Message> findAllForGroup(GroupChat groupChat) {
+        return this.findAllForGroup(groupChat.getId());
+    }
+
+    public List<Message> findAllForGroup(String gid) {
+        return this.messagesRepository.getAllForGroup(gid);
+    }
+
     /**
      * Deletes all messages between two users.
      * @param userOne User one

@@ -69,3 +69,9 @@
 .scroll-pane {
     -fx-background-color: transparent;
 }
+
+.messageComponent {
+    -fx-background-color:  transparent;
+    -fx-border-width: 0 0 0 5;
+    -fx-border-color: cyan;
+}

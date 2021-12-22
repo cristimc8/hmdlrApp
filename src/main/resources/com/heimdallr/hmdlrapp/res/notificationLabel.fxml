@@ -5,10 +5,9 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.text.Font?>
 
-
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" style="-fx-background-color: #1c2c3b; -fx-background-radius: 25;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
+<fx:root fx:id="notificationContainer" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" style="-fx-background-color: #1c2c3b; -fx-background-radius: 25;" type="BorderPane" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
    <center>
-      <Label alignment="CENTER" text="Lorem ipsum" textAlignment="CENTER" textFill="WHITE" wrapText="true" BorderPane.alignment="CENTER">
+      <Label fx:id="notificationText" alignment="CENTER" text="Lorem ipsum" textAlignment="CENTER" textFill="WHITE" wrapText="true" BorderPane.alignment="CENTER">
          <font>
             <Font name="Garuda" size="15.0" />
          </font>
@@ -17,4 +16,4 @@
    <padding>
       <Insets left="12.0" right="12.0" />
    </padding>
-</BorderPane>
+</fx:root>

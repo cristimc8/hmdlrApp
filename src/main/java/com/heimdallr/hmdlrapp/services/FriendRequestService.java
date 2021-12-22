@@ -82,9 +82,10 @@ public class FriendRequestService {
             friendRequest.setAccepted(true);
             try {
                 ((MessagesService) HmdlrDI.getContainer().getService(MessagesService.class))
-                        .sendMessage(
+                        .replyToMessage(
                                 friendRequest.getSenderId(),
                                 friendRequest.getReceiverId(),
+                                -1,
                                 Constants.sayHi
                         );
 

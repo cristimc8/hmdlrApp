@@ -127,9 +127,10 @@ public class CreateGCController extends Subscriber implements CustomController {
             List<User> profileHeads = new ArrayList<>(List.of(userService.getCurrentUser()));
             profileHeads.addAll(joint);
             GroupChat groupChat = this.groupChatsService.createOne(chatAliasTextBox.getText(), profileHeads);
-            this.messagesService.sendMessage(
+            this.messagesService.replyToMessage(
                     1,
                     groupChat.getId(),
+                    -1,
                     Constants.breakIceGroup
             );
             eraseInMemoryGroup();
