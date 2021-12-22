@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+
+<AnchorPane fx:id="injectableCharArea" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="478.0" prefWidth="798.0" style="-fx-background-color: #0e1621;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <BorderPane prefHeight="478.0" prefWidth="798.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <center>
+            <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #0e1621;" BorderPane.alignment="CENTER">
+               <content>
+                  <VBox fx:id="scrollableChatAreaContainer" prefHeight="419.0" prefWidth="784.0" style="-fx-background-color: #0e1621;" />
+               </content>
+            </ScrollPane>
+         </center>
+         <top>
+            <BorderPane prefHeight="60.0" prefWidth="798.0" style="-fx-background-color: #17212b;" BorderPane.alignment="CENTER">
+               <left>
+                  <HBox fx:id="chatTopLeftBar" alignment="CENTER_LEFT" spacing="15.0" BorderPane.alignment="CENTER">
+                     <children>
+                        <Label fx:id="chatUsernameLabel" text="\@LoremIpsulinum" textFill="#f7f3f3">
+                           <font>
+                              <Font name="Garuda Bold" size="20.0" />
+                           </font>
+                        </Label>
+                     </children>
+                     <padding>
+                        <Insets left="15.0" right="15.0" />
+                     </padding>
+                  </HBox>
+               </left>
+            </BorderPane>
+         </top>
+         <bottom>
+            <HBox fx:id="messageTextAreaContainer" alignment="CENTER" style="-fx-background-color: #17212b;" BorderPane.alignment="CENTER">
+               <children>
+                  <TextArea fx:id="messageTextArea" prefHeight="56.0" prefWidth="731.0" promptText="Write a message" styleClass="hmdlrTextArea" stylesheets="@../res/style.css" wrapText="true" HBox.hgrow="ALWAYS">
+                     <font>
+                        <Font name="Garuda" size="15.0" />
+                     </font>
+                  </TextArea>
+                  <ImageView fx:id="sendMessageButton" fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true" HBox.hgrow="ALWAYS">
+                     <image>
+                        <Image url="@../res/send.png" />
+                     </image>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </ImageView>
+               </children>
+               <padding>
+                  <Insets right="15.0" />
+               </padding>
+            </HBox>
+         </bottom>
+      </BorderPane>
+   </children>
+</AnchorPane>

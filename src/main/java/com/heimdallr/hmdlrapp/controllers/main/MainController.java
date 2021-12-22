@@ -16,6 +16,7 @@ import com.heimdallr.hmdlrapp.services.pubSub.Subscriber;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -134,6 +135,34 @@ public class MainController extends Subscriber {
     @FXML
     TextField scrollableSearchMembersTextBox;
 
+    // Chat area
+    @FXML
+    AnchorPane chatAreaContainer;
+
+    @FXML
+    BorderPane selectAChatSystemContainer;
+
+    @FXML
+    AnchorPane injectableCharArea;
+
+    @FXML
+    VBox scrollableChatAreaContainer;
+
+    @FXML
+    TextArea messageTextArea;
+
+    @FXML
+    ImageView sendMessageButton;
+
+    @FXML
+    HBox chatTopLeftBar;
+
+    @FXML
+    Label chatUsernameLabel;
+
+    @FXML
+    HBox messageTextAreaContainer;
+
     @FXML
     protected void initialize() {
         try {
@@ -201,7 +230,17 @@ public class MainController extends Subscriber {
                 searchTextBox,
                 mainChildrenComponents,
                 sliderMenu,
-                closeSliderMenuButton
+                closeSliderMenuButton,
+                selectAChatSystemContainer,
+                injectableCharArea,
+                chatAreaContainer,
+                scrollableChatAreaContainer,
+                messageTextArea,
+                sendMessageButton,
+                sendMessageButton,
+                chatTopLeftBar,
+                chatUsernameLabel,
+                messageTextAreaContainer
         );
         leftBarController.initialize();
     }

@@ -24,8 +24,22 @@ public class ChatHeadController extends AnchorPane {
     @FXML
     Label lastSentMessageLabel;
 
-    public ChatHeadController(String imagePath, String letters, String groupNameOrFriend, String lastSentMessage) {
+    private int uid = 0;
+    private String gid = null;
 
+    public ChatHeadController(String imagePath, String letters, String groupNameOrFriend, String lastSentMessage, int uid) {
+
+        this.uid = uid;
+        this.init(imagePath, letters, groupNameOrFriend, lastSentMessage);
+
+    }
+
+    public ChatHeadController(String imagePath, String letters, String groupNameOrFriend, String lastSentMessage, String gid) {
+        this.gid = gid;
+        this.init(imagePath, letters, groupNameOrFriend, lastSentMessage);
+    }
+
+    private void init(String imagePath, String letters, String groupNameOrFriend, String lastSentMessage) {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/heimdallr/hmdlrapp/main/friendsAndGroupsTabComponent.fxml"));
         fxmlLoader.setRoot(this);
         fxmlLoader.setController(this);
@@ -45,5 +59,13 @@ public class ChatHeadController extends AnchorPane {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public int getUid() {
+        return this.uid;
+    }
+
+    public String getGid() {
+        return this.gid;
     }
 }

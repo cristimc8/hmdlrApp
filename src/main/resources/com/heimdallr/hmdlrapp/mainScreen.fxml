@@ -5,6 +5,7 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -67,18 +68,79 @@
             </AnchorPane>
          </left>
          <center>
-            <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" style="-fx-background-color: #1c2c3b; -fx-background-radius: 25;" BorderPane.alignment="CENTER">
-               <center>
-                  <Label alignment="CENTER" text="Select a chat and start messaging!" textAlignment="CENTER" textFill="WHITE" wrapText="true" BorderPane.alignment="CENTER">
-                     <font>
-                        <Font name="Garuda" size="15.0" />
-                     </font>
-                  </Label>
-               </center>
-               <padding>
-                  <Insets left="12.0" right="12.0" />
-               </padding>
-            </BorderPane>
+            <AnchorPane fx:id="chatAreaContainer" BorderPane.alignment="CENTER">
+               <children>
+                  <AnchorPane fx:id="injectableCharArea" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="737.5050259475688" prefWidth="854.1724876793876" style="-fx-background-color: #0e1621;" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <children>
+                        <BorderPane prefHeight="478.0" prefWidth="798.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                           <center>
+                              <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #0e1621;" BorderPane.alignment="CENTER">
+                                 <content>
+                                    <VBox fx:id="scrollableChatAreaContainer" prefHeight="419.0" prefWidth="784.0" style="-fx-background-color: #0e1621;" />
+                                 </content>
+                              </ScrollPane>
+                           </center>
+                           <top>
+                              <BorderPane prefHeight="60.0" prefWidth="798.0" style="-fx-background-color: #17212b;" BorderPane.alignment="CENTER">
+                                 <left>
+                                    <HBox fx:id="chatTopLeftBar" alignment="CENTER_LEFT" spacing="15.0" BorderPane.alignment="CENTER">
+                                       <children>
+                                          <Label fx:id="chatUsernameLabel" text="\@LoremIpsulinum" textFill="#f7f3f3">
+                                             <font>
+                                                <Font name="Garuda Bold" size="20.0" />
+                                             </font>
+                                          </Label>
+                                       </children>
+                                       <padding>
+                                          <Insets left="15.0" right="15.0" />
+                                       </padding>
+                                    </HBox>
+                                 </left>
+                              </BorderPane>
+                           </top>
+                           <bottom>
+                              <HBox fx:id="messageTextAreaContainer" alignment="CENTER" fillHeight="false" style="-fx-background-color: #17212b;" BorderPane.alignment="CENTER">
+                                 <children>
+                                    <TextArea fx:id="messageTextArea" prefHeight="56.0" prefWidth="731.0" promptText="Write a message" styleClass="hmdlrTextArea" stylesheets="@res/style.css" wrapText="true" HBox.hgrow="ALWAYS">
+                                       <font>
+                                          <Font name="Garuda" size="15.0" />
+                                       </font>
+                                    </TextArea>
+                                    <ImageView fx:id="sendMessageButton" fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true" HBox.hgrow="ALWAYS">
+                                       <image>
+                                          <Image url="@res/send.png" />
+                                       </image>
+                                       <cursor>
+                                          <Cursor fx:constant="HAND" />
+                                       </cursor>
+                                    </ImageView>
+                                 </children>
+                                 <padding>
+                                    <Insets right="15.0" />
+                                 </padding>
+                              </HBox>
+                           </bottom>
+                        </BorderPane>
+                     </children>
+                  </AnchorPane>
+                  <BorderPane fx:id="selectAChatSystemContainer" prefHeight="737.5050259475688" prefWidth="854.1724876793876" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <center>
+                        <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" style="-fx-background-color: #1c2c3b; -fx-background-radius: 25;">
+                           <center>
+                              <Label alignment="CENTER" text="Select a chat and start messaging!" textAlignment="CENTER" textFill="WHITE" wrapText="true" BorderPane.alignment="CENTER">
+                                 <font>
+                                    <Font name="Garuda" size="15.0" />
+                                 </font>
+                              </Label>
+                           </center>
+                           <padding>
+                              <Insets left="12.0" right="12.0" />
+                           </padding>
+                        </BorderPane>
+                     </center>
+                  </BorderPane>
+               </children>
+            </AnchorPane>
          </center>
       </BorderPane>
       <AnchorPane fx:id="loadingComponent" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="691.0" prefWidth="937.0" style="-fx-background-color: transparent;" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">

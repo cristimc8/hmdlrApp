@@ -51,6 +51,10 @@
     -fx-prompt-text-fill: #54606e;
 }
 
+.text-area .scroll-bar:vertical:disabled {
+    -fx-opacity: 0;
+}
+
 .profilePicture {
     -fx-background-color: cyan;
     -fx-pref-width: 50;

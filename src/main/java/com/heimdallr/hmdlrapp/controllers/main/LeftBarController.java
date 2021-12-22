@@ -2,7 +2,6 @@ package com.heimdallr.hmdlrapp.controllers.main;
 
 import com.heimdallr.hmdlrapp.controllers.CustomController;
 import com.heimdallr.hmdlrapp.exceptions.ServiceNotRegisteredException;
-import com.heimdallr.hmdlrapp.models.BaseEntity;
 import com.heimdallr.hmdlrapp.models.GroupChat;
 import com.heimdallr.hmdlrapp.models.Message;
 import com.heimdallr.hmdlrapp.services.DI.HmdlrDI;
@@ -17,17 +16,19 @@ import javafx.animation.TranslateTransition;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class LeftBarController extends Subscriber implements CustomController {
     private UserService userService;
@@ -43,19 +44,52 @@ public class LeftBarController extends Subscriber implements CustomController {
     BorderPane parent;
     AnchorPane sliderMenu;
     ImageView closeSliderMenuButton;
+    BorderPane selectAChatSystemContainer;
+    AnchorPane injectableCharArea;
+
+    // Chat area
+    AnchorPane chatAreaContainer;
+    VBox scrollableChatAreaContainer;
+    TextArea messageTextArea;
+    ImageView sendMessageButton;
+    ImageView messageButton;
+    HBox chatTopLeftBar;
+    Label chatUsernameLabel;
+    HBox messageTextAreaContainer;
 
     public LeftBarController(VBox recentChatsContainer,
                              ImageView burgerMenuButton,
                              TextField searchTextBox,
                              BorderPane parent,
                              AnchorPane sliderMenu,
-                             ImageView closeSliderMenuButton) {
+                             ImageView closeSliderMenuButton,
+                             BorderPane selectAChatSystemContainer,
+                             AnchorPane injectableCharArea,
+                             AnchorPane chatAreaContainer,
+                             VBox scrollableChatAreaContainer,
+                             TextArea messageTextArea,
+                             ImageView sendMessageButton,
+                             ImageView messageButton,
+                             HBox chatTopLeftBar,
+                             Label chatUsernameLabel,
+                             HBox messageTextAreaContainer) {
         this.recentChatsContainer = recentChatsContainer;
         this.burgerMenuButton = burgerMenuButton;
         this.searchTextBox = searchTextBox;
         this.parent = parent;
         this.sliderMenu = sliderMenu;
         this.closeSliderMenuButton = closeSliderMenuButton;
+        this.selectAChatSystemContainer = selectAChatSystemContainer;
+        this.injectableCharArea = injectableCharArea;
+
+        this.chatAreaContainer = chatAreaContainer;
+        this.scrollableChatAreaContainer = scrollableChatAreaContainer;
+        this.messageTextArea = messageTextArea;
+        this.sendMessageButton = sendMessageButton;
+        this.messageButton = messageButton;
+        this.chatTopLeftBar = chatTopLeftBar;
+        this.chatUsernameLabel = chatUsernameLabel;
+        this.messageTextAreaContainer = messageTextAreaContainer;
     }
 
     @Override
@@ -153,13 +187,12 @@ public class LeftBarController extends Subscriber implements CustomController {
         List<Message> filtered = new ArrayList<>();
 
         messages.forEach(message -> {
-            if(message.getGroupId() == null) {
+            if (message.getGroupId() == null) {
                 int id = getDifferentIdFromMessage(message);
                 if (userService.findById(id).getUsername().contains(query))
                     filtered.add(message);
-            }
-            else {
-                if(groupChatsService.findById(message.getGroupId()).getAlias().contains(query))
+            } else {
+                if (groupChatsService.findById(message.getGroupId()).getAlias().contains(query))
                     filtered.add(message);
             }
         });
@@ -172,12 +205,50 @@ public class LeftBarController extends Subscriber implements CustomController {
     }
 
     private void addMessageToGUI(Message message) {
-        ChatHeadController chatHeadController = new ChatHeadController(
-                null,
-                getChatHeadPreviewLetters(message),
-                getFriendOrGroupName(message),
-                message.getMessageBody()
-        );
+        ChatHeadController chatHeadController;
+        if (message.getGroupId() == null) {
+            chatHeadController = new ChatHeadController(
+                    null,
+                    getChatHeadPreviewLetters(message),
+                    getFriendOrGroupName(message),
+                    message.getMessageBody(),
+                    getDifferentIdFromMessage(message)
+            );
+        } else {
+            chatHeadController = new ChatHeadController(
+                    null,
+                    getChatHeadPreviewLetters(message),
+                    getFriendOrGroupName(message),
+                    message.getMessageBody(),
+                    message.getGroupId()
+            );
+        }
+        chatHeadController.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
+            ChatAreaController chatAreaController;
+            if (chatHeadController.getGid() == null) {
+                // Could do some events here but im lazy and this aint that complicated
+                // means it's convo
+                int otId = chatHeadController.getUid();
+                 chatAreaController = new ChatAreaController(
+                        injectableCharArea, chatAreaContainer, scrollableChatAreaContainer, messageTextArea,
+                        sendMessageButton, messageButton, chatTopLeftBar, chatUsernameLabel, messageTextAreaContainer,
+                        otId
+                );
+            } else {
+                // Means group
+                String gid = chatHeadController.getGid();
+                chatAreaController = new ChatAreaController(
+                        injectableCharArea, chatAreaContainer, scrollableChatAreaContainer, messageTextArea,
+                        sendMessageButton, messageButton, chatTopLeftBar, chatUsernameLabel, messageTextAreaContainer,
+                        gid
+                );
+            }
+
+            chatAreaController.initialize();
+
+            injectableCharArea.setVisible(true);
+            selectAChatSystemContainer.setVisible(false);
+        });
         try {
             recentChatsContainer.getChildren().add(chatHeadController);
         } catch (Exception e) {
