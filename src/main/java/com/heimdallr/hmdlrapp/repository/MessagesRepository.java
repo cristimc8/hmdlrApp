@@ -118,8 +118,8 @@ public class MessagesRepository implements RepoInterface<Message, Integer> {
         if (!userGroups.isEmpty()) {
             cmd = String.format(
                     "SELECT * FROM messages " +
-                            "WHERE ((sender_id = ? AND group_id IS NULL) OR receiver_id = ?) " +
-                            "OR (group_id IN (%s) AND reply_to != -1) " +
+                            "WHERE (sender_id = ? OR receiver_id = ?) " +
+                            "OR (group_id IN (%s)) " +
                             "ORDER BY message_id DESC",
                     userGroups.stream()
                             .map(v -> "?").collect(Collectors.joining(", ")));
@@ -152,10 +152,13 @@ public class MessagesRepository implements RepoInterface<Message, Integer> {
 
                 // We only want the last message with each user
                 // But the system is special case
-                if ((!candidates.contains(candidateId) && (!groupIdsCandidates.contains(groupId) || groupId == null)) || senderId == 1) {
+                if ((!candidates.contains(candidateId) &&
+                        (groupId == null || !groupIdsCandidates.contains(groupId))) ||
+                        (senderId == 1 && !groupIdsCandidates.contains(groupId))) {
                     messages.add(new Message(messageId, senderId, receiverId, groupId, replyTo, messageBody, timestamp));
                     candidates.add(candidateId);
-                    groupIdsCandidates.add(groupId);
+                    if(groupId != null)
+                        groupIdsCandidates.add(groupId);
                 }
             }
         } catch (SQLException e) {
