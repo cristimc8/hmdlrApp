@@ -158,7 +158,7 @@ public class ChatAreaController extends Subscriber implements CustomController {
         if (this.isConvo) {
             this.groupChat = null;
             this.other = userService.findById(uid);
-            if(this.other.getId() == 1) {
+            if (this.other.getId() == 1) {
                 this.messageTextArea.setDisable(true);
                 this.messageTextArea.setPromptText("You can't talk to the system! Find some friends.");
             }
@@ -206,10 +206,10 @@ public class ChatAreaController extends Subscriber implements CustomController {
         EventHandler<InputEvent> handler = new EventHandler() {
             @Override
             public void handle(Event event) {
-                if(!messageTextArea.getText().isBlank()) {
+                if (!messageTextArea.getText().isBlank()) {
                     // send message
                     System.out.println("Sending message to: " + (isConvo ? other.getUsername() : groupChat.getAlias()));
-                    if(isConvo)
+                    if (isConvo)
                         messagesService.sendMessage(currentUser, other, messageTextArea.getText());
                     else
                         messagesService.sendMessage(currentUser, groupChat, messageTextArea.getText());
@@ -249,13 +249,12 @@ public class ChatAreaController extends Subscriber implements CustomController {
         if (this.isConvo) {
             System.out.println("Loading convo with " + other.getUsername());
             allMessages = messagesService.findAllBetweenUsers(currentUser, other);
-        }
-        else {
-            System.out.println("Loading convo with" + groupChat.getAlias());
+        } else {
+            System.out.println("Loading convo with " + groupChat.getAlias());
             allMessages = messagesService.findAllForGroup(groupChat);
         }
         for (Message message : allMessages) {
-            if(message.getSenderId() == 1 || message.getReplyTo() == -1) {
+            if (message.getSenderId() == 1 || message.getReplyTo() == -1) {
                 // message from system
                 SystemNotificationController systemNotificationController = new SystemNotificationController(
                         message.getMessageBody()

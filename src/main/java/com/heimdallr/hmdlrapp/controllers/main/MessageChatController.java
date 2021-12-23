@@ -12,6 +12,7 @@ import com.heimdallr.hmdlrapp.services.pubSub.EventDispatcher;
 import com.heimdallr.hmdlrapp.services.pubSub.Subscriber;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
@@ -26,6 +27,8 @@ public class MessageChatController extends AnchorPane {
     TextFlow textFlowContainer;
     @FXML
     Text messageBodyLabel;
+    @FXML
+    Label messageSenderLabel;
 
     int mid;
     int senderId;
@@ -56,6 +59,7 @@ public class MessageChatController extends AnchorPane {
                 this.messageAnchorPane.setStyle("-fx-border-color: crimson;");
             }
             this.messageBodyLabel.setText(message.getMessageBody());
+            this.messageSenderLabel.setText(userService.findById(message.getSenderId()).getDisplayUsername());
 
         }
         catch (Exception ignored) {}
