@@ -270,13 +270,15 @@ public class ChatAreaController extends Subscriber implements CustomController {
             }
             if(message.getReplyTo() > 0) {
                 ReplyToMessageController replyToMessageController = new ReplyToMessageController(
-                        message
+                        message,
+                        scrollableChatAreaContainer
                 );
                 this.scrollableChatAreaContainer.getChildren().add(replyToMessageController);
             }
             else {
                 MessageChatController messageChatController = new MessageChatController(
-                        message
+                        message,
+                        scrollableChatAreaContainer
                 );
                 this.scrollableChatAreaContainer.getChildren().add(messageChatController);
             }
