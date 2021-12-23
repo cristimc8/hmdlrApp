@@ -268,10 +268,19 @@ public class ChatAreaController extends Subscriber implements CustomController {
                 this.scrollableChatAreaContainer.getChildren().add(hBox);
                 continue;
             }
-            MessageChatController messageChatController = new MessageChatController(
-                    message
-            );
-            this.scrollableChatAreaContainer.getChildren().add(messageChatController);
+            if(message.getReplyTo() > 0) {
+                ReplyToMessageController replyToMessageController = new ReplyToMessageController(
+                        message
+                );
+                this.scrollableChatAreaContainer.getChildren().add(replyToMessageController);
+            }
+            else {
+                MessageChatController messageChatController = new MessageChatController(
+                        message
+                );
+                this.scrollableChatAreaContainer.getChildren().add(messageChatController);
+            }
+
         }
         this.parentScrollPane.setVvalue(1.0);
 

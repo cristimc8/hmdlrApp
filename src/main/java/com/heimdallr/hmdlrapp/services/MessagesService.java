@@ -17,6 +17,10 @@ public class MessagesService {
         this.messagesRepository = (MessagesRepository) messagesRepo;
     }
 
+    public Message findById(int id) {
+        return this.messagesRepository.findById(id);
+    }
+
     public List<Message> findAllBetweenUsers(User userOne, User userTwo) {
         return this.findAllBetweenUsers(userOne.getId(), userTwo.getId());
     }

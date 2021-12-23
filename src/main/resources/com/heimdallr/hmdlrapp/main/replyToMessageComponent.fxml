@@ -3,15 +3,26 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 <?import javafx.scene.text.TextFlow?>
 
-<fx:root fx:id="messageAnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="800.0" styleClass="messageComponent" stylesheets="@res/style.css" type="AnchorPane" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
+<fx:root fx:id="messageAnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="83.0" prefWidth="800.0" styleClass="messageComponent" stylesheets="@../res/style.css" type="AnchorPane" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
    <children>
+      <Line endX="50.0" endY="15.0" startX="20.0" startY="15.0" stroke="WHITE" />
+      <Line endX="20.0" endY="15.0" startX="20.0" startY="25.0" stroke="WHITE" />
+      <Label fx:id="repliedMessageAuthorLabel" text="Replying to @username's: lorem ipsum dolor sit amet!" textFill="#efebeb">
+         <padding>
+            <Insets left="60.0" top="2.0" />
+         </padding>
+         <font>
+            <Font name="Garuda" size="13.0" />
+         </font>
+      </Label>
       <Label fx:id="messageSenderLabel" text="\@LoremIpsulinum" textFill="#4077a3">
          <padding>
-            <Insets left="15.0" />
+            <Insets left="15.0" top="25.0" />
          </padding>
          <font>
             <Font name="Garuda Bold" size="14.0" />
@@ -26,7 +37,7 @@
             </Text>
          </children>
          <padding>
-            <Insets bottom="5.0" left="5.0" right="5.0" top="16.0" />
+            <Insets bottom="5.0" left="5.0" right="5.0" top="40.0" />
          </padding>
       </TextFlow>
    </children>
