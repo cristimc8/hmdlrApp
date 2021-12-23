@@ -17,6 +17,7 @@ import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
@@ -37,6 +38,7 @@ public class LeftBarController extends Subscriber implements CustomController {
     private EventDispatcher eventDispatcher;
 
     private String query = "";
+    private ChatAreaController chatAreaController = new ChatAreaController();
 
     VBox recentChatsContainer;
     ImageView burgerMenuButton;
@@ -56,6 +58,7 @@ public class LeftBarController extends Subscriber implements CustomController {
     HBox chatTopLeftBar;
     Label chatUsernameLabel;
     HBox messageTextAreaContainer;
+    ScrollPane parentScrollPane;
 
     public LeftBarController(VBox recentChatsContainer,
                              ImageView burgerMenuButton,
@@ -72,7 +75,8 @@ public class LeftBarController extends Subscriber implements CustomController {
                              ImageView messageButton,
                              HBox chatTopLeftBar,
                              Label chatUsernameLabel,
-                             HBox messageTextAreaContainer) {
+                             HBox messageTextAreaContainer,
+                             ScrollPane parentScrollPane) {
         this.recentChatsContainer = recentChatsContainer;
         this.burgerMenuButton = burgerMenuButton;
         this.searchTextBox = searchTextBox;
@@ -90,6 +94,7 @@ public class LeftBarController extends Subscriber implements CustomController {
         this.chatTopLeftBar = chatTopLeftBar;
         this.chatUsernameLabel = chatUsernameLabel;
         this.messageTextAreaContainer = messageTextAreaContainer;
+        this.parentScrollPane = parentScrollPane;
     }
 
     @Override
@@ -224,22 +229,21 @@ public class LeftBarController extends Subscriber implements CustomController {
             );
         }
         chatHeadController.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
-            ChatAreaController chatAreaController;
             if (chatHeadController.getGid() == null) {
                 // Could do some events here but im lazy and this aint that complicated
                 // means it's convo
                 int otId = chatHeadController.getUid();
-                 chatAreaController = new ChatAreaController(
+                chatAreaController.setArgs(
                         injectableCharArea, chatAreaContainer, scrollableChatAreaContainer, messageTextArea,
-                        sendMessageButton, messageButton, chatTopLeftBar, chatUsernameLabel, messageTextAreaContainer,
+                        sendMessageButton, messageButton, chatTopLeftBar, chatUsernameLabel, messageTextAreaContainer, parentScrollPane,
                         otId
                 );
             } else {
                 // Means group
                 String gid = chatHeadController.getGid();
-                chatAreaController = new ChatAreaController(
+                chatAreaController.setArgs(
                         injectableCharArea, chatAreaContainer, scrollableChatAreaContainer, messageTextArea,
-                        sendMessageButton, messageButton, chatTopLeftBar, chatUsernameLabel, messageTextAreaContainer,
+                        sendMessageButton, messageButton, chatTopLeftBar, chatUsernameLabel, messageTextAreaContainer, parentScrollPane,
                         gid
                 );
             }

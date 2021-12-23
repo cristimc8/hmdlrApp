@@ -14,13 +14,18 @@ import com.heimdallr.hmdlrapp.services.pubSub.EventDispatcher;
 import com.heimdallr.hmdlrapp.services.pubSub.Subscriber;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollBar;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.InputEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -45,6 +50,7 @@ public class ChatAreaController extends Subscriber implements CustomController {
     HBox chatTopLeftBar;
     Label chatUsernameLabel;
     HBox messageTextAreaContainer;
+    ScrollPane parentScrollPane;
 
     private int uid = 0;
     private String gid = null;
@@ -55,36 +61,8 @@ public class ChatAreaController extends Subscriber implements CustomController {
     private boolean isConvo;
     private double originalHeight;
 
-    public ChatAreaController(AnchorPane injectableCharArea,
-                              AnchorPane chatAreaContainer,
-                              VBox scrollableChatAreaContainer,
-                              TextArea messageTextArea,
-                              ImageView sendMessageButton,
-                              ImageView messageButton,
-                              HBox chatTopLeftBar,
-                              Label chatUsernameLabel,
-                              HBox messageTextAreaContainer,
-                              int uid) {
-        this.uid = uid;
-        this.isConvo = true;
-        this.initArgs(injectableCharArea, chatAreaContainer, scrollableChatAreaContainer, messageTextArea,
-                sendMessageButton, messageButton, chatTopLeftBar, chatUsernameLabel, messageTextAreaContainer);
-    }
+    public ChatAreaController() {
 
-    public ChatAreaController(AnchorPane injectableCharArea,
-                              AnchorPane chatAreaContainer,
-                              VBox scrollableChatAreaContainer,
-                              TextArea messageTextArea,
-                              ImageView sendMessageButton,
-                              ImageView messageButton,
-                              HBox chatTopLeftBar,
-                              Label chatUsernameLabel,
-                              HBox messageTextAreaContainer,
-                              String gid) {
-        this.isConvo = false;
-        this.gid = gid;
-        this.initArgs(injectableCharArea, chatAreaContainer, scrollableChatAreaContainer, messageTextArea,
-                sendMessageButton, messageButton, chatTopLeftBar, chatUsernameLabel, messageTextAreaContainer);
     }
 
     private void initArgs(AnchorPane injectableCharArea,
@@ -95,7 +73,8 @@ public class ChatAreaController extends Subscriber implements CustomController {
                           ImageView messageButton,
                           HBox chatTopLeftBar,
                           Label chatUsernameLabel,
-                          HBox messageTextAreaContainer) {
+                          HBox messageTextAreaContainer,
+                          ScrollPane parentScrollPane) {
         this.injectableCharArea = injectableCharArea;
         this.chatAreaContainer = chatAreaContainer;
         this.scrollableChatAreaContainer = scrollableChatAreaContainer;
@@ -105,7 +84,42 @@ public class ChatAreaController extends Subscriber implements CustomController {
         this.chatTopLeftBar = chatTopLeftBar;
         this.chatUsernameLabel = chatUsernameLabel;
         this.messageTextAreaContainer = messageTextAreaContainer;
+        this.parentScrollPane = parentScrollPane;
 
+    }
+
+    public void setArgs(AnchorPane injectableCharArea,
+                        AnchorPane chatAreaContainer,
+                        VBox scrollableChatAreaContainer,
+                        TextArea messageTextArea,
+                        ImageView sendMessageButton,
+                        ImageView messageButton,
+                        HBox chatTopLeftBar,
+                        Label chatUsernameLabel,
+                        HBox messageTextAreaContainer,
+                        ScrollPane parentScrollPane,
+                        int uid) {
+        this.uid = uid;
+        this.isConvo = true;
+        this.initArgs(injectableCharArea, chatAreaContainer, scrollableChatAreaContainer, messageTextArea,
+                sendMessageButton, messageButton, chatTopLeftBar, chatUsernameLabel, messageTextAreaContainer, parentScrollPane);
+    }
+
+    public void setArgs(AnchorPane injectableCharArea,
+                        AnchorPane chatAreaContainer,
+                        VBox scrollableChatAreaContainer,
+                        TextArea messageTextArea,
+                        ImageView sendMessageButton,
+                        ImageView messageButton,
+                        HBox chatTopLeftBar,
+                        Label chatUsernameLabel,
+                        HBox messageTextAreaContainer,
+                        ScrollPane parentScrollPane,
+                        String gid) {
+        this.isConvo = false;
+        this.gid = gid;
+        this.initArgs(injectableCharArea, chatAreaContainer, scrollableChatAreaContainer, messageTextArea,
+                sendMessageButton, messageButton, chatTopLeftBar, chatUsernameLabel, messageTextAreaContainer, parentScrollPane);
     }
 
     @Override
@@ -123,14 +137,31 @@ public class ChatAreaController extends Subscriber implements CustomController {
         this.setGoodDisplayData();
         this.setEventHandlers();
         this.loadMessages();
+        this.eventDispatcher.subscribeTo(this, Channel.onNewMessage);
     }
 
     private void setGoodDisplayData() {
+        this.messageTextArea.setDisable(false);
+        this.messageTextArea.setPromptText("Write a message");
+        // Making the scroll to bottom automatically
+        this.parentScrollPane.setVvalue(1.0);
+        this.scrollableChatAreaContainer.heightProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                parentScrollPane.setVvalue((Double) newValue);
+            }
+        });
+
         // Inject the chat head with letters and the username
         if (this.chatTopLeftBar.getChildren().size() > 1)
             this.chatTopLeftBar.getChildren().remove(0);
         if (this.isConvo) {
+            this.groupChat = null;
             this.other = userService.findById(uid);
+            if(this.other.getId() == 1) {
+                this.messageTextArea.setDisable(true);
+                this.messageTextArea.setPromptText("You can't talk to the system! Find some friends.");
+            }
             this.chatUsernameLabel.setText(this.other.getDisplayUsername());
             ProfileHeadController profileHeadController = new ProfileHeadController(
                     null,
@@ -138,6 +169,7 @@ public class ChatAreaController extends Subscriber implements CustomController {
             );
             this.chatTopLeftBar.getChildren().add(0, profileHeadController);
         } else {
+            this.other = null;
             this.groupChat = groupChatsService.findById(gid);
             this.chatUsernameLabel.setText(this.groupChat.getAlias());
             ProfileHeadController profileHeadController = new ProfileHeadController(
@@ -166,6 +198,38 @@ public class ChatAreaController extends Subscriber implements CustomController {
             }
         });
 
+/*        try {
+            sendMessageButton.removeEventHandler(MouseEvent.MOUSE_CLICKED, sendMessageButton.getOnMouseClicked());
+        }
+        catch (Exception ignored) {}*/
+
+        EventHandler<InputEvent> handler = new EventHandler() {
+            @Override
+            public void handle(Event event) {
+                if(!messageTextArea.getText().isBlank()) {
+                    // send message
+                    System.out.println("Sending message to: " + (isConvo ? other.getUsername() : groupChat.getAlias()));
+                    if(isConvo)
+                        messagesService.sendMessage(currentUser, other, messageTextArea.getText());
+                    else
+                        messagesService.sendMessage(currentUser, groupChat, messageTextArea.getText());
+
+                    messageTextArea.clear();
+                }
+            }
+        };
+
+/*
+        try {
+            sendMessageButton.removeEventHandler(MouseEvent.MOUSE_CLICKED, handler);
+        }
+        catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+*/
+
+        sendMessageButton.setOnMouseClicked(handler);
+
         /*messageTextAreaContainer.lookup(".text").boundsInLocalProperty().addListener(new ChangeListener<Bounds>() {
             @Override
             public void changed(ObservableValue<? extends Bounds> observable, Bounds oldValue, Bounds newValue) {
@@ -183,9 +247,11 @@ public class ChatAreaController extends Subscriber implements CustomController {
         this.scrollableChatAreaContainer.getChildren().clear();
         List<Message> allMessages = new ArrayList<>();
         if (this.isConvo) {
+            System.out.println("Loading convo with " + other.getUsername());
             allMessages = messagesService.findAllBetweenUsers(currentUser, other);
         }
         else {
+            System.out.println("Loading convo with" + groupChat.getAlias());
             allMessages = messagesService.findAllForGroup(groupChat);
         }
         for (Message message : allMessages) {
@@ -208,5 +274,7 @@ public class ChatAreaController extends Subscriber implements CustomController {
             );
             this.scrollableChatAreaContainer.getChildren().add(messageChatController);
         }
+        this.parentScrollPane.setVvalue(1.0);
+
     }
 }

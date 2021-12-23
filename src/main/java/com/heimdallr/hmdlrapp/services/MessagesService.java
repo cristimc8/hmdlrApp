@@ -52,7 +52,10 @@ public class MessagesService {
     }
 
     public List<Message> getAllUserPreviews(int uid, List<String> userGroups) {
-        return this.messagesRepository.getAllPreviewsForUser(uid, userGroups);
+        List<Message> previews = this.messagesRepository.getAllPreviewsForUser(uid, userGroups);
+        previews.forEach(message -> {message.setMessageBody(message.getMessageBody().split("\n")[0]);});
+        return previews;
+
     }
 
     public List<Message> getAllUserMessages(User user) {

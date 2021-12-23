@@ -110,6 +110,7 @@ public class MessagesRepository implements RepoInterface<Message, Integer> {
     public List<Message> getAllPreviewsForUser(int uid, List<String> userGroups) {
         List<Message> messages = new ArrayList<>();
         List<Integer> candidates = new ArrayList<>();
+        List<String> groupIdsCandidates = new ArrayList<>();
 
         String cmd = "SELECT * FROM messages " +
                 "WHERE sender_id = ? OR receiver_id = ? " +
@@ -117,8 +118,8 @@ public class MessagesRepository implements RepoInterface<Message, Integer> {
         if (!userGroups.isEmpty()) {
             cmd = String.format(
                     "SELECT * FROM messages " +
-                            "WHERE sender_id = ? OR receiver_id = ? " +
-                            "OR group_id IN (%s) " +
+                            "WHERE ((sender_id = ? AND group_id IS NULL) OR receiver_id = ?) " +
+                            "OR (group_id IN (%s) AND reply_to != -1) " +
                             "ORDER BY message_id DESC",
                     userGroups.stream()
                             .map(v -> "?").collect(Collectors.joining(", ")));
@@ -151,9 +152,10 @@ public class MessagesRepository implements RepoInterface<Message, Integer> {
 
                 // We only want the last message with each user
                 // But the system is special case
-                if (!candidates.contains(candidateId) || senderId == 1) {
+                if ((!candidates.contains(candidateId) && (!groupIdsCandidates.contains(groupId) || groupId == null)) || senderId == 1) {
                     messages.add(new Message(messageId, senderId, receiverId, groupId, replyTo, messageBody, timestamp));
                     candidates.add(candidateId);
+                    groupIdsCandidates.add(groupId);
                 }
             }
         } catch (SQLException e) {

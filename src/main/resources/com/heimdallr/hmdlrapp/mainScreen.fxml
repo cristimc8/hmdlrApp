@@ -74,7 +74,7 @@
                      <children>
                         <BorderPane prefHeight="478.0" prefWidth="798.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <center>
-                              <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #0e1621;" BorderPane.alignment="CENTER">
+                              <ScrollPane fx:id="parentScrollPane" fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #0e1621;" BorderPane.alignment="CENTER">
                                  <content>
                                     <VBox fx:id="scrollableChatAreaContainer" prefHeight="419.0" prefWidth="784.0" style="-fx-background-color: #0e1621;" />
                                  </content>
@@ -99,7 +99,7 @@
                               </BorderPane>
                            </top>
                            <bottom>
-                              <HBox fx:id="messageTextAreaContainer" alignment="CENTER" fillHeight="false" style="-fx-background-color: #17212b;" BorderPane.alignment="CENTER">
+                              <HBox fx:id="messageTextAreaContainer" alignment="CENTER" style="-fx-background-color: #17212b;" BorderPane.alignment="CENTER">
                                  <children>
                                     <TextArea fx:id="messageTextArea" prefHeight="56.0" prefWidth="731.0" promptText="Write a message" styleClass="hmdlrTextArea" stylesheets="@res/style.css" wrapText="true" HBox.hgrow="ALWAYS">
                                        <font>

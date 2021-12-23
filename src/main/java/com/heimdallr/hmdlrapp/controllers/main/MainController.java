@@ -14,10 +14,7 @@ import com.heimdallr.hmdlrapp.services.pubSub.Channel;
 import com.heimdallr.hmdlrapp.services.pubSub.EventDispatcher;
 import com.heimdallr.hmdlrapp.services.pubSub.Subscriber;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
@@ -164,6 +161,9 @@ public class MainController extends Subscriber {
     HBox messageTextAreaContainer;
 
     @FXML
+    ScrollPane parentScrollPane;
+
+    @FXML
     protected void initialize() {
         try {
             this.userService = (UserService) HmdlrDI.getContainer().getService(UserService.class);
@@ -240,7 +240,8 @@ public class MainController extends Subscriber {
                 sendMessageButton,
                 chatTopLeftBar,
                 chatUsernameLabel,
-                messageTextAreaContainer
+                messageTextAreaContainer,
+                parentScrollPane
         );
         leftBarController.initialize();
     }
