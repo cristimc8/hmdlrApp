@@ -115,11 +115,18 @@ public class MessagesRepository implements RepoInterface<Message, Integer> {
         String cmd = "SELECT * FROM messages " +
                 "WHERE sender_id = ? OR receiver_id = ? " +
                 "ORDER BY message_id DESC";
+
+        /*String cmd1 = "SELECT * FROM (" +
+                "SELECT * FROM messages " +
+                "ORDER BY message_id DESC) SQ " +
+                "WHERE sender_id = ? OR receiver_id = ? " +
+                "OR group_id IN (%s) " +
+                "ORDER BY message_id ASC";*/
         if (!userGroups.isEmpty()) {
             cmd = String.format(
                     "SELECT * FROM messages " +
-                            "WHERE (sender_id = ? OR receiver_id = ?) " +
-                            "OR (group_id IN (%s)) " +
+                            "WHERE sender_id = ? OR receiver_id = ? " +
+                            "OR group_id IN (%s) " +
                             "ORDER BY message_id DESC",
                     userGroups.stream()
                             .map(v -> "?").collect(Collectors.joining(", ")));
@@ -152,13 +159,21 @@ public class MessagesRepository implements RepoInterface<Message, Integer> {
 
                 // We only want the last message with each user
                 // But the system is special case
-                if ((!candidates.contains(candidateId) &&
-                        (groupId == null || !groupIdsCandidates.contains(groupId))) ||
-                        (senderId == 1 && !groupIdsCandidates.contains(groupId))) {
-                    messages.add(new Message(messageId, senderId, receiverId, groupId, replyTo, messageBody, timestamp));
-                    candidates.add(candidateId);
-                    if(groupId != null)
+                if(groupId == null) {
+                    // its a convo
+                    if(!candidates.contains(candidateId)) {
+                        // If from this convo we don't already have a preview
+                        // with this other person
+                        messages.add(new Message(messageId, senderId, receiverId, null, replyTo, messageBody, timestamp));
+                        candidates.add(candidateId);
+                    }
+                }
+                else {
+                    // its a gc
+                    if(!groupIdsCandidates.contains(groupId)) {
+                        messages.add(new Message(messageId, senderId, receiverId, groupId, replyTo, messageBody, timestamp));
                         groupIdsCandidates.add(groupId);
+                    }
                 }
             }
         } catch (SQLException e) {
