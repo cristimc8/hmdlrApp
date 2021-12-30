@@ -43,6 +43,11 @@ public class MessagesService {
         return this.nextPageBetweenUsers(uidOne, uidTwo).stream().toList();
     }
 
+    public Message latestMessageBetweenUsers(int uidOne, int uidTwo) {
+        List<Message> lastPage = findAllBetweenUsers(0, uidOne, uidTwo);
+        return lastPage.get(lastPage.size() - 1);
+    }
+
     // Retrieves the next page
     private List<Message> nextPageBetweenUsers(int uidOne, int uidTwo) {
         this.page++;
@@ -50,7 +55,6 @@ public class MessagesService {
     }
 
     private List<Message> findAllBetweenUsers(int page, int uidOne, int uidTwo) {
-        this.page = page;
         Pageable pageable = new PageableImplementation(page, this.size);
         Page<Message> messagePage = messagesRepository.getAllBetweenUsers(pageable, uidOne, uidTwo);
         List<Message> retrievedMessages = messagePage.getContent().toList();
@@ -58,6 +62,7 @@ public class MessagesService {
         Collections.reverse(tmpList);
         return tmpList;
     }
+
 
     public Iterable<Message> findAllForGroup(GroupChat groupChat) {
         return this.findAllForGroup(groupChat.getId());
