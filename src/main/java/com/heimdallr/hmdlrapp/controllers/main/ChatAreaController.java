@@ -266,7 +266,7 @@ public class ChatAreaController extends Subscriber implements CustomController {
 
     // This method is bound to the scroll wheel when it reaches the 0 position
     private void loadMoreMessages() {
-        Iterable<Message> allMessages = this.fetchMessages();
+        List<Message> allMessages = this.fetchMessages();
         this.displayMessages(allMessages);
     }
 
@@ -280,7 +280,7 @@ public class ChatAreaController extends Subscriber implements CustomController {
 
     private void loadMessages() {
         // Retrieves next page of conversation
-        Iterable<Message> allMessages = this.fetchMessages();
+        List<Message> allMessages = this.fetchMessages();
         // Display messages in the GUI
         this.displayMessages(allMessages);
         Async.setTimeout(() -> {
