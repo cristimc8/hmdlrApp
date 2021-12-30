@@ -5,6 +5,10 @@ import com.heimdallr.hmdlrapp.exceptions.ServiceNotRegisteredException;
 import com.heimdallr.hmdlrapp.exceptions.ValueExistsException;
 import com.heimdallr.hmdlrapp.models.GroupChat;
 import com.heimdallr.hmdlrapp.models.Message;
+import com.heimdallr.hmdlrapp.repository.pagination.Page;
+import com.heimdallr.hmdlrapp.repository.pagination.Pageable;
+import com.heimdallr.hmdlrapp.repository.pagination.Paginator;
+import com.heimdallr.hmdlrapp.repository.pagination.PagingRepository;
 import com.heimdallr.hmdlrapp.services.DI.HmdlrDI;
 import com.heimdallr.hmdlrapp.services.pubSub.Channel;
 import com.heimdallr.hmdlrapp.services.pubSub.EventDispatcher;
@@ -14,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class MessagesRepository implements RepoInterface<Message, Integer> {
+public class MessagesRepository implements PagingRepository<Message, Integer> {
     private Connection dbInstance;
 
     public MessagesRepository() {
@@ -25,11 +29,12 @@ public class MessagesRepository implements RepoInterface<Message, Integer> {
         }
     }
 
-    public List<Message> getAllBetweenUsers(int uidOne, int uidTwo) {
+    public Iterable<Message> getAllBetweenUsers(int uidOne, int uidTwo) {
         List<Message> messages = new ArrayList<>();
         String cmd = "SELECT * FROM messages " +
                 "WHERE (sender_id = ? AND receiver_id = ?) " +
-                "OR (sender_id = ? AND receiver_id = ?)";
+                "OR (sender_id = ? AND receiver_id = ?)" +
+                "ORDER BY timestamp DESC";
         try {
             PreparedStatement preparedStatement = dbInstance.prepareStatement(cmd);
             preparedStatement.setInt(1, uidOne);
@@ -57,7 +62,7 @@ public class MessagesRepository implements RepoInterface<Message, Integer> {
         return messages;
     }
 
-    public List<Message> getAllForGroup(String gid) {
+    public Iterable<Message> getAllForGroup(String gid) {
         List<Message> messages = new ArrayList<>();
         String cmd = "SELECT * FROM messages " +
                 "WHERE group_id = ?";
@@ -116,12 +121,6 @@ public class MessagesRepository implements RepoInterface<Message, Integer> {
                 "WHERE sender_id = ? OR receiver_id = ? " +
                 "ORDER BY message_id DESC";
 
-        /*String cmd1 = "SELECT * FROM (" +
-                "SELECT * FROM messages " +
-                "ORDER BY message_id DESC) SQ " +
-                "WHERE sender_id = ? OR receiver_id = ? " +
-                "OR group_id IN (%s) " +
-                "ORDER BY message_id ASC";*/
         if (!userGroups.isEmpty()) {
             cmd = String.format(
                     "SELECT * FROM messages " +
@@ -133,12 +132,12 @@ public class MessagesRepository implements RepoInterface<Message, Integer> {
         }
 
 
-        System.out.println(cmd);
+//        System.out.println(cmd);
         try {
             PreparedStatement preparedStatement = dbInstance.prepareStatement(cmd);
             preparedStatement.setInt(1, uid);
             preparedStatement.setInt(2, uid);
-            if(!userGroups.isEmpty()) {
+            if (!userGroups.isEmpty()) {
                 for (int i = 0; i < userGroups.size(); i++) {
                     preparedStatement.setString(i + 3, userGroups.get(i));
                 }
@@ -159,18 +158,17 @@ public class MessagesRepository implements RepoInterface<Message, Integer> {
 
                 // We only want the last message with each user
                 // But the system is special case
-                if(groupId == null) {
+                if (groupId == null) {
                     // its a convo
-                    if(!candidates.contains(candidateId)) {
+                    if (!candidates.contains(candidateId)) {
                         // If from this convo we don't already have a preview
                         // with this other person
                         messages.add(new Message(messageId, senderId, receiverId, null, replyTo, messageBody, timestamp));
                         candidates.add(candidateId);
                     }
-                }
-                else {
+                } else {
                     // its a gc
-                    if(!groupIdsCandidates.contains(groupId)) {
+                    if (!groupIdsCandidates.contains(groupId)) {
                         messages.add(new Message(messageId, senderId, receiverId, groupId, replyTo, messageBody, timestamp));
                         groupIdsCandidates.add(groupId);
                     }
@@ -333,5 +331,16 @@ public class MessagesRepository implements RepoInterface<Message, Integer> {
             e.printStackTrace();
         }
         return 1;
+    }
+
+    @Override
+    public Page<Message> findAll(Pageable pageable) {
+        Paginator<Message> paginator = new Paginator<Message>(pageable, this.findAll());
+        return paginator.paginate();
+    }
+
+    public Page<Message> getAllBetweenUsers(Pageable pageable, int uidOne, int uidTwo) {
+        Paginator<Message> paginator = new Paginator<>(pageable, this.getAllBetweenUsers(uidOne, uidTwo));
+        return paginator.paginate();
     }
 }

@@ -25,11 +25,10 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.InputEvent;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -218,34 +217,38 @@ public class ChatAreaController extends Subscriber implements CustomController {
                 }
             }
         };
-
-/*
-        try {
-            sendMessageButton.removeEventHandler(MouseEvent.MOUSE_CLICKED, handler);
-        }
-        catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
-*/
-
+        
         sendMessageButton.setOnMouseClicked(handler);
-
-        /*messageTextAreaContainer.lookup(".text").boundsInLocalProperty().addListener(new ChangeListener<Bounds>() {
-            @Override
-            public void changed(ObservableValue<? extends Bounds> observable, Bounds oldValue, Bounds newValue) {
-                messageTextArea.setPrefHeight(newValue.getHeight());
-            }
-        });*/
     }
 
     @Override
     protected void newContent(String info) {
+        // Retrieve the next page without clearing the chat here
         this.loadMessages();
     }
 
+    // This method is bound to the scroll wheel when it reaches the 0 position
+    private void loadMoreMessages() {
+        Iterable<Message> allMessages = this.fetchMessages();
+        this.displayMessages(allMessages);
+    }
+
     private void loadMessages() {
+        // Clears chat for first loading
         this.scrollableChatAreaContainer.getChildren().clear();
-        List<Message> allMessages = new ArrayList<>();
+        // Sets service page to 0
+        this.messagesService.resetPage();
+        // Retrieves next page of conversation
+        Iterable<Message> allMessages = this.fetchMessages();
+        // Display messages in the GUI
+        this.displayMessages(allMessages);
+        // Set scroll to bottom
+        this.parentScrollPane.setVvalue(1.0);
+
+    }
+
+    private Iterable<Message> fetchMessages() {
+        Iterable<Message> allMessages = new ArrayList<>();
         if (this.isConvo) {
             System.out.println("Loading convo with " + other.getUsername());
             allMessages = messagesService.findAllBetweenUsers(currentUser, other);
@@ -253,38 +256,55 @@ public class ChatAreaController extends Subscriber implements CustomController {
             System.out.println("Loading convo with " + groupChat.getAlias());
             allMessages = messagesService.findAllForGroup(groupChat);
         }
-        for (Message message : allMessages) {
-            if (message.getSenderId() == 1 || message.getReplyTo() == -1) {
-                // message from system
-                SystemNotificationController systemNotificationController = new SystemNotificationController(
-                        message.getMessageBody()
-                );
+        return allMessages;
+    }
 
-                HBox hBox = new HBox();
-                hBox.setPrefWidth(scrollableChatAreaContainer.getPrefWidth());
-                hBox.setAlignment(Pos.CENTER);
-                hBox.setPadding(new Insets(10, 5, 5, 5));
-                hBox.getChildren().add(systemNotificationController);
-                this.scrollableChatAreaContainer.getChildren().add(hBox);
+    private void displayMessages(Iterable<Message> allMessages) {
+        List<Pane> displayedMessages = new ArrayList<>();
+        for (Message message : allMessages) {
+            if (this.isSystemMessage(message)) {
+                HBox hBox = this.getSystemNotification(message);
+                displayedMessages.add(hBox);
                 continue;
             }
-            if(message.getReplyTo() > 0) {
+            if (this.isReplyMessage(message)) {
                 ReplyToMessageController replyToMessageController = new ReplyToMessageController(
                         message,
                         scrollableChatAreaContainer
                 );
-                this.scrollableChatAreaContainer.getChildren().add(replyToMessageController);
-            }
-            else {
+                displayedMessages.add(replyToMessageController);
+            } else {
                 MessageChatController messageChatController = new MessageChatController(
                         message,
                         scrollableChatAreaContainer
                 );
-                this.scrollableChatAreaContainer.getChildren().add(messageChatController);
+                displayedMessages.add(messageChatController);
             }
-
         }
-        this.parentScrollPane.setVvalue(1.0);
+        this.scrollableChatAreaContainer.getChildren().addAll(displayedMessages);
+    }
 
+    /**
+     * Gets the system notification wrapped in a HBox
+     */
+    private HBox getSystemNotification(Message message) {
+        // message from system
+        SystemNotificationController systemNotificationController = new SystemNotificationController(
+                message.getMessageBody()
+        );
+
+        HBox hBox = new HBox();
+        hBox.setPrefWidth(scrollableChatAreaContainer.getPrefWidth());
+        hBox.setAlignment(Pos.CENTER);
+        hBox.setPadding(new Insets(10, 5, 5, 5));
+        hBox.getChildren().add(systemNotificationController);
+        return hBox;
+    }
+
+    private boolean isSystemMessage(Message message) {
+        return message.getSenderId() == 1 || message.getReplyTo() == -1;
+    }
+    private boolean isReplyMessage(Message message) {
+        return message.getReplyTo() > 0;
     }
 }

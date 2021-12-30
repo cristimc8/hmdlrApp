@@ -5,12 +5,25 @@ import com.heimdallr.hmdlrapp.models.GroupChat;
 import com.heimdallr.hmdlrapp.models.Message;
 import com.heimdallr.hmdlrapp.models.User;
 import com.heimdallr.hmdlrapp.repository.MessagesRepository;
+import com.heimdallr.hmdlrapp.repository.pagination.Page;
+import com.heimdallr.hmdlrapp.repository.pagination.Pageable;
+import com.heimdallr.hmdlrapp.repository.pagination.PageableImplementation;
+import com.heimdallr.hmdlrapp.repository.pagination.PagingRepository;
 import com.heimdallr.hmdlrapp.services.DI.Service;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service(AssociatedRepo = MessagesRepository.class)
 public class MessagesService {
+    private int page = -1;
+    private int size = 14;
+
+    private Pageable pageable;
+
     private MessagesRepository messagesRepository;
 
     private MessagesService(Object messagesRepo) {
@@ -21,24 +34,42 @@ public class MessagesService {
         return this.messagesRepository.findById(id);
     }
 
-    public List<Message> findAllBetweenUsers(User userOne, User userTwo) {
+    public Iterable<Message> findAllBetweenUsers(User userOne, User userTwo) {
         return this.findAllBetweenUsers(userOne.getId(), userTwo.getId());
     }
 
-    public List<Message> findAllBetweenUsers(int uidOne, int uidTwo) {
-        return this.messagesRepository.getAllBetweenUsers(uidOne, uidTwo);
+    // Overload with id's
+    public Iterable<Message> findAllBetweenUsers(int uidOne, int uidTwo) {
+        return this.nextPageBetweenUsers(uidOne, uidTwo).stream().toList();
     }
 
-    public List<Message> findAllForGroup(GroupChat groupChat) {
+    // Retrieves the next page
+    private List<Message> nextPageBetweenUsers(int uidOne, int uidTwo) {
+        this.page++;
+        return findAllBetweenUsers(this.page, uidOne, uidTwo);
+    }
+
+    private List<Message> findAllBetweenUsers(int page, int uidOne, int uidTwo) {
+        this.page = page;
+        Pageable pageable = new PageableImplementation(page, this.size);
+        Page<Message> messagePage = messagesRepository.getAllBetweenUsers(pageable, uidOne, uidTwo);
+        List<Message> retrievedMessages = messagePage.getContent().toList();
+        List<Message> tmpList = new ArrayList<>(retrievedMessages);
+        Collections.reverse(tmpList);
+        return tmpList;
+    }
+
+    public Iterable<Message> findAllForGroup(GroupChat groupChat) {
         return this.findAllForGroup(groupChat.getId());
     }
 
-    public List<Message> findAllForGroup(String gid) {
+    public Iterable<Message> findAllForGroup(String gid) {
         return this.messagesRepository.getAllForGroup(gid);
     }
 
     /**
      * Deletes all messages between two users.
+     *
      * @param userOne User one
      * @param userTwo User two
      */
@@ -57,7 +88,9 @@ public class MessagesService {
 
     public List<Message> getAllUserPreviews(int uid, List<String> userGroups) {
         List<Message> previews = this.messagesRepository.getAllPreviewsForUser(uid, userGroups);
-        previews.forEach(message -> {message.setMessageBody(message.getMessageBody().split("\n")[0]);});
+        previews.forEach(message -> {
+            message.setMessageBody(message.getMessageBody().split("\n")[0]);
+        });
         return previews;
 
     }
@@ -72,8 +105,9 @@ public class MessagesService {
 
     /**
      * Method used to send(not reply) a message.
-     * @param sender Sender user
-     * @param receiver Receiver user
+     *
+     * @param sender      Sender user
+     * @param receiver    Receiver user
      * @param messageBody The body of the message to send
      */
     public void sendMessage(User sender, User receiver, String messageBody) {
@@ -145,5 +179,29 @@ public class MessagesService {
         );
 
         this.messagesRepository.addOne(message);
+    }
+
+    public void setPageSize(int size) {
+        this.size = size;
+    }
+
+    public Set<Message> getNextMessages() {
+//        Pageable pageable = new PageableImplementation(this.page, this.size);
+//        Page<MessageTask> studentPage = repo.findAll(pageable);
+//        this.page++;
+//        return studentPage.getContent().collect(Collectors.toSet());
+        this.page++;
+        return getMessagesOnPage(this.page);
+    }
+
+    public Set<Message> getMessagesOnPage(int page) {
+        this.page = page;
+        Pageable pageable = new PageableImplementation(page, this.size);
+        Page<Message> messagePage = messagesRepository.findAll(pageable);
+        return messagePage.getContent().collect(Collectors.toSet());
+    }
+
+    public void resetPage() {
+        this.page = -1;
     }
 }
