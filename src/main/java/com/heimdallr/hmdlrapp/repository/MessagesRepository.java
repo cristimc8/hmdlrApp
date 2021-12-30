@@ -29,7 +29,7 @@ public class MessagesRepository implements PagingRepository<Message, Integer> {
         }
     }
 
-    public Iterable<Message> getAllBetweenUsers(int uidOne, int uidTwo) {
+    public List<Message> getAllBetweenUsers(int uidOne, int uidTwo) {
         List<Message> messages = new ArrayList<>();
         String cmd = "SELECT * FROM messages " +
                 "WHERE (sender_id = ? AND receiver_id = ?) " +
@@ -62,10 +62,11 @@ public class MessagesRepository implements PagingRepository<Message, Integer> {
         return messages;
     }
 
-    public Iterable<Message> getAllForGroup(String gid) {
+    public List<Message> getAllForGroup(String gid) {
         List<Message> messages = new ArrayList<>();
         String cmd = "SELECT * FROM messages " +
-                "WHERE group_id = ?";
+                "WHERE group_id = ?" +
+                "ORDER BY timestamp DESC";
         try {
             PreparedStatement preparedStatement = dbInstance.prepareStatement(cmd);
             preparedStatement.setString(1, gid);
@@ -341,6 +342,11 @@ public class MessagesRepository implements PagingRepository<Message, Integer> {
 
     public Page<Message> getAllBetweenUsers(Pageable pageable, int uidOne, int uidTwo) {
         Paginator<Message> paginator = new Paginator<>(pageable, this.getAllBetweenUsers(uidOne, uidTwo));
+        return paginator.paginate();
+    }
+
+    public Page<Message> getAllForGroup(Pageable pageable, String gid) {
+        Paginator<Message> paginator = new Paginator<>(pageable, this.getAllForGroup(gid));
         return paginator.paginate();
     }
 }

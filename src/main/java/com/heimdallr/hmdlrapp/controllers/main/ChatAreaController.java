@@ -150,15 +150,17 @@ public class ChatAreaController extends Subscriber implements CustomController {
     private void setGoodDisplayData() {
         this.messageTextArea.setDisable(false);
         this.messageTextArea.setPromptText("Write a message");
-        this.scrollableChatAreaContainer.heightProperty().addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                System.out.println(oldValue + " " + newValue);
-                if(parentScrollPane.getVmin() != parentScrollPane.getVvalue()) {
-                    parentScrollPane.setVvalue((Double) newValue);
+        if(!scrollListenerSet) {
+            this.scrollableChatAreaContainer.heightProperty().addListener(new ChangeListener<Number>() {
+                @Override
+                public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                    System.out.println(oldValue + " " + newValue);
+                    if (parentScrollPane.getVmin() != parentScrollPane.getVvalue()) {
+                        parentScrollPane.setVvalue((Double) newValue);
+                    }
                 }
-            }
-        });
+            });
+        }
 
         // Inject the chat head with letters and the username
         if (this.chatTopLeftBar.getChildren().size() > 1)
@@ -216,6 +218,7 @@ public class ChatAreaController extends Subscriber implements CustomController {
                     else
                         messagesService.sendMessage(currentUser, groupChat, messageTextArea.getText());
 
+                    parentScrollPane.setVvalue(1.0);
                     messageTextArea.clear();
                 }
             }
@@ -230,7 +233,7 @@ public class ChatAreaController extends Subscriber implements CustomController {
         if(!scrollListenerSet) {
             this.parentScrollPane.vvalueProperty().addListener(
                     (ObservableValue<? extends Number> observable, Number oldValue, Number newValue) -> {
-                        if (newValue.doubleValue() == 0 && (Double) oldValue != 1.0) {
+                        if (newValue.doubleValue() == 0 && oldValue.doubleValue() != 1.0) {
                             this.loadMoreMessages();
                         }
                     });
@@ -241,8 +244,11 @@ public class ChatAreaController extends Subscriber implements CustomController {
     @Override
     protected void newContent(String info) {
         // Retrieve the last message without deleting the rest of them
-        Message latest = this.messagesService.latestMessageBetweenUsers(currentUser.getId(), other.getId());
-        System.out.println(latest.getMessageBody());
+        Message latest = this.fetchLastMessage();
+        displayLastMessage(latest);
+    }
+
+    private void displayLastMessage(Message latest) {
         if (this.isReplyMessage(latest)) {
             ReplyToMessageController replyToMessageController = new ReplyToMessageController(
                     latest,
@@ -277,10 +283,13 @@ public class ChatAreaController extends Subscriber implements CustomController {
         Iterable<Message> allMessages = this.fetchMessages();
         // Display messages in the GUI
         this.displayMessages(allMessages);
+        Async.setTimeout(() -> {
+            parentScrollPane.setVvalue(1.0);
+        }, 50);
     }
 
-    private Iterable<Message> fetchMessages() {
-        Iterable<Message> allMessages = new ArrayList<>();
+    private List<Message> fetchMessages() {
+        List<Message> allMessages = new ArrayList<>();
         if (this.isConvo) {
             System.out.println("Loading messages with " + other.getUsername());
             allMessages = messagesService.findAllBetweenUsers(currentUser, other);
@@ -289,6 +298,14 @@ public class ChatAreaController extends Subscriber implements CustomController {
             allMessages = messagesService.findAllForGroup(groupChat);
         }
         return allMessages;
+    }
+
+    private Message fetchLastMessage() {
+        Message latest;
+        if(this.isConvo)
+            latest = this.messagesService.latestMessageBetweenUsers(currentUser.getId(), other.getId());
+        else latest = this.messagesService.latestMessageForGroup(gid);
+        return latest;
     }
 
     private void displayMessages(Iterable<Message> allMessages) {
