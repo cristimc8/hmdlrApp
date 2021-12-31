@@ -188,7 +188,7 @@ public class LeftBarController extends Subscriber implements CustomController {
 
     private List<Message> getAllUserMessages() {
         List<GroupChat> userGroups = groupChatsService.getAllForUser(userService.getCurrentUser());
-        List<Message> messages = messagesService.getAllUserPreviews(userService.getCurrentUser(), userGroups);
+        Iterable<Message> messages = messagesService.getAllUserPreviews(userService.getCurrentUser(), userGroups);
         List<Message> filtered = new ArrayList<>();
 
         messages.forEach(message -> {

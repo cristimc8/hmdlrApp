@@ -112,6 +112,7 @@ public class CreateGCController extends Subscriber implements CustomController {
 
         scrollableSearchMembersTextBox.textProperty().addListener((observable, oldValue, newValue) -> {
             this.query = scrollableSearchMembersTextBox.getText();
+            System.out.println(this.query);
             this.eventDispatcher.dispatch(Channel.guiVisibleGCController, null);
         });
 
