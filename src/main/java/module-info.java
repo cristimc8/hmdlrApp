@@ -19,4 +19,6 @@ module com.heimdallr.hmdlrapp {
     exports com.heimdallr.hmdlrapp.controllers.main.popups;
     opens com.heimdallr.hmdlrapp.models;
     exports com.heimdallr.hmdlrapp.models;
+    exports com.heimdallr.hmdlrapp.controllers.main.popups.requests;
+    opens com.heimdallr.hmdlrapp.controllers.main.popups.requests;
 }

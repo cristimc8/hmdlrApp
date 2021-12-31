@@ -1,4 +1,4 @@
-package com.heimdallr.hmdlrapp.controllers.main.popups;
+package com.heimdallr.hmdlrapp.controllers.main.popups.requests;
 
 import com.heimdallr.hmdlrapp.controllers.CustomController;
 import com.heimdallr.hmdlrapp.controllers.main.RequestRowController;
@@ -6,6 +6,7 @@ import com.heimdallr.hmdlrapp.controllers.main.UserRowController;
 import com.heimdallr.hmdlrapp.exceptions.ServiceNotRegisteredException;
 import com.heimdallr.hmdlrapp.models.FriendRequest;
 import com.heimdallr.hmdlrapp.models.User;
+import com.heimdallr.hmdlrapp.models.dtos.UserFriendRequestDTO;
 import com.heimdallr.hmdlrapp.models.dtos.UserFriendshipDTO;
 import com.heimdallr.hmdlrapp.services.DI.HmdlrDI;
 import com.heimdallr.hmdlrapp.services.FriendRequestService;
@@ -99,28 +100,27 @@ public class RequestsController extends Subscriber implements CustomController {
         }
 
         List<FriendRequest> friendRequests = friendRequestService.findAllActiveForUser(currentUser);
-        List<User> usersRequesting = new ArrayList<>();
 
-        usersRequesting = friendRequests.stream()
-                .filter(request -> {
-                    return request.getSenderId() != currentUser.getId();
-                })
-                .map(request -> {
-                    return userService.findById(differentIdFromYours(request.getSenderId(), request.getReceiverId()));
+        List<UserFriendRequestDTO> userFriendshipDTOS = new ArrayList<>();
+        userFriendshipDTOS = friendRequests.stream()
+                .map(friendRequest -> {
+                    return new UserFriendRequestDTO(
+                            friendRequest,
+                            userService.findById(differentIdFromYours(friendRequest.getSenderId(), friendRequest.getReceiverId())));
                 })
                 .collect(Collectors.toList());
 
-        for (User user : usersRequesting) {
-            if (user.getId() == 1 ||
-                    Objects.equals(user.getId(), userService.getCurrentUser().getId()) ||
-                    !user.getUsername().contains(query)) continue;
+        for(UserFriendRequestDTO userFriendRequestDTO : userFriendshipDTOS) {
+            if (userFriendRequestDTO.getSenderUser().getId() == 1 ||
+                    Objects.equals(userFriendRequestDTO.getSenderUser().getId(), userService.getCurrentUser().getId()) ||
+                    !userFriendRequestDTO.getSenderUser().getUsername().contains(query)) continue;
             RequestRowController requestRowController = new RequestRowController(
                     null,
-                    userService.getChatHeadPreviewLetters(user),
-                    user.getUsername(),
-                    user.getFirstName() + " " + user.getLastName()
+                    userService.getChatHeadPreviewLetters(userFriendRequestDTO.getSenderUser()),
+                    userFriendRequestDTO.getSenderUser().getUsername(),
+                    userFriendRequestDTO.getSenderUser().getFirstName() + " " + userFriendRequestDTO.getSenderUser().getLastName(),
+                    userFriendRequestDTO.getFriendRequest().getTimestamp()
             );
-
             try {
                 scrollableRequestsContainer.getChildren().add(requestRowController);
             } catch (Exception e) {
