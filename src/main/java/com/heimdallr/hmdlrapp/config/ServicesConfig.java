@@ -23,7 +23,8 @@ public class ServicesConfig {
                 UserService.class,
                 FriendshipsService.class,
                 FriendRequestService.class,
-                GroupChatsService.class);
+                GroupChatsService.class,
+                ReportsService.class);
         hmdlrDI.initialize(servicesToInit);
     }
 }
