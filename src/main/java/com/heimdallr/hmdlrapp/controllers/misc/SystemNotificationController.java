@@ -1,4 +1,4 @@
-package com.heimdallr.hmdlrapp.controllers.main;
+package com.heimdallr.hmdlrapp.controllers.misc;
 
 import com.heimdallr.hmdlrapp.exceptions.ServiceNotRegisteredException;
 import com.heimdallr.hmdlrapp.services.DI.HmdlrDI;

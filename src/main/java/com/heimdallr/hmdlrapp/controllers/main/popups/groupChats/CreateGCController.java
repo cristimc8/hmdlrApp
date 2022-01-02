@@ -1,7 +1,7 @@
-package com.heimdallr.hmdlrapp.controllers.main.popups;
+package com.heimdallr.hmdlrapp.controllers.main.popups.groupChats;
 
 import com.heimdallr.hmdlrapp.controllers.CustomController;
-import com.heimdallr.hmdlrapp.controllers.main.ProfileHeadController;
+import com.heimdallr.hmdlrapp.controllers.misc.ProfileHeadController;
 import com.heimdallr.hmdlrapp.exceptions.ServiceNotRegisteredException;
 import com.heimdallr.hmdlrapp.models.GroupChat;
 import com.heimdallr.hmdlrapp.models.User;
@@ -22,6 +22,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -96,6 +97,7 @@ public class CreateGCController extends Subscriber implements CustomController {
                 this.joint.add(receivedUser);
             }
         }
+
         this.loadAllUsersAndTheFriendships();
         if (this.joint.size() < 2) finishCreateGCActionButton.setDisable(true);
         else if (!chatAliasTextBox.getText().isBlank()) finishCreateGCActionButton.setDisable(false);

@@ -1,4 +1,4 @@
-package com.heimdallr.hmdlrapp.controllers.main;
+package com.heimdallr.hmdlrapp.controllers.misc;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;

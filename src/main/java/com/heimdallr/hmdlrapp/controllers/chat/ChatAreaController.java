@@ -1,6 +1,8 @@
-package com.heimdallr.hmdlrapp.controllers.main;
+package com.heimdallr.hmdlrapp.controllers.chat;
 
 import com.heimdallr.hmdlrapp.controllers.CustomController;
+import com.heimdallr.hmdlrapp.controllers.misc.ProfileHeadController;
+import com.heimdallr.hmdlrapp.controllers.misc.SystemNotificationController;
 import com.heimdallr.hmdlrapp.exceptions.ServiceNotRegisteredException;
 import com.heimdallr.hmdlrapp.models.GroupChat;
 import com.heimdallr.hmdlrapp.models.Message;
@@ -13,17 +15,13 @@ import com.heimdallr.hmdlrapp.services.pubSub.Channel;
 import com.heimdallr.hmdlrapp.services.pubSub.EventDispatcher;
 import com.heimdallr.hmdlrapp.services.pubSub.Subscriber;
 import com.heimdallr.hmdlrapp.utils.Async;
-import javafx.beans.InvalidationListener;
-import javafx.beans.Observable;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.collections.ListChangeListener;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollBar;
 import javafx.scene.control.ScrollPane;
@@ -37,7 +35,6 @@ import javafx.scene.layout.VBox;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class ChatAreaController extends Subscriber implements CustomController {
 

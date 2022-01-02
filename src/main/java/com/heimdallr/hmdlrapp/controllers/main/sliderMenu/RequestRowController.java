@@ -1,4 +1,4 @@
-package com.heimdallr.hmdlrapp.controllers.main;
+package com.heimdallr.hmdlrapp.controllers.main.sliderMenu;
 
 import com.heimdallr.hmdlrapp.exceptions.ServiceNotRegisteredException;
 import com.heimdallr.hmdlrapp.models.FriendRequest;
@@ -13,11 +13,18 @@ import com.heimdallr.hmdlrapp.services.pubSub.EventDispatcher;
 import com.heimdallr.hmdlrapp.utils.Constants;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 
 import java.io.IOException;
+import java.sql.Timestamp;
+import java.util.Objects;
 
 public class RequestRowController extends AnchorPane {
     private FriendshipsService friendshipsService;
@@ -42,7 +49,13 @@ public class RequestRowController extends AnchorPane {
     @FXML
     Button denyRequestActionButton;
 
-    public RequestRowController(String imagePath, String letters, String username, String userFullName) {
+    @FXML
+    ImageView infoButton;
+
+    @FXML
+    BorderPane chatHead;
+
+    public RequestRowController(String imagePath, String letters, String username, String userFullName, Timestamp timestamp) {
         try {
             this.eventDispatcher = (EventDispatcher) HmdlrDI.getContainer().getService(EventDispatcher.class);
             this.userService = (UserService) HmdlrDI.getContainer().getService(UserService.class);
@@ -99,6 +112,24 @@ public class RequestRowController extends AnchorPane {
                         Constants.FriendshipRequestStatus.REJECTED
                 );
                 this.eventDispatcher.dispatch(Channel.guiVisibleRequestsController, null);
+            });
+
+            infoButton.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
+                if(chatHead.getBottom() != null) {
+                    chatHead.setBottom(null);
+                }
+                else {
+                    // adding timestamp field
+                    HBox hbox = new HBox();
+                    hbox.setId("timestampContainer");
+                    hbox.setPadding(new Insets(10, 5, 5, 5));
+                    Label timestampLabel = new Label();
+                    timestampLabel.setText("Sent on: " + timestamp.toString());
+                    timestampLabel.setStyle("-fx-text-fill: #f9f9f9");
+                    hbox.getChildren().add(timestampLabel);
+
+                    chatHead.setBottom(hbox);
+                }
             });
 
         } catch (IOException e) {

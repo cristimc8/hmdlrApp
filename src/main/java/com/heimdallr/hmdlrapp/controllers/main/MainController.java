@@ -1,11 +1,11 @@
 package com.heimdallr.hmdlrapp.controllers.main;
 
-import com.heimdallr.hmdlrapp.controllers.main.popups.AllUsersController;
-import com.heimdallr.hmdlrapp.controllers.main.popups.CreateGCController;
-import com.heimdallr.hmdlrapp.controllers.main.popups.FriendsController;
-import com.heimdallr.hmdlrapp.controllers.main.popups.RequestsController;
+import com.heimdallr.hmdlrapp.controllers.main.popups.users.AllUsersController;
+import com.heimdallr.hmdlrapp.controllers.main.popups.groupChats.CreateGCController;
+import com.heimdallr.hmdlrapp.controllers.main.popups.users.FriendsController;
+import com.heimdallr.hmdlrapp.controllers.main.popups.users.requests.RequestsController;
+import com.heimdallr.hmdlrapp.controllers.main.sliderMenu.SliderMenuController;
 import com.heimdallr.hmdlrapp.exceptions.*;
-import com.heimdallr.hmdlrapp.models.Message;
 import com.heimdallr.hmdlrapp.services.DI.HmdlrDI;
 import com.heimdallr.hmdlrapp.services.GroupChatsService;
 import com.heimdallr.hmdlrapp.services.MessagesService;
