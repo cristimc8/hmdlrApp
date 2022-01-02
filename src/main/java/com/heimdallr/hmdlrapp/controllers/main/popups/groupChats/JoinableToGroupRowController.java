@@ -1,4 +1,4 @@
-package com.heimdallr.hmdlrapp.controllers.main.popups;
+package com.heimdallr.hmdlrapp.controllers.main.popups.groupChats;
 
 import com.heimdallr.hmdlrapp.exceptions.ServiceNotRegisteredException;
 import com.heimdallr.hmdlrapp.models.FriendRequest;

@@ -1,22 +1,18 @@
-package com.heimdallr.hmdlrapp.controllers.main.popups.requests;
+package com.heimdallr.hmdlrapp.controllers.main.popups.users.requests;
 
 import com.heimdallr.hmdlrapp.controllers.CustomController;
-import com.heimdallr.hmdlrapp.controllers.main.RequestRowController;
-import com.heimdallr.hmdlrapp.controllers.main.UserRowController;
+import com.heimdallr.hmdlrapp.controllers.main.sliderMenu.RequestRowController;
 import com.heimdallr.hmdlrapp.exceptions.ServiceNotRegisteredException;
 import com.heimdallr.hmdlrapp.models.FriendRequest;
 import com.heimdallr.hmdlrapp.models.User;
 import com.heimdallr.hmdlrapp.models.dtos.UserFriendRequestDTO;
-import com.heimdallr.hmdlrapp.models.dtos.UserFriendshipDTO;
 import com.heimdallr.hmdlrapp.services.DI.HmdlrDI;
 import com.heimdallr.hmdlrapp.services.FriendRequestService;
-import com.heimdallr.hmdlrapp.services.FriendshipsService;
 import com.heimdallr.hmdlrapp.services.UserService;
 import com.heimdallr.hmdlrapp.services.pubSub.Channel;
 import com.heimdallr.hmdlrapp.services.pubSub.EventDispatcher;
 import com.heimdallr.hmdlrapp.services.pubSub.Subscriber;
 import javafx.event.EventHandler;
-import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;

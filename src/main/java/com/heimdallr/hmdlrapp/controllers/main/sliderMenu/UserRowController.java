@@ -1,4 +1,4 @@
-package com.heimdallr.hmdlrapp.controllers.main;
+package com.heimdallr.hmdlrapp.controllers.main.sliderMenu;
 
 import com.heimdallr.hmdlrapp.exceptions.ServiceNotRegisteredException;
 import com.heimdallr.hmdlrapp.models.FriendRequest;

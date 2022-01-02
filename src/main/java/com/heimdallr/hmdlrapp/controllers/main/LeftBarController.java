@@ -1,6 +1,8 @@
 package com.heimdallr.hmdlrapp.controllers.main;
 
 import com.heimdallr.hmdlrapp.controllers.CustomController;
+import com.heimdallr.hmdlrapp.controllers.chat.ChatAreaController;
+import com.heimdallr.hmdlrapp.controllers.chat.ChatHeadController;
 import com.heimdallr.hmdlrapp.exceptions.ServiceNotRegisteredException;
 import com.heimdallr.hmdlrapp.models.GroupChat;
 import com.heimdallr.hmdlrapp.models.Message;

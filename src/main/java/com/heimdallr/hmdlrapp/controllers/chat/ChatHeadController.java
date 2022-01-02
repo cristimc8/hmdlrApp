@@ -1,8 +1,5 @@
-package com.heimdallr.hmdlrapp.controllers.main;
+package com.heimdallr.hmdlrapp.controllers.chat;
 
-import com.heimdallr.hmdlrapp.exceptions.ServiceNotRegisteredException;
-import com.heimdallr.hmdlrapp.services.DI.HmdlrDI;
-import com.heimdallr.hmdlrapp.services.UserService;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;

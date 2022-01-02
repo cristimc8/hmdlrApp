@@ -1,4 +1,4 @@
-package com.heimdallr.hmdlrapp.controllers.main;
+package com.heimdallr.hmdlrapp.controllers.main.sliderMenu;
 
 
 import com.heimdallr.hmdlrapp.controllers.CustomController;
