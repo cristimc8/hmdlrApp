@@ -71,6 +71,12 @@ public class MainController extends Subscriber {
     HBox createGCRow;
 
     @FXML
+    HBox generateReportsRow;
+
+    @FXML
+    BorderPane generateReportsPopupContainer;
+
+    @FXML
     BorderPane allUsersPopupContainer;
 
     @FXML
@@ -206,7 +212,9 @@ public class MainController extends Subscriber {
                 requestsPopupContainer,
                 friendRequestsRow,
                 createGCRow,
-                createGCPopupContainer
+                createGCPopupContainer,
+                generateReportsRow,
+                generateReportsPopupContainer
         );
         sliderMenuController.initialize();
     }

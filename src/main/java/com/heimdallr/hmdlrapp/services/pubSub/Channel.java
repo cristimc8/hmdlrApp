@@ -7,5 +7,6 @@ public enum Channel {
     guiVisibleAllUsersController,
     guiVisibleFriendsController,
     guiVisibleRequestsController,
-    guiVisibleGCController
+    guiVisibleGCController,
+    guiVisibleGenerateReports
 }

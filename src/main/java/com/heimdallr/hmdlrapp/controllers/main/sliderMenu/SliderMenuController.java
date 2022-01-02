@@ -34,6 +34,8 @@ public class SliderMenuController implements CustomController {
     private HBox friendRequestsRow;
     private HBox createGCRow;
     private BorderPane createGCPopupContainer;
+    private HBox generateReportsRow;
+    private BorderPane generateReportsPopupContainer;
 
     private UserService userService;
 
@@ -49,7 +51,9 @@ public class SliderMenuController implements CustomController {
                                 BorderPane requestsPopupContainer,
                                 HBox friendRequestsRow,
                                 HBox createGCRow,
-                                BorderPane createGCPopupContainer) {
+                                BorderPane createGCPopupContainer,
+                                HBox generateReportsRow,
+                                BorderPane generateReportsPopupContainer) {
         this.sliderMenu = sliderMenu;
         this.usernameLabel = usernameLabel;
         this.nameLabel = nameLabel;
@@ -63,6 +67,8 @@ public class SliderMenuController implements CustomController {
         this.requestsPopupContainer = requestsPopupContainer;
         this.createGCRow = createGCRow;
         this.createGCPopupContainer = createGCPopupContainer;
+        this.generateReportsRow = generateReportsRow;
+        this.generateReportsPopupContainer = generateReportsPopupContainer;
 
         try {
             this.eventDispatcher = (EventDispatcher) HmdlrDI.getContainer().getService(EventDispatcher.class);
@@ -155,6 +161,21 @@ public class SliderMenuController implements CustomController {
 //                        coveringBorderInjectable.setPickOnBounds(false);
                 }, 150);
             }
+        });
+
+        generateReportsRow.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
+            eventDispatcher.dispatch(Channel.guiVisibleGenerateReports, null);
+            generateReportsPopupContainer.setVisible(true);
+            parent.setOpacity(0.12);
+
+            TranslateTransition closeNav = new TranslateTransition(new Duration(150), sliderMenu);
+            closeNav.setToX(-(sliderMenu.getWidth()));
+            closeNav.play();
+            Async.setTimeout(() -> {
+                sliderMenu.setVisible(false);
+//                    parent.setOpacity(1);
+//                        coveringBorderInjectable.setPickOnBounds(false);
+            }, 150);
         });
 
     }

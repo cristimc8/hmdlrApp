@@ -3,6 +3,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextArea?>
@@ -314,6 +315,26 @@
                                  </image>
                               </ImageView>
                               <Label text="Create a group chat" textFill="#ded7d7">
+                                 <font>
+                                    <Font name="Garuda Bold" size="18.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                           <padding>
+                              <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+                           </padding>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                        </HBox>
+                        <HBox fx:id="generateReportsRow" alignment="CENTER_LEFT" spacing="20.0">
+                           <children>
+                              <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@res/raports.png" />
+                                 </image>
+                              </ImageView>
+                              <Label text="Generate reports" textFill="#ded7d7">
                                  <font>
                                     <Font name="Garuda Bold" size="18.0" />
                                  </font>
@@ -651,6 +672,56 @@
                            </center>
                         </BorderPane>
                      </right>
+                  </BorderPane>
+               </children>
+            </AnchorPane>
+         </center>
+      </BorderPane>
+      <BorderPane fx:id="generateReportsPopupContainer" prefHeight="737.0" prefWidth="1304.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <center>
+            <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="248.0" prefWidth="577.0" style="-fx-background-color: #17212b; -fx-background-radius: 5;" stylesheets="@res/style.css" BorderPane.alignment="CENTER">
+               <children>
+                  <BorderPane prefHeight="336.0" prefWidth="617.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <center>
+                        <BorderPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                           <left>
+                              <VBox alignment="CENTER" BorderPane.alignment="CENTER">
+                                 <padding>
+                                    <Insets left="15.0" right="15.0" />
+                                 </padding>
+                                 <children>
+                                    <Button fx:id="friendsAndMessagesButton" mnemonicParsing="false" styleClass="hmdlrButton" text="Friends &amp; messages" textAlignment="CENTER" textFill="WHITE">
+                                       <font>
+                                          <Font name="Garuda" size="18.0" />
+                                       </font>
+                                    </Button>
+                                 </children>
+                              </VBox>
+                           </left>
+                           <right>
+                              <VBox fx:id="messagesWithFriendButton" alignment="CENTER" BorderPane.alignment="CENTER">
+                                 <children>
+                                    <Button mnemonicParsing="false" styleClass="hmdlrButton" text="Messages with friend" textAlignment="CENTER" textFill="WHITE">
+                                       <font>
+                                          <Font name="Garuda" size="18.0" />
+                                       </font>
+                                    </Button>
+                                 </children>
+                                 <padding>
+                                    <Insets left="15.0" right="15.0" />
+                                 </padding>
+                              </VBox>
+                           </right>
+                           <top>
+                              <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="35.0" BorderPane.alignment="CENTER">
+                                 <children>
+                                    <DatePicker fx:id="firtstDatePicker" promptText="First date" style="-fx-background-color: black;" />
+                                    <DatePicker fx:id="secondDatePicker" promptText="Second date" style="-fx-background-color: black;" />
+                                 </children>
+                              </HBox>
+                           </top>
+                        </BorderPane>
+                     </center>
                   </BorderPane>
                </children>
             </AnchorPane>
