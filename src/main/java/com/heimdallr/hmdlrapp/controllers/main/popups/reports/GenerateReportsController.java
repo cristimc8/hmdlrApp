@@ -12,6 +12,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 
+import java.time.LocalDate;
+
 public class GenerateReportsController extends Subscriber implements CustomController {
 
     Button friendsAndMessagesButton;
@@ -71,7 +73,7 @@ public class GenerateReportsController extends Subscriber implements CustomContr
             public void handle(MouseEvent event) {
                 //get dates and access service functions to export
                 if(datesValid()) {
-
+                    reportsService.generateNewFriendsAndMessagesForPeriod(LocalDate.ofEpochDay(firstDatePicker.getValue().toEpochDay()), LocalDate.ofEpochDay(secondDatePicker.getValue().toEpochDay()));
                 }
             }
         });

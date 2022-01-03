@@ -10,6 +10,7 @@ import com.heimdallr.hmdlrapp.services.DI.Service;
 import com.heimdallr.hmdlrapp.services.pubSub.Channel;
 import com.heimdallr.hmdlrapp.services.pubSub.EventDispatcher;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,6 +36,10 @@ public class FriendshipsService {
         } catch (ServiceNotRegisteredException e) {
             e.printStackTrace();
         }
+    }
+
+    public List<Friendship> findForUserInRange(Timestamp t1, Timestamp t2) {
+        return friendshipsRepository.findForUserInRange(t1, t2);
     }
 
     public void createFriendship(User userOne, User userTwo) {
