@@ -65,8 +65,9 @@ public class ReportsService {
         pdfWriter.saveAndClose();
     }
 
-    public void generateMessagesWithFriendForPeriod(LocalDate d1, LocalDate d2, String path) {
+    public void generateMessagesWithFriendForPeriod(LocalDate d1, LocalDate d2, User other, String path) {
         Timestamp t1 = Timestamp.valueOf(d1.atStartOfDay());
         Timestamp t2 = Timestamp.valueOf(d2.atStartOfDay());
+        System.out.println("Generating pdf of convos with user other: " + other.getDisplayUsername());
     }
 }

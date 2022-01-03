@@ -2,8 +2,12 @@ package com.heimdallr.hmdlrapp.controllers.main.popups.reports;
 
 import com.heimdallr.hmdlrapp.controllers.CustomController;
 import com.heimdallr.hmdlrapp.exceptions.ServiceNotRegisteredException;
+import com.heimdallr.hmdlrapp.models.User;
 import com.heimdallr.hmdlrapp.services.DI.HmdlrDI;
 import com.heimdallr.hmdlrapp.services.ReportsService;
+import com.heimdallr.hmdlrapp.services.UserService;
+import com.heimdallr.hmdlrapp.services.pubSub.Channel;
+import com.heimdallr.hmdlrapp.services.pubSub.EventDispatcher;
 import com.heimdallr.hmdlrapp.services.pubSub.Subscriber;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
@@ -28,6 +32,8 @@ public class GenerateReportsController extends Subscriber implements CustomContr
     BorderPane parent;
 
     ReportsService reportsService;
+    EventDispatcher eventDispatcher;
+    UserService userService;
 
     public GenerateReportsController(
             Button friendsAndMessagesButton,
@@ -50,16 +56,29 @@ public class GenerateReportsController extends Subscriber implements CustomContr
     public void initialize() {
         try {
             this.reportsService = (ReportsService) HmdlrDI.getContainer().getService(ReportsService.class);
+            this.eventDispatcher = (EventDispatcher) HmdlrDI.getContainer().getService(EventDispatcher.class);
+            this.userService = (UserService) HmdlrDI.getContainer().getService(UserService.class);
         } catch (ServiceNotRegisteredException e) {
             e.printStackTrace();
         }
 
         this.addEventListeners();
+        this.eventDispatcher.subscribeTo(this, Channel.onFriendSelectedForReports);
     }
 
     @Override
     protected void newContent(String info) {
-
+        // The selected username will come here
+        if (info != null) {
+            User selectedUser = this.userService.findByUsername(info);
+            String path = getPath();
+            if (path == null) return;
+            this.reportsService.generateMessagesWithFriendForPeriod(
+                    LocalDate.ofEpochDay(firstDatePicker.getValue().toEpochDay()),
+                    LocalDate.ofEpochDay(secondDatePicker.getValue().toEpochDay()),
+                    selectedUser,
+                    path);
+        }
     }
 
     private void addEventListeners() {
@@ -75,9 +94,9 @@ public class GenerateReportsController extends Subscriber implements CustomContr
             @Override
             public void handle(MouseEvent event) {
                 //get dates and access service functions to export
-                if(datesValid()) {
+                if (datesValid()) {
                     String path = getPath();
-                    if(path == null) return;
+                    if (path == null) return;
                     reportsService.generateNewFriendsAndMessagesForPeriod(LocalDate.ofEpochDay(firstDatePicker.getValue().toEpochDay()), LocalDate.ofEpochDay(secondDatePicker.getValue().toEpochDay()), path);
                 }
             }
@@ -85,8 +104,8 @@ public class GenerateReportsController extends Subscriber implements CustomContr
 
         messagesWithFriendButton.setOnMouseClicked(e -> {
             // get dates and open a controller to select a friend
-            if(datesValid()) {
-
+            if (datesValid()) {
+                eventDispatcher.dispatch(Channel.guiVisibleSelectAFriend, "visible");
             }
         });
     }
@@ -95,9 +114,9 @@ public class GenerateReportsController extends Subscriber implements CustomContr
         Stage stage = (Stage) messagesWithFriendButton.getScene().getWindow();
         DirectoryChooser directoryChooser = new DirectoryChooser();
         File selectedDirectory = directoryChooser.showDialog(stage);
-        if(selectedDirectory == null){
+        if (selectedDirectory == null) {
             //No Directory selected
-        }else{
+        } else {
             System.out.println("Selected path: " + selectedDirectory.getAbsolutePath());
         }
         return selectedDirectory == null ? null : selectedDirectory.getAbsolutePath();

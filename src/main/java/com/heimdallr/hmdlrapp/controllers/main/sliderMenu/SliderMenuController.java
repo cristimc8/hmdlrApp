@@ -36,6 +36,7 @@ public class SliderMenuController implements CustomController {
     private BorderPane createGCPopupContainer;
     private HBox generateReportsRow;
     private BorderPane generateReportsPopupContainer;
+    BorderPane selectAFriendPopupContainer;
 
     private UserService userService;
 
@@ -53,7 +54,8 @@ public class SliderMenuController implements CustomController {
                                 HBox createGCRow,
                                 BorderPane createGCPopupContainer,
                                 HBox generateReportsRow,
-                                BorderPane generateReportsPopupContainer) {
+                                BorderPane generateReportsPopupContainer,
+                                BorderPane selectAFriendPopupContainer) {
         this.sliderMenu = sliderMenu;
         this.usernameLabel = usernameLabel;
         this.nameLabel = nameLabel;
@@ -69,6 +71,7 @@ public class SliderMenuController implements CustomController {
         this.createGCPopupContainer = createGCPopupContainer;
         this.generateReportsRow = generateReportsRow;
         this.generateReportsPopupContainer = generateReportsPopupContainer;
+        this.selectAFriendPopupContainer = selectAFriendPopupContainer;
 
         try {
             this.eventDispatcher = (EventDispatcher) HmdlrDI.getContainer().getService(EventDispatcher.class);

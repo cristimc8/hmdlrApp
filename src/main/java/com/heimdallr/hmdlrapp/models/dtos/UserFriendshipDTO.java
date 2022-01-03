@@ -44,7 +44,7 @@ public class UserFriendshipDTO {
         String formatDateTime = friendship.getTimestamp().toLocalDateTime().format(formatter);
         return "Friendship between: " +
                 "" + userOne.getDisplayUsername() + " and " + userTwo.getDisplayUsername() + "\n" +
-                "With friendship id:" + friendship.getId() + "\n" +
+                "With friendship id: " + friendship.getId() + "\n" +
                 "Started from: " + formatDateTime + "\n" +
                 "=================================== \n";
     }

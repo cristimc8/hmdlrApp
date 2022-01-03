@@ -756,5 +756,72 @@
             </AnchorPane>
          </center>
       </BorderPane>
+      <BorderPane fx:id="selectAFriendPopupContainer" layoutX="10.0" layoutY="10.0" prefHeight="737.0" prefWidth="1304.0" visible="false">
+         <center>
+            <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="564.0" prefWidth="389.0" style="-fx-background-color: #17212b; -fx-background-radius: 5;" stylesheets="@res/style.css" BorderPane.alignment="CENTER">
+               <children>
+                  <BorderPane prefHeight="564.0" prefWidth="389.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <top>
+                        <VBox spacing="15.0" BorderPane.alignment="CENTER">
+                           <children>
+                              <BorderPane>
+                                 <left>
+                                    <Label text="Friends" textFill="WHITE" BorderPane.alignment="CENTER">
+                                       <font>
+                                          <Font name="Garuda Bold" size="22.0" />
+                                       </font>
+                                    </Label>
+                                 </left>
+                                 <right>
+                                    <ImageView fx:id="closeSelectAFriendPopupButton" fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
+                                       <image>
+                                          <Image url="@res/close.png" />
+                                       </image>
+                                       <cursor>
+                                          <Cursor fx:constant="HAND" />
+                                       </cursor>
+                                    </ImageView>
+                                 </right>
+                              </BorderPane>
+                              <BorderPane>
+                                 <top>
+                                    <HBox alignment="CENTER" spacing="10.0" BorderPane.alignment="CENTER">
+                                       <children>
+                                          <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@res/search.png" />
+                                             </image>
+                                          </ImageView>
+                                          <TextField fx:id="scrollableSelectAFriendSearch" prefHeight="39.0" prefWidth="363.0" promptText="Search" styleClass="hmdlrTextBox">
+                                             <font>
+                                                <Font name="Garuda" size="15.0" />
+                                             </font>
+                                          </TextField>
+                                       </children>
+                                    </HBox>
+                                 </top>
+                              </BorderPane>
+                           </children>
+                           <padding>
+                              <Insets bottom="10.0" left="15.0" right="15.0" top="5.0" />
+                           </padding>
+                        </VBox>
+                     </top>
+                     <center>
+                        <ScrollPane fitToWidth="true" prefHeight="200.0" prefWidth="200.0" vbarPolicy="NEVER" BorderPane.alignment="CENTER">
+                           <content>
+                              <VBox fx:id="scrollableSelectAFriendContainer">
+                                 <padding>
+                                    <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+                                 </padding>
+                              </VBox>
+                           </content>
+                        </ScrollPane>
+                     </center>
+                  </BorderPane>
+               </children>
+            </AnchorPane>
+         </center>
+      </BorderPane>
    </children>
 </AnchorPane>
