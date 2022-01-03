@@ -1,7 +1,5 @@
 package com.heimdallr.hmdlrapp.config;
 
-import java.sql.Connection;
-
 /**
  * Class initializing all services config classes in a single convenient place,
  * so we don't initialize them one by one in main

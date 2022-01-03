@@ -56,6 +56,7 @@ public class MessagesService {
 
     public Message latestMessageBetweenUsers(int uidOne, int uidTwo) {
         List<Message> lastPage = findAllBetweenUsers(0, uidOne, uidTwo);
+        if(lastPage.isEmpty()) return null;
         return lastPage.get(lastPage.size() - 1);
     }
 

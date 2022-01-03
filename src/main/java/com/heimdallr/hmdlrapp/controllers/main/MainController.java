@@ -14,9 +14,12 @@ import com.heimdallr.hmdlrapp.services.MessagesService;
 import com.heimdallr.hmdlrapp.services.UserService;
 import com.heimdallr.hmdlrapp.services.pubSub.Channel;
 import com.heimdallr.hmdlrapp.services.pubSub.EventDispatcher;
+import com.heimdallr.hmdlrapp.services.pubSub.On;
 import com.heimdallr.hmdlrapp.services.pubSub.Subscriber;
+import com.heimdallr.hmdlrapp.utils.Async;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
@@ -196,6 +199,11 @@ public class MainController extends Subscriber {
     VBox scrollableSelectAFriendContainer;
 
     @FXML
+    BorderPane successGifContainer;
+    @FXML
+    ImageView successGif;
+
+    @FXML
     protected void initialize() {
         try {
             this.userService = (UserService) HmdlrDI.getContainer().getService(UserService.class);
@@ -208,6 +216,7 @@ public class MainController extends Subscriber {
 
 //        this.eventDispatcher.subscribeTo(this, Channel.onNewMessage);
         this.eventDispatcher.subscribeTo(this, Channel.guiVisibleSelectAFriend);
+        this.eventDispatcher.subscribeTo(this, Channel.onSaveToPDFCompleted);
         this.assignComponentsToControllers();
     }
 
@@ -218,10 +227,26 @@ public class MainController extends Subscriber {
             this.selectAFriendPopupContainer.setVisible(true);
             this.generateReportsPopupContainer.setOpacity(0.16);
         }
-        else {
+        else if(Objects.equals(info, "invisible")) {
             this.selectAFriendPopupContainer.setVisible(false);
             this.generateReportsPopupContainer.setOpacity(1);
         }
+        else if(Objects.equals(info, "completed")) {
+            this.generateReportsPopupContainer.setVisible(false);
+            Image imProfile = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/com/heimdallr/hmdlrapp/res/successTransparent.gif")));
+            this.successGif.setImage(imProfile);
+            this.successGifContainer.setVisible(true);
+            Async.setTimeout(() -> {
+                successGifContainer.setVisible(false);
+                this.mainChildrenComponents.setOpacity(1);
+            }, 1500);
+        }
+    }
+
+    // this almost works, but I don't really have time to complete setup
+    @On(CapturedChannel = Channel.onFriendshipsChanged)
+    void onFriendSelectedTriggered(String info) {
+        System.out.println("Channel captured!");
     }
 
     private void assignComponentsToControllers() {

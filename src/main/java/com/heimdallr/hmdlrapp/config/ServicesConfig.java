@@ -4,6 +4,7 @@ import com.heimdallr.hmdlrapp.exceptions.ServiceInitException;
 import com.heimdallr.hmdlrapp.services.*;
 import com.heimdallr.hmdlrapp.services.DI.HmdlrDI;
 import com.heimdallr.hmdlrapp.services.pubSub.EventDispatcher;
+import com.heimdallr.hmdlrapp.services.pubSub.HmdlrSubscribers;
 
 import java.util.List;
 

@@ -7,6 +7,8 @@ import com.heimdallr.hmdlrapp.models.dtos.UserFriendshipDTO;
 import com.heimdallr.hmdlrapp.models.dtos.UserMessageDTO;
 import com.heimdallr.hmdlrapp.services.DI.HmdlrDI;
 import com.heimdallr.hmdlrapp.services.DI.Service;
+import com.heimdallr.hmdlrapp.services.pubSub.Channel;
+import com.heimdallr.hmdlrapp.services.pubSub.EventDispatcher;
 import com.heimdallr.hmdlrapp.utils.PDFWriter;
 
 import java.sql.Timestamp;
@@ -21,6 +23,7 @@ public class ReportsService {
     FriendshipsService friendshipsService;
     MessagesService messagesService;
     GroupChatsService groupChatsService;
+    EventDispatcher eventDispatcher;
 
     private User user;
 
@@ -30,6 +33,7 @@ public class ReportsService {
             this.friendshipsService = (FriendshipsService) HmdlrDI.getContainer().getService(FriendshipsService.class);
             this.messagesService = (MessagesService) HmdlrDI.getContainer().getService(MessagesService.class);
             this.groupChatsService = (GroupChatsService) HmdlrDI.getContainer().getService(GroupChatsService.class);
+            this.eventDispatcher = (EventDispatcher) HmdlrDI.getContainer().getService(EventDispatcher.class);
         } catch (ServiceNotRegisteredException e) {
             e.printStackTrace();
         }
@@ -91,5 +95,7 @@ public class ReportsService {
         pdfWriter.createPdfFile();
         pdfWriter.addPage(title, big);
         pdfWriter.saveAndClose();
+
+        eventDispatcher.dispatch(Channel.onSaveToPDFCompleted, "completed");
     }
 }

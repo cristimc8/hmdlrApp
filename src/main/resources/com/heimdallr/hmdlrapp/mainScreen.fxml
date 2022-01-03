@@ -756,7 +756,7 @@
             </AnchorPane>
          </center>
       </BorderPane>
-      <BorderPane fx:id="selectAFriendPopupContainer" layoutX="10.0" layoutY="10.0" prefHeight="737.0" prefWidth="1304.0" visible="false">
+      <BorderPane fx:id="selectAFriendPopupContainer" layoutX="10.0" layoutY="10.0" prefHeight="737.0" prefWidth="1304.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <center>
             <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="564.0" prefWidth="389.0" style="-fx-background-color: #17212b; -fx-background-radius: 5;" stylesheets="@res/style.css" BorderPane.alignment="CENTER">
                <children>
@@ -821,6 +821,15 @@
                   </BorderPane>
                </children>
             </AnchorPane>
+         </center>
+      </BorderPane>
+      <BorderPane fx:id="successGifContainer" layoutX="20.0" layoutY="20.0" prefHeight="737.0" prefWidth="1304.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <center>
+            <ImageView fx:id="successGif" fitHeight="300.0" fitWidth="300.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
+               <image>
+                  <Image url="@res/successTransparent.gif" />
+               </image>
+            </ImageView>
          </center>
       </BorderPane>
    </children>
