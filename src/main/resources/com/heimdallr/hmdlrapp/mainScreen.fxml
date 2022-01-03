@@ -679,7 +679,7 @@
       </BorderPane>
       <BorderPane fx:id="generateReportsPopupContainer" prefHeight="737.0" prefWidth="1304.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <center>
-            <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="248.0" prefWidth="577.0" style="-fx-background-color: #17212b; -fx-background-radius: 5;" stylesheets="@res/style.css" BorderPane.alignment="CENTER">
+            <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="271.0" prefWidth="577.0" style="-fx-background-color: #17212b; -fx-background-radius: 5;" stylesheets="@res/style.css" BorderPane.alignment="CENTER">
                <children>
                   <BorderPane prefHeight="336.0" prefWidth="617.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <center>
@@ -699,9 +699,9 @@
                               </VBox>
                            </left>
                            <right>
-                              <VBox fx:id="messagesWithFriendButton" alignment="CENTER" BorderPane.alignment="CENTER">
+                              <VBox alignment="CENTER" BorderPane.alignment="CENTER">
                                  <children>
-                                    <Button mnemonicParsing="false" styleClass="hmdlrButton" text="Messages with friend" textAlignment="CENTER" textFill="WHITE">
+                                    <Button fx:id="messagesWithFriendsButton" mnemonicParsing="false" styleClass="hmdlrButton" text="Messages with friend" textAlignment="CENTER" textFill="WHITE">
                                        <font>
                                           <Font name="Garuda" size="18.0" />
                                        </font>
@@ -713,12 +713,41 @@
                               </VBox>
                            </right>
                            <top>
-                              <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="35.0" BorderPane.alignment="CENTER">
+                              <VBox alignment="CENTER" BorderPane.alignment="CENTER">
                                  <children>
-                                    <DatePicker fx:id="firtstDatePicker" promptText="First date" style="-fx-background-color: black;" />
-                                    <DatePicker fx:id="secondDatePicker" promptText="Second date" style="-fx-background-color: black;" />
+                                    <BorderPane>
+                                       <right>
+                                          <ImageView fx:id="closeGenerateReportsContainer" fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
+                                             <image>
+                                                <Image url="@res/close.png" />
+                                             </image>
+                                             <cursor>
+                                                <Cursor fx:constant="HAND" />
+                                             </cursor>
+                                          </ImageView>
+                                       </right>
+                                       <left>
+                                          <Label text="Generate reports" textFill="WHITE" BorderPane.alignment="CENTER">
+                                             <font>
+                                                <Font name="Garuda" size="16.0" />
+                                             </font>
+                                          </Label>
+                                       </left>
+                                       <padding>
+                                          <Insets left="15.0" right="15.0" />
+                                       </padding>
+                                    </BorderPane>
+                                    <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="35.0">
+                                       <children>
+                                          <DatePicker fx:id="firtstDatePicker" promptText="First date" style="-fx-background-color: black;" />
+                                          <DatePicker fx:id="secondDatePicker" promptText="Second date" style="-fx-background-color: black;" />
+                                       </children>
+                                    </HBox>
                                  </children>
-                              </HBox>
+                                 <padding>
+                                    <Insets top="10.0" />
+                                 </padding>
+                              </VBox>
                            </top>
                         </BorderPane>
                      </center>

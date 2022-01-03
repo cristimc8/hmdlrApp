@@ -1,5 +1,6 @@
 package com.heimdallr.hmdlrapp.controllers.main;
 
+import com.heimdallr.hmdlrapp.controllers.main.popups.reports.GenerateReportsController;
 import com.heimdallr.hmdlrapp.controllers.main.popups.users.AllUsersController;
 import com.heimdallr.hmdlrapp.controllers.main.popups.groupChats.CreateGCController;
 import com.heimdallr.hmdlrapp.controllers.main.popups.users.FriendsController;
@@ -169,6 +170,18 @@ public class MainController extends Subscriber {
     @FXML
     ScrollPane parentScrollPane;
 
+    // generate reports
+    @FXML
+    Button friendsAndMessagesButton;
+    @FXML
+    Button messagesWithFriendsButton;
+    @FXML
+    DatePicker firtstDatePicker;
+    @FXML
+    DatePicker secondDatePicker;
+    @FXML
+    ImageView closeGenerateReportsContainer;
+
     @FXML
     protected void initialize() {
         try {
@@ -196,6 +209,7 @@ public class MainController extends Subscriber {
         this.assignToFriends();
         this.assignToRequests();
         this.assignToCreateGC();
+        this.assignToGenerateReports();
     }
 
     private void assignToSliderMenu() {
@@ -288,5 +302,18 @@ public class MainController extends Subscriber {
                 scrollableSearchMembersTextBox
         );
         createGCController.initialize();
+    }
+
+    private void assignToGenerateReports() {
+        GenerateReportsController generateReportsController = new GenerateReportsController(
+                friendsAndMessagesButton,
+                messagesWithFriendsButton,
+                firtstDatePicker,
+                secondDatePicker,
+                closeGenerateReportsContainer,
+                generateReportsPopupContainer,
+                mainChildrenComponents
+        );
+        generateReportsController.initialize();
     }
 }
