@@ -3,6 +3,7 @@ package com.heimdallr.hmdlrapp.services;
 import com.heimdallr.hmdlrapp.exceptions.ServiceNotRegisteredException;
 import com.heimdallr.hmdlrapp.models.Friendship;
 import com.heimdallr.hmdlrapp.models.User;
+import com.heimdallr.hmdlrapp.models.dtos.UserFriendshipDTO;
 import com.heimdallr.hmdlrapp.services.DI.HmdlrDI;
 import com.heimdallr.hmdlrapp.services.DI.Service;
 import com.heimdallr.hmdlrapp.utils.PDFWriter;
@@ -11,6 +12,7 @@ import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ReportsService {
@@ -37,8 +39,14 @@ public class ReportsService {
         Timestamp t1 = Timestamp.valueOf(d1.atStartOfDay());
         Timestamp t2 = Timestamp.valueOf(d2.atStartOfDay());
         List<Friendship> friendships = friendshipsService.findForUserInRange(t1, t2);
+        List<UserFriendshipDTO> userFriendshipDTOS =
+                friendships.stream().map(f -> {
+                    return new UserFriendshipDTO(f,
+                            userService.findById(f.getUserOne()),
+                            userService.findById(f.getUserTwo()));
+                }).toList();
         StringBuffer big = new StringBuffer();
-        friendships.forEach(f -> {
+        userFriendshipDTOS.forEach(f -> {
             String text = f.toString();
             big.append("\n").append(text);
         });
