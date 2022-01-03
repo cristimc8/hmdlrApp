@@ -4,6 +4,7 @@ import com.heimdallr.hmdlrapp.exceptions.ServiceNotRegisteredException;
 import com.heimdallr.hmdlrapp.models.Friendship;
 import com.heimdallr.hmdlrapp.models.User;
 import com.heimdallr.hmdlrapp.models.dtos.UserFriendshipDTO;
+import com.heimdallr.hmdlrapp.models.dtos.UserMessageDTO;
 import com.heimdallr.hmdlrapp.services.DI.HmdlrDI;
 import com.heimdallr.hmdlrapp.services.DI.Service;
 import com.heimdallr.hmdlrapp.utils.PDFWriter;
@@ -11,6 +12,7 @@ import com.heimdallr.hmdlrapp.utils.PDFWriter;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ReportsService {
@@ -56,18 +58,38 @@ public class ReportsService {
             big.append("\n").append(text);
         });
 
-        String fileName = "friendshipsAndMessages";
-
-        PDFWriter pdfWriter = new PDFWriter(path, fileName);
-        pdfWriter.createPdfFile();
-        String heading = "Friendships and messages report";
-        pdfWriter.addPage(heading, big);
-        pdfWriter.saveAndClose();
+        saveToFile(big, path, "friendshipsAndMessages", "Friendships and messages report");
     }
 
     public void generateMessagesWithFriendForPeriod(LocalDate d1, LocalDate d2, User other, String path) {
         Timestamp t1 = Timestamp.valueOf(d1.atStartOfDay());
         Timestamp t2 = Timestamp.valueOf(d2.atStartOfDay());
+        this.user = userService.getCurrentUser();
+
+        StringBuffer big = new StringBuffer();
+
+        List<UserMessageDTO> userMessageDTOS = messagesService.findAllBetweenUsersForRange(user, other, t1, t2)
+                .stream().map(m -> {
+                    return new UserMessageDTO(
+                            userService.findById(m.getSenderId()),
+                            userService.findById(m.getReceiverId()),
+                            m
+                    );
+                }).toList();
+        userMessageDTOS.forEach(x -> {
+            if(x.getMessage().getReplyTo() != -1)
+                big.append(x.toString()).append('\n');
+        });
         System.out.println("Generating pdf of convos with user other: " + other.getDisplayUsername());
+
+        saveToFile(big, path, "messages", "Messages with user report");
+    }
+
+
+    private void saveToFile(StringBuffer big, String path, String filename, String title) {
+        PDFWriter pdfWriter = new PDFWriter(path, filename);
+        pdfWriter.createPdfFile();
+        pdfWriter.addPage(title, big);
+        pdfWriter.saveAndClose();
     }
 }

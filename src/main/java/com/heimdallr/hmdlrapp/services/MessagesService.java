@@ -37,6 +37,10 @@ public class MessagesService {
         return messagesRepository.countForRangeForUser(t1, t2, user.getId(), userGroupsStringList);
     }
 
+    public List<Message> findAllBetweenUsersForRange(User userOne, User userTwo, Timestamp t1, Timestamp t2) {
+        return messagesRepository.findAllForUsersForRange(userOne.getId(), userTwo.getId(), t1, t2);
+    }
+
     public Message findById(int id) {
         return this.messagesRepository.findById(id);
     }

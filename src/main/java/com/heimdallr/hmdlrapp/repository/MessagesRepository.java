@@ -29,6 +29,41 @@ public class MessagesRepository implements PagingRepository<Message, Integer> {
         }
     }
 
+    public List<Message> findAllForUsersForRange(int uidOne, int uidTwo, Timestamp t1, Timestamp t2) {
+        List<Message> messages = new ArrayList<>();
+        String cmd = "SELECT * FROM messages " +
+                "WHERE (sender_id = ? AND receiver_id = ?) " +
+                "OR (sender_id = ? AND receiver_id = ?) " +
+                "AND timestamp >= ? AND timestamp <= ?";
+        try {
+            PreparedStatement preparedStatement = dbInstance.prepareStatement(cmd);
+            preparedStatement.setInt(1, uidOne);
+            preparedStatement.setInt(2, uidTwo);
+            preparedStatement.setInt(3, uidTwo);
+            preparedStatement.setInt(4, uidOne);
+            preparedStatement.setTimestamp(5, t1);
+            preparedStatement.setTimestamp(6, t2);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while(resultSet.next()) {
+                int messageId = resultSet.getInt("message_id");
+                int senderId = resultSet.getInt("sender_id");
+                // can be null! for ints = 0
+                int receiverId = resultSet.getInt("receiver_id");
+                // can be null! for strings = null
+                String groupId = resultSet.getString("group_id");
+                int replyTo = resultSet.getInt("reply_to");
+                String messageBody = resultSet.getString("message_body");
+                Timestamp timestamp = resultSet.getTimestamp("timestamp");
+
+                messages.add(new Message(messageId, senderId, receiverId, groupId, replyTo, messageBody, timestamp));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return messages;
+    }
+
     public int countForRangeForUser(Timestamp t1, Timestamp t2, int uid, List<String> userGroups) {
         int number = 0;
         String cmd = "SELECT COUNT(*) AS numeroMesagios FROM messages " +
