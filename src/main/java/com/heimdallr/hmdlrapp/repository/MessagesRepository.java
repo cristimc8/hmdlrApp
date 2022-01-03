@@ -29,6 +29,48 @@ public class MessagesRepository implements PagingRepository<Message, Integer> {
         }
     }
 
+    public int countForRangeForUser(Timestamp t1, Timestamp t2, int uid, List<String> userGroups) {
+        int number = 0;
+        String cmd = "SELECT COUNT(*) AS numeroMesagios FROM messages " +
+                "WHERE sender_id = ? OR receiver_id = ? " +
+                "AND timestamp >= ? AND timestamp <= ? ";
+
+        if (!userGroups.isEmpty()) {
+            cmd = String.format(
+                    "SELECT COUNT(*) AS numeroMesagios FROM messages " +
+                            "WHERE sender_id = ? OR receiver_id = ? " +
+                            "OR group_id IN (%s) " +
+                            "AND timestamp >= ? AND timestamp <= ? ",
+                    userGroups.stream()
+                            .map(v -> "?").collect(Collectors.joining(", ")));
+        }
+
+        try {
+            PreparedStatement preparedStatement = dbInstance.prepareStatement(cmd);
+            preparedStatement.setInt(1, uid);
+            preparedStatement.setInt(2, uid);
+            if (!userGroups.isEmpty()) {
+                for (int i = 0; i < userGroups.size(); i++) {
+                    preparedStatement.setString(i + 3, userGroups.get(i));
+                }
+                preparedStatement.setTimestamp(3 + userGroups.size(), t1);
+                preparedStatement.setTimestamp(4 + userGroups.size(), t2);
+            }
+            else {
+                preparedStatement.setTimestamp(3, t1);
+                preparedStatement.setTimestamp(4, t2);
+            }
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if(resultSet.next()) {
+                number = resultSet.getInt("numeroMesagios");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return number;
+    }
+
     public List<Message> getAllBetweenUsers(int uidOne, int uidTwo) {
         List<Message> messages = new ArrayList<>();
         String cmd = "SELECT * FROM messages " +

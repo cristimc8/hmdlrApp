@@ -10,9 +10,7 @@ import com.heimdallr.hmdlrapp.utils.PDFWriter;
 
 import java.sql.Timestamp;
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class ReportsService {
@@ -20,6 +18,7 @@ public class ReportsService {
     UserService userService;
     FriendshipsService friendshipsService;
     MessagesService messagesService;
+    GroupChatsService groupChatsService;
 
     private User user;
 
@@ -28,16 +27,23 @@ public class ReportsService {
             this.userService = (UserService) HmdlrDI.getContainer().getService(UserService.class);
             this.friendshipsService = (FriendshipsService) HmdlrDI.getContainer().getService(FriendshipsService.class);
             this.messagesService = (MessagesService) HmdlrDI.getContainer().getService(MessagesService.class);
+            this.groupChatsService = (GroupChatsService) HmdlrDI.getContainer().getService(GroupChatsService.class);
         } catch (ServiceNotRegisteredException e) {
             e.printStackTrace();
         }
-
-        this.user = userService.getCurrentUser();
     }
 
-    public void generateNewFriendsAndMessagesForPeriod(LocalDate d1, LocalDate d2) {
+    public void generateNewFriendsAndMessagesForPeriod(LocalDate d1, LocalDate d2, String path) {
+        this.user = userService.getCurrentUser();
         Timestamp t1 = Timestamp.valueOf(d1.atStartOfDay());
         Timestamp t2 = Timestamp.valueOf(d2.atStartOfDay());
+
+        int numberOfMessages = messagesService.countForRange(t1, t2, user, groupChatsService.getAllForUser(user));
+        StringBuffer big = new StringBuffer();
+
+        big.append("\n").append("Number of messages that were visible to you in this time range: ")
+                .append(numberOfMessages).append('\n').append("(Including group chats)").append('\n');
+
         List<Friendship> friendships = friendshipsService.findForUserInRange(t1, t2);
         List<UserFriendshipDTO> userFriendshipDTOS =
                 friendships.stream().map(f -> {
@@ -45,23 +51,21 @@ public class ReportsService {
                             userService.findById(f.getUserOne()),
                             userService.findById(f.getUserTwo()));
                 }).toList();
-        StringBuffer big = new StringBuffer();
         userFriendshipDTOS.forEach(f -> {
             String text = f.toString();
             big.append("\n").append(text);
         });
 
-        String outputDir = "/home/cristi/college/map/docs";
-        String fileName = "ex";
+        String fileName = "friendshipsAndMessages";
 
-        PDFWriter pdfWriter = new PDFWriter(outputDir, fileName);
+        PDFWriter pdfWriter = new PDFWriter(path, fileName);
         pdfWriter.createPdfFile();
-        String heading = "Conva";
+        String heading = "Friendships and messages report";
         pdfWriter.addPage(heading, big);
         pdfWriter.saveAndClose();
     }
 
-    public void generateMessagesWithFriendForPeriod(LocalDate d1, LocalDate d2) {
+    public void generateMessagesWithFriendForPeriod(LocalDate d1, LocalDate d2, String path) {
         Timestamp t1 = Timestamp.valueOf(d1.atStartOfDay());
         Timestamp t2 = Timestamp.valueOf(d2.atStartOfDay());
     }

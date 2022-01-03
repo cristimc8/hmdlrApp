@@ -11,7 +11,10 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
+import javafx.stage.DirectoryChooser;
+import javafx.stage.Stage;
 
+import java.io.File;
 import java.time.LocalDate;
 
 public class GenerateReportsController extends Subscriber implements CustomController {
@@ -73,7 +76,9 @@ public class GenerateReportsController extends Subscriber implements CustomContr
             public void handle(MouseEvent event) {
                 //get dates and access service functions to export
                 if(datesValid()) {
-                    reportsService.generateNewFriendsAndMessagesForPeriod(LocalDate.ofEpochDay(firstDatePicker.getValue().toEpochDay()), LocalDate.ofEpochDay(secondDatePicker.getValue().toEpochDay()));
+                    String path = getPath();
+                    if(path == null) return;
+                    reportsService.generateNewFriendsAndMessagesForPeriod(LocalDate.ofEpochDay(firstDatePicker.getValue().toEpochDay()), LocalDate.ofEpochDay(secondDatePicker.getValue().toEpochDay()), path);
                 }
             }
         });
@@ -84,6 +89,18 @@ public class GenerateReportsController extends Subscriber implements CustomContr
 
             }
         });
+    }
+
+    private String getPath() {
+        Stage stage = (Stage) messagesWithFriendButton.getScene().getWindow();
+        DirectoryChooser directoryChooser = new DirectoryChooser();
+        File selectedDirectory = directoryChooser.showDialog(stage);
+        if(selectedDirectory == null){
+            //No Directory selected
+        }else{
+            System.out.println("Selected path: " + selectedDirectory.getAbsolutePath());
+        }
+        return selectedDirectory == null ? null : selectedDirectory.getAbsolutePath();
     }
 
     private boolean datesValid() {
