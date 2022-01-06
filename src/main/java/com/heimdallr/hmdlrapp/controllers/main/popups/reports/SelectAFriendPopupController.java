@@ -55,6 +55,7 @@ public class SelectAFriendPopupController extends Subscriber implements CustomCo
         }
 
         this.eventDispatcher.subscribeTo(this, Channel.onFriendSelectedForReports);
+        this.eventDispatcher.subscribeTo(this, Channel.onFriendshipsChanged);
         this.setListeners();
         this.populate();
     }
@@ -62,6 +63,7 @@ public class SelectAFriendPopupController extends Subscriber implements CustomCo
     @Override
     protected void newContent(String info) {
         // When the selected username comes, we close this window
+        this.populate();
         this.eventDispatcher.dispatch(Channel.guiVisibleSelectAFriend, "invisible");
     }
 

@@ -23,6 +23,26 @@ public class GroupChatsService {
         this.groupChatsRepository = (GroupChatsRepository) groupChatsRepo;
     }
 
+    /**
+     * Call this method whenever you need to delete a user.
+     * We use this because the gc participants is not a FK, so
+     * we cannot delete cascade that.
+     * @param user User that was deleted
+     */
+    public void removeUserFromAllGroups(User user) {
+        this.removeUserFromAllGroups(user.getId());
+    }
+
+    public void removeUserFromAllGroups(int uid) {
+        List<GroupChat> groupChats = this.getAllForUser(uid);
+        for (GroupChat groupChat : groupChats) {
+            List<Integer> participants = groupChat.getParticipants();
+            participants.remove(uid);
+            groupChat.setParticipants(participants);
+            this.groupChatsRepository.updateOne(groupChat, groupChat);
+        }
+    }
+
     public GroupChat createOne(String alias, List<User> participants) {
         String participantsString = getParticipantsAsString(participants);
         return this.createOne(alias, participantsString);
