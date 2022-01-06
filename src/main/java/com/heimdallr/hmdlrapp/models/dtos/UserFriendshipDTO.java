@@ -3,6 +3,11 @@ package com.heimdallr.hmdlrapp.models.dtos;
 import com.heimdallr.hmdlrapp.models.Friendship;
 import com.heimdallr.hmdlrapp.models.User;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
+
 public class UserFriendshipDTO {
     private User userOne;
     private User userTwo;
@@ -30,5 +35,17 @@ public class UserFriendshipDTO {
 
     public Friendship getFriendship() {
         return friendship;
+    }
+
+    @Override
+    public String toString() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+        String formatDateTime = friendship.getTimestamp().toLocalDateTime().format(formatter);
+        return "Friendship between: " +
+                "" + userOne.getDisplayUsername() + " and " + userTwo.getDisplayUsername() + "\n" +
+                "With friendship id: " + friendship.getId() + "\n" +
+                "Started from: " + formatDateTime + "\n" +
+                "=================================== \n";
     }
 }

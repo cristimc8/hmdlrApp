@@ -82,4 +82,17 @@ public class Message extends BaseEntity<Integer> {
     public void setGroupId(String groupId) {
         this.groupId = groupId;
     }
+
+    @Override
+    public String toString() {
+        return "Message{" +
+                "id=" + id +
+                ", senderId=" + senderId +
+                ", receiverId=" + receiverId +
+                ", groupId='" + groupId + '\'' +
+                ", replyTo=" + replyTo +
+                ", messageBody='" + messageBody + '\'' +
+                ", timestamp=" + timestamp +
+                '}';
+    }
 }

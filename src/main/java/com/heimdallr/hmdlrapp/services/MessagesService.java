@@ -11,6 +11,7 @@ import com.heimdallr.hmdlrapp.repository.pagination.PageableImplementation;
 import com.heimdallr.hmdlrapp.repository.pagination.PagingRepository;
 import com.heimdallr.hmdlrapp.services.DI.Service;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -30,6 +31,16 @@ public class MessagesService {
         this.messagesRepository = (MessagesRepository) messagesRepo;
     }
 
+    public int countForRange(Timestamp t1, Timestamp t2, User user, List<GroupChat> userGroups) {
+        List<String> userGroupsStringList = userGroups.stream().map(BaseEntity::getId).toList();
+
+        return messagesRepository.countForRangeForUser(t1, t2, user.getId(), userGroupsStringList);
+    }
+
+    public List<Message> findAllBetweenUsersForRange(User userOne, User userTwo, Timestamp t1, Timestamp t2) {
+        return messagesRepository.findAllForUsersForRange(userOne.getId(), userTwo.getId(), t1, t2);
+    }
+
     public Message findById(int id) {
         return this.messagesRepository.findById(id);
     }
@@ -45,6 +56,7 @@ public class MessagesService {
 
     public Message latestMessageBetweenUsers(int uidOne, int uidTwo) {
         List<Message> lastPage = findAllBetweenUsers(0, uidOne, uidTwo);
+        if(lastPage.isEmpty()) return null;
         return lastPage.get(lastPage.size() - 1);
     }
 

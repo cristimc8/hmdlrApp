@@ -163,6 +163,26 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </HBox>
+            <HBox fx:id="generateReportsRow" alignment="CENTER_LEFT" spacing="20.0">
+               <children>
+                  <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../res/raports.png" />
+                     </image>
+                  </ImageView>
+                  <Label text="Generate reports" textFill="#ded7d7">
+                     <font>
+                        <Font name="Garuda Bold" size="18.0" />
+                     </font>
+                  </Label>
+               </children>
+               <padding>
+                  <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+               </padding>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </HBox>
          </children>
       </VBox>
    </children>

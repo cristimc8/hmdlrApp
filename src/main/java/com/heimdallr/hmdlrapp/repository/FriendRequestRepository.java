@@ -27,12 +27,12 @@ public class FriendRequestRepository implements RepoInterface<FriendRequest, Int
     public List<FriendRequest> findAllActiveForUser(int uid) {
         List<FriendRequest> friendRequests = new ArrayList<>();
         String cmd = "SELECT * FROM friend_requests " +
-                "WHERE (receiver_id = ? OR sender_id = ?)" +
+                "WHERE (receiver_id = ?)" +
                 "AND accepted = false AND status = 'pending'";
         try {
             PreparedStatement preparedStatement = dbInstance.prepareStatement(cmd);
             preparedStatement.setInt(1, uid);
-            preparedStatement.setInt(2, uid);
+//            preparedStatement.setInt(2, uid);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 int id = resultSet.getInt("friend_request_id");

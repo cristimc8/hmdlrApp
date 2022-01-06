@@ -65,4 +65,14 @@ public class Friendship extends BaseEntity<Integer> {
     public int hashCode() {
         return Objects.hash(super.hashCode(), userOne, userTwo, timestamp);
     }
+
+    @Override
+    public String toString() {
+        return "Friendship{" +
+                "id=" + id +
+                ", userOne=" + userOne +
+                ", userTwo=" + userTwo +
+                ", timestamp=" + timestamp +
+                '}';
+    }
 }
