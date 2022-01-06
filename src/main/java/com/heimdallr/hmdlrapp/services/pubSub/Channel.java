@@ -5,6 +5,7 @@ public enum Channel {
     onFriendshipsChanged,
     groupContentChanged,
     onSaveToPDFCompleted,
+    onReplyStarted,
     onFriendSelectedForReports,
     guiVisibleAllUsersController,
     guiVisibleFriendsController,

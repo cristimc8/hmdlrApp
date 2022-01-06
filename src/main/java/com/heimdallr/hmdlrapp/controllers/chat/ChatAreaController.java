@@ -62,6 +62,7 @@ public class ChatAreaController extends Subscriber implements CustomController {
     private GroupChat groupChat;
     private boolean isConvo;
     private double originalHeight;
+    private Message messageToReplyTo;
 
     private boolean scrollListenerSet = false;
 
@@ -142,6 +143,7 @@ public class ChatAreaController extends Subscriber implements CustomController {
         this.setEventHandlers();
         this.firstLoad();
         this.eventDispatcher.subscribeTo(this, Channel.onNewMessage);
+        this.eventDispatcher.subscribeTo(this, Channel.onReplyStarted);
     }
 
     private void setGoodDisplayData() {
@@ -210,11 +212,18 @@ public class ChatAreaController extends Subscriber implements CustomController {
                 if (!messageTextArea.getText().isBlank()) {
                     // send message
                     System.out.println("Sending message to: " + (isConvo ? other.getUsername() : groupChat.getAlias()));
-                    if (isConvo)
-                        messagesService.sendMessage(currentUser, other, messageTextArea.getText());
-                    else
-                        messagesService.sendMessage(currentUser, groupChat, messageTextArea.getText());
-
+                    if (isConvo){
+                        if(messageToReplyTo == null)
+                            messagesService.sendMessage(currentUser, other, messageTextArea.getText());
+                        else messagesService.replyToMessage(currentUser, other, messageToReplyTo.getId(), messageTextArea.getText());
+                    }
+                    else{
+                        if(messageToReplyTo == null)
+                            messagesService.sendMessage(currentUser, groupChat, messageTextArea.getText());
+                        else messagesService.replyToMessage(currentUser, groupChat, messageToReplyTo.getId(), messageTextArea.getText());
+                    }
+                    messageToReplyTo = null;
+                    messageTextArea.setPromptText("Write a message");
                     parentScrollPane.setVvalue(1.0);
                     messageTextArea.clear();
                 }
@@ -241,8 +250,16 @@ public class ChatAreaController extends Subscriber implements CustomController {
     @Override
     protected void newContent(String info) {
         // Retrieve the last message without deleting the rest of them
-        Message latest = this.fetchLastMessage();
-        displayLastMessage(latest);
+        if(info == null) {
+            Message latest = this.fetchLastMessage();
+            displayLastMessage(latest);
+        }
+        else {
+            int mid = Integer.parseInt(info);
+            // set gui for reply
+            messageToReplyTo = messagesService.findById(mid);
+            messageTextArea.setPromptText("Replying to " + userService.findById(messageToReplyTo.getSenderId()).getDisplayUsername() + "'s: " + messageToReplyTo.getMessageBody());
+        }
     }
 
     private void displayLastMessage(Message latest) {
