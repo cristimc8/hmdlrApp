@@ -171,7 +171,7 @@ public class MainController extends Subscriber {
     Label chatUsernameLabel;
 
     @FXML
-    HBox messageTextAreaContainer;
+    VBox messageTextAreaContainer;
 
     @FXML
     ScrollPane parentScrollPane;

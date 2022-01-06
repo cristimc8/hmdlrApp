@@ -59,7 +59,7 @@ public class LeftBarController extends Subscriber implements CustomController {
     ImageView messageButton;
     HBox chatTopLeftBar;
     Label chatUsernameLabel;
-    HBox messageTextAreaContainer;
+    VBox messageTextAreaContainer;
     ScrollPane parentScrollPane;
 
     public LeftBarController(VBox recentChatsContainer,
@@ -77,7 +77,7 @@ public class LeftBarController extends Subscriber implements CustomController {
                              ImageView messageButton,
                              HBox chatTopLeftBar,
                              Label chatUsernameLabel,
-                             HBox messageTextAreaContainer,
+                             VBox messageTextAreaContainer,
                              ScrollPane parentScrollPane) {
         this.recentChatsContainer = recentChatsContainer;
         this.burgerMenuButton = burgerMenuButton;

@@ -22,16 +22,12 @@ import javafx.event.EventHandler;
 import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.control.Label;
-import javafx.scene.control.ScrollBar;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.InputEvent;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,7 +47,7 @@ public class ChatAreaController extends Subscriber implements CustomController {
     ImageView messageButton;
     HBox chatTopLeftBar;
     Label chatUsernameLabel;
-    HBox messageTextAreaContainer;
+    VBox messageTextAreaContainer;
     ScrollPane parentScrollPane;
 
     private int uid = 0;
@@ -78,7 +74,7 @@ public class ChatAreaController extends Subscriber implements CustomController {
                           ImageView messageButton,
                           HBox chatTopLeftBar,
                           Label chatUsernameLabel,
-                          HBox messageTextAreaContainer,
+                          VBox messageTextAreaContainer,
                           ScrollPane parentScrollPane) {
         this.injectableCharArea = injectableCharArea;
         this.chatAreaContainer = chatAreaContainer;
@@ -101,7 +97,7 @@ public class ChatAreaController extends Subscriber implements CustomController {
                         ImageView messageButton,
                         HBox chatTopLeftBar,
                         Label chatUsernameLabel,
-                        HBox messageTextAreaContainer,
+                        VBox messageTextAreaContainer,
                         ScrollPane parentScrollPane,
                         int uid) {
         this.uid = uid;
@@ -118,7 +114,7 @@ public class ChatAreaController extends Subscriber implements CustomController {
                         ImageView messageButton,
                         HBox chatTopLeftBar,
                         Label chatUsernameLabel,
-                        HBox messageTextAreaContainer,
+                        VBox messageTextAreaContainer,
                         ScrollPane parentScrollPane,
                         String gid) {
         this.isConvo = false;
@@ -148,6 +144,7 @@ public class ChatAreaController extends Subscriber implements CustomController {
 
     private void setGoodDisplayData() {
         this.messageTextArea.setDisable(false);
+        setReplyMode(false);
         this.messageTextArea.setPromptText("Write a message");
         if(!scrollListenerSet) {
             this.scrollableChatAreaContainer.heightProperty().addListener(new ChangeListener<Number>() {
@@ -222,8 +219,7 @@ public class ChatAreaController extends Subscriber implements CustomController {
                             messagesService.sendMessage(currentUser, groupChat, messageTextArea.getText());
                         else messagesService.replyToMessage(currentUser, groupChat, messageToReplyTo.getId(), messageTextArea.getText());
                     }
-                    messageToReplyTo = null;
-                    messageTextArea.setPromptText("Write a message");
+                    setReplyMode(false);
                     parentScrollPane.setVvalue(1.0);
                     messageTextArea.clear();
                 }
@@ -258,7 +254,40 @@ public class ChatAreaController extends Subscriber implements CustomController {
             int mid = Integer.parseInt(info);
             // set gui for reply
             messageToReplyTo = messagesService.findById(mid);
-            messageTextArea.setPromptText("Replying to " + userService.findById(messageToReplyTo.getSenderId()).getDisplayUsername() + "'s: " + messageToReplyTo.getMessageBody());
+            setReplyMode(true);
+        }
+    }
+
+    private void setReplyMode(boolean replying) {
+        if(replying) {
+            HBox hBox = new HBox();
+            hBox.setAlignment(Pos.CENTER_LEFT);
+            hBox.setPrefHeight(30);
+            hBox.setPadding(new Insets(5, 15, 5, 15));
+            Label label = new Label();
+            label.setText("Replying to: " + userService.findById(messageToReplyTo.getSenderId()).getDisplayUsername() + "'s: " + messageToReplyTo.getMessageBody());
+            label.setFont(Font.font("Garuda"));
+            label.setTextFill(new Color(0.8, 0.8, 0.8, 1));
+
+            HBox hBox1 = new HBox();
+            hBox1.setPadding(new Insets(0, 0, 0, 15));
+
+            Button button = new Button();
+            button.setText("X");
+            button.setOnAction(e -> {
+                setReplyMode(false);
+            });
+
+            hBox1.getChildren().add(button);
+
+            hBox.getChildren().add(label);
+            hBox.getChildren().add(hBox1);
+            messageTextAreaContainer.getChildren().add(0, hBox);
+        }
+        else {
+            messageToReplyTo = null;
+            if(messageTextAreaContainer.getChildren().size() == 2)
+                messageTextAreaContainer.getChildren().remove(0);
         }
     }
 
