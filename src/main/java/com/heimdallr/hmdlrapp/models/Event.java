@@ -1,13 +1,16 @@
 package com.heimdallr.hmdlrapp.models;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class Event extends BaseEntity<String> {
 
     private String eventName;
     private int eventCreator;
-    private List<Integer> registeredUsers;
+    private List<Integer> registeredUsers = new ArrayList<>();
     private Timestamp eventDate;
 
     /**
@@ -18,6 +21,20 @@ public class Event extends BaseEntity<String> {
      */
     public Event(String id) {
         super(id);
+    }
+
+    public Event(String id, int eventCreator, String eventName, String registeredUsers, Timestamp eventDate) {
+        super(id);
+        setEventName(eventName);
+        setRegisteredUsers(registeredUsers);
+        setEventDate(eventDate);
+    }
+
+    public Event(String id, int eventCreator, String eventName, List<Integer> registeredUsers, Timestamp eventDate) {
+        super(id);
+        setEventName(eventName);
+        setRegisteredUsers(registeredUsers);
+        setEventDate(eventDate);
     }
 
     public String getEventName() {
@@ -50,5 +67,27 @@ public class Event extends BaseEntity<String> {
 
     public void setEventDate(Timestamp eventDate) {
         this.eventDate = eventDate;
+    }
+
+    /**
+     * Returns the list of participants as a ',' delimited String.
+     *
+     * @return list of participants ids delimited with , separator
+     */
+    public String getRegisteredUsersAsString() {
+        StringBuilder stringBuilder = new StringBuilder();
+        for (Integer elem : this.getRegisteredUsers()) {
+            stringBuilder.append(elem).append(",");
+        }
+
+        return "," + stringBuilder.toString();
+    }
+
+    public void setRegisteredUsers(String participants) {
+        participants = participants.substring(1);
+        participants = participants.substring(0, participants.length() - 1);
+        this.registeredUsers = Stream.of(participants.split(","))
+                .map(Integer::valueOf)
+                .collect(Collectors.toList());
     }
 }
