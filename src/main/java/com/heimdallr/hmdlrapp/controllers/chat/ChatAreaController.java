@@ -32,7 +32,7 @@ import javafx.scene.text.Font;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ChatAreaController extends Subscriber implements CustomController {
+public class ChatAreaController implements CustomController, Subscriber {
 
     private EventDispatcher eventDispatcher;
     private UserService userService;
@@ -244,7 +244,7 @@ public class ChatAreaController extends Subscriber implements CustomController {
     }
 
     @Override
-    protected void newContent(String info) {
+    public void newContent(String info) {
         // Retrieve the last message without deleting the rest of them
         if(info == null) {
             Message latest = this.fetchLastMessage();

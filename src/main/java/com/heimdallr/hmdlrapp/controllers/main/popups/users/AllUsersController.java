@@ -23,7 +23,7 @@ import java.util.Objects;
 /**
  * Controller class for the all-users popup component
  */
-public class AllUsersController extends Subscriber implements CustomController {
+public class AllUsersController implements CustomController, Subscriber {
     private EventDispatcher eventDispatcher;
     private UserService userService;
     private FriendshipsService friendshipsService;
@@ -60,7 +60,7 @@ public class AllUsersController extends Subscriber implements CustomController {
     }
 
     @Override
-    protected void newContent(String info) {
+    public void newContent(String info) {
         loadAllUsersAndTheFriendships();
     }
 

@@ -1,5 +1,7 @@
 package com.heimdallr.hmdlrapp.controllers.main;
 
+import com.heimdallr.hmdlrapp.controllers.main.popups.events.AllEventsContainer;
+import com.heimdallr.hmdlrapp.controllers.main.popups.events.CreateEventController;
 import com.heimdallr.hmdlrapp.controllers.main.popups.reports.GenerateReportsController;
 import com.heimdallr.hmdlrapp.controllers.main.popups.reports.SelectAFriendPopupController;
 import com.heimdallr.hmdlrapp.controllers.main.popups.users.AllUsersController;
@@ -17,19 +19,23 @@ import com.heimdallr.hmdlrapp.services.pubSub.EventDispatcher;
 import com.heimdallr.hmdlrapp.services.pubSub.On;
 import com.heimdallr.hmdlrapp.services.pubSub.Subscriber;
 import com.heimdallr.hmdlrapp.utils.Async;
+import javafx.animation.TranslateTransition;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.util.Duration;
 
 import java.util.Objects;
 
 
-public class MainController extends Subscriber {
+public class MainController implements Subscriber {
     private UserService userService;
     private MessagesService messagesService;
     private GroupChatsService groupChatsService;
@@ -88,6 +94,9 @@ public class MainController extends Subscriber {
 
     @FXML
     HBox upcomingRow;
+
+    @FXML
+    BorderPane dynamicContentHolder;
 
     @FXML
     BorderPane generateReportsPopupContainer;
@@ -227,10 +236,11 @@ public class MainController extends Subscriber {
         this.eventDispatcher.subscribeTo(this, Channel.guiVisibleSelectAFriend);
         this.eventDispatcher.subscribeTo(this, Channel.onSaveToPDFCompleted);
         this.assignComponentsToControllers();
+        this.setEventListeners();
     }
 
     @Override
-    protected void newContent(String info) {
+    public void newContent(String info) {
 //        this.loadMessages();
         if (Objects.equals(info, "visible")) {
             this.selectAFriendPopupContainer.setVisible(true);
@@ -383,5 +393,26 @@ public class MainController extends Subscriber {
                 scrollableSelectAFriendContainer
         );
         selectAFriendPopupController.initialize();
+    }
+
+    private void setEventListeners() {
+        createAnEventRow.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
+            this.setCenteredAndFocusedNode(new CreateEventController(mainChildrenComponents));
+        });
+
+        allEventsRow.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
+            this.setCenteredAndFocusedNode(new AllEventsContainer(mainChildrenComponents));
+        });
+    }
+
+    private void setCenteredAndFocusedNode(Node node) {
+        dynamicContentHolder.setCenter(node);
+        TranslateTransition closeNav = new TranslateTransition(new Duration(150), sliderMenu);
+        closeNav.setToX(-(sliderMenu.getWidth()));
+        closeNav.play();
+        Async.setTimeout(() -> {
+            sliderMenu.setVisible(false);
+            mainChildrenComponents.setOpacity(0.12);
+        }, 150);
     }
 }

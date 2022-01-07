@@ -351,6 +351,66 @@
                               <Cursor fx:constant="HAND" />
                            </cursor>
                         </HBox>
+                        <HBox fx:id="createAnEventRow" alignment="CENTER_LEFT" spacing="20.0">
+                           <children>
+                              <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@res/calendar.png" />
+                                 </image>
+                              </ImageView>
+                              <Label text="Create an event" textFill="#ded7d7">
+                                 <font>
+                                    <Font name="Garuda Bold" size="18.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                           <padding>
+                              <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+                           </padding>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                        </HBox>
+                        <HBox fx:id="allEventsRow" alignment="CENTER_LEFT" spacing="20.0">
+                           <children>
+                              <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@res/pizza.png" />
+                                 </image>
+                              </ImageView>
+                              <Label text="All events" textFill="#ded7d7">
+                                 <font>
+                                    <Font name="Garuda Bold" size="18.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                           <padding>
+                              <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+                           </padding>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                        </HBox>
+                        <HBox fx:id="upcomingRow" alignment="CENTER_LEFT" spacing="20.0">
+                           <children>
+                              <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@res/bell.png" />
+                                 </image>
+                              </ImageView>
+                              <Label text="Upcoming" textFill="#ded7d7">
+                                 <font>
+                                    <Font name="Garuda Bold" size="18.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                           <padding>
+                              <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+                           </padding>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                        </HBox>
                      </children>
                   </VBox>
                </children>
@@ -836,5 +896,6 @@
             </ImageView>
          </center>
       </BorderPane>
+      <BorderPane fx:id="dynamicContentHolder" pickOnBounds="false" prefHeight="737.0" prefWidth="1304.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
    </children>
 </AnchorPane>

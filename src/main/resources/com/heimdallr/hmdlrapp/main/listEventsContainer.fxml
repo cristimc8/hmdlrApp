@@ -12,13 +12,13 @@
 <?import javafx.scene.text.Font?>
 
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="678.0" prefWidth="494.0" style="-fx-background-color: #0e1621; -fx-background-radius: 5;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
+<fx:root fx:id="allEventsContainer" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="678.0" prefWidth="494.0" style="-fx-background-color: #17212b; -fx-background-radius: 5;" type="AnchorPane" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <BorderPane prefHeight="678.0" prefWidth="547.0" style="-fx-background-color: transparent;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <center>
             <ScrollPane fitToHeight="true" fitToWidth="true" style="-fx-background-color: transparent;" vbarPolicy="NEVER" BorderPane.alignment="CENTER">
                <content>
-                  <VBox fx:id="injectableVboxEvents" prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: #0e1621;" />
+                  <VBox fx:id="injectableVboxEvents" prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: #17212b;" />
                </content>
             </ScrollPane>
          </center>
@@ -48,4 +48,4 @@
          </top>
       </BorderPane>
    </children>
-</AnchorPane>
+</fx:root>

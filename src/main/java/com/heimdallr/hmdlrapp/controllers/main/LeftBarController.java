@@ -33,7 +33,7 @@ import javafx.util.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LeftBarController extends Subscriber implements CustomController {
+public class LeftBarController implements CustomController, Subscriber {
     private UserService userService;
     private MessagesService messagesService;
     private GroupChatsService groupChatsService;
@@ -118,7 +118,7 @@ public class LeftBarController extends Subscriber implements CustomController {
     }
 
     @Override
-    protected void newContent(String info) {
+    public void newContent(String info) {
         this.loadMessages();
     }
 
