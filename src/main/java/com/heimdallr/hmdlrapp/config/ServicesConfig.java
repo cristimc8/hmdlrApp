@@ -25,7 +25,8 @@ public class ServicesConfig {
                 FriendshipsService.class,
                 FriendRequestService.class,
                 GroupChatsService.class,
-                ReportsService.class);
+                ReportsService.class,
+                EventsService.class);
         hmdlrDI.initialize(servicesToInit);
     }
 }

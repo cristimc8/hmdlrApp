@@ -6,8 +6,10 @@ import com.heimdallr.hmdlrapp.exceptions.ValueExistsException;
 import com.heimdallr.hmdlrapp.models.Event;
 import com.heimdallr.hmdlrapp.models.GroupChat;
 import com.heimdallr.hmdlrapp.services.DI.HmdlrDI;
+import com.heimdallr.hmdlrapp.utils.RandomString;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class EventsRepository implements RepoInterface<Event, String> {
@@ -67,7 +69,24 @@ public class EventsRepository implements RepoInterface<Event, String> {
 
     @Override
     public List<Event> findAll() {
-        return null;
+        List<Event> events = new ArrayList<>();
+        String cmd = "SELECT * FROM events";
+        try {
+            PreparedStatement preparedStatement = dbInstance.prepareStatement(cmd);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                String id = resultSet.getString("event_id");
+                int creatorId = resultSet.getInt("event_creator");
+                String eventName = resultSet.getString("event_name");
+                String registered = resultSet.getString("registered");
+                Timestamp eventDate = resultSet.getTimestamp("event_date");
+
+                events.add(new Event(id, creatorId, eventName, registered, eventDate));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return events;
     }
 
     @Override
@@ -75,8 +94,19 @@ public class EventsRepository implements RepoInterface<Event, String> {
 
     }
 
+    private String generateNextId() {
+        String generatedId;
+        RandomString randomString = new RandomString(12);
+        generatedId = randomString.nextString();
+        return generatedId;
+    }
+
     @Override
     public String getNextAvailableId() {
-        return null;
+        String id = generateNextId();
+        while(this.findById(id) != null) {
+            id = generateNextId();
+        }
+        return id;
     }
 }
