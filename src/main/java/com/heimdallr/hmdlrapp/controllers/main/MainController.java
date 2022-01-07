@@ -81,6 +81,15 @@ public class MainController extends Subscriber {
     HBox generateReportsRow;
 
     @FXML
+    HBox createAnEventRow;
+
+    @FXML
+    HBox allEventsRow;
+
+    @FXML
+    HBox upcomingRow;
+
+    @FXML
     BorderPane generateReportsPopupContainer;
 
     @FXML
