@@ -23,18 +23,20 @@ public class Event extends BaseEntity<String> {
         super(id);
     }
 
-    public Event(String id, int eventCreator, String eventName, String registeredUsers, Timestamp eventDate) {
+    public Event(String id, String eventName, String registeredUsers, Timestamp eventDate) {
         super(id);
         setEventName(eventName);
         setRegisteredUsers(registeredUsers);
         setEventDate(eventDate);
+        setEventCreator(this.registeredUsers.get(0));
     }
 
-    public Event(String id, int eventCreator, String eventName, List<Integer> registeredUsers, Timestamp eventDate) {
+    public Event(String id, String eventName, List<Integer> registeredUsers, Timestamp eventDate) {
         super(id);
         setEventName(eventName);
         setRegisteredUsers(registeredUsers);
         setEventDate(eventDate);
+        setEventCreator(this.registeredUsers.get(0));
     }
 
     public String getEventName() {

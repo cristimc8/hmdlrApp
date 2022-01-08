@@ -1,6 +1,12 @@
 package com.heimdallr.hmdlrapp.controllers.main.popups.events;
 
 import com.heimdallr.hmdlrapp.controllers.CustomController;
+import com.heimdallr.hmdlrapp.exceptions.ServiceNotRegisteredException;
+import com.heimdallr.hmdlrapp.services.DI.HmdlrDI;
+import com.heimdallr.hmdlrapp.services.EventsService;
+import com.heimdallr.hmdlrapp.services.UserService;
+import com.heimdallr.hmdlrapp.services.pubSub.Channel;
+import com.heimdallr.hmdlrapp.services.pubSub.EventDispatcher;
 import com.heimdallr.hmdlrapp.services.pubSub.Subscriber;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -12,8 +18,14 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 
+import java.sql.Timestamp;
 
-public class CreateEventController extends AnchorPane implements CustomController, Subscriber {
+
+public class CreateEventController extends AnchorPane implements Subscriber {
+
+    private EventsService eventsService;
+    private EventDispatcher eventDispatcher;
+    private UserService userService;
 
     BorderPane parent;
 
@@ -41,14 +53,18 @@ public class CreateEventController extends AnchorPane implements CustomControlle
 
         try {
             fxmlLoader.load();
+
+            try {
+                this.eventsService = (EventsService) HmdlrDI.getContainer().getService(EventsService.class);
+                this.userService = (UserService) HmdlrDI.getContainer().getService(UserService.class);
+                this.eventDispatcher = (EventDispatcher) HmdlrDI.getContainer().getService(EventDispatcher.class);
+            } catch (ServiceNotRegisteredException e) {
+                e.printStackTrace();
+            }
+
             this.setListeners();
         } catch (Exception ignored) {
         }
-    }
-
-    @Override
-    public void initialize() {
-
     }
 
     @Override
@@ -58,8 +74,21 @@ public class CreateEventController extends AnchorPane implements CustomControlle
 
     private void setListeners() {
         closeCreateEventBtn.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
-            createEventContainer.setVisible(false);
-            parent.setOpacity(1);
+            closePopup();
         });
+
+        createEventButton.setOnAction(e -> {
+            String eventNameVal = eventName.getText();
+            Timestamp eventDateVal = Timestamp.valueOf(datePicker.getValue().atStartOfDay());
+
+            this.eventsService.createEvent(eventNameVal, userService.getCurrentUser().getId(), eventDateVal);
+            closePopup();
+            this.eventDispatcher.dispatch(Channel.onEventSuccessfullyCreated, "success_image");
+        });
+    }
+
+    private void closePopup() {
+        createEventContainer.setVisible(false);
+        parent.setOpacity(1);
     }
 }

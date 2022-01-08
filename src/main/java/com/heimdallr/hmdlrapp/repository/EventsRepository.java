@@ -24,6 +24,28 @@ public class EventsRepository implements RepoInterface<Event, String> {
         }
     }
 
+    public Event findByName(String name) {
+        String cmd = "SELECT * FROM events WHERE event_name = ?";
+        try {
+            PreparedStatement ps = dbInstance.prepareStatement(cmd);
+            ps.setString(1, name);
+            ResultSet resultSet = ps.executeQuery();
+            if (resultSet.next()) {
+
+                String id = resultSet.getString("event_id");
+                int creatorId = resultSet.getInt("event_creator");
+                String eventName = resultSet.getString("event_name");
+                String registered = resultSet.getString("registered");
+                Timestamp eventDate = resultSet.getTimestamp("event_date");
+
+                return new Event(id, eventName, registered, eventDate);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     @Override
     public Event findById(String id) {
         String cmd = "SELECT * FROM events WHERE event_id = ?";
@@ -38,12 +60,37 @@ public class EventsRepository implements RepoInterface<Event, String> {
                 String registered = resultSet.getString("registered");
                 Timestamp eventDate = resultSet.getTimestamp("event_date");
 
-                return new Event(id, creatorId, eventName, registered, eventDate);
+                return new Event(id, eventName, registered, eventDate);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public List<Event> findUpcomingForUserId(int uid, Timestamp currentDate, int acceptableNumberOfDaysForNotification) {
+        List<Event> events = new ArrayList<>();
+        String cmd = "SELECT * FROM events WHERE EXTRACT(DAY FROM events.event_date- ?) < ?" +
+                " AND events.registered LIKE '%' || ? || '%'";
+        try {
+            PreparedStatement preparedStatement = dbInstance.prepareStatement(cmd);
+            preparedStatement.setTimestamp(1, currentDate);
+            preparedStatement.setInt(2, acceptableNumberOfDaysForNotification);
+            preparedStatement.setString(3, "," + String.valueOf(uid) + ",");
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                String id = resultSet.getString("event_id");
+                int creatorId = resultSet.getInt("event_creator");
+                String eventName = resultSet.getString("event_name");
+                String registered = resultSet.getString("registered");
+                Timestamp eventDate = resultSet.getTimestamp("event_date");
+
+                events.add(new Event(id, eventName, registered, eventDate));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return events;
     }
 
     @Override
@@ -64,7 +111,14 @@ public class EventsRepository implements RepoInterface<Event, String> {
 
     @Override
     public void deleteOne(String id) {
-
+        String cmd = "DELETE FROM events WHERE event_id = ?";
+        try {
+            PreparedStatement preparedStatement = dbInstance.prepareStatement(cmd);
+            preparedStatement.setString(1, id);
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -81,7 +135,7 @@ public class EventsRepository implements RepoInterface<Event, String> {
                 String registered = resultSet.getString("registered");
                 Timestamp eventDate = resultSet.getTimestamp("event_date");
 
-                events.add(new Event(id, creatorId, eventName, registered, eventDate));
+                events.add(new Event(id, eventName, registered, eventDate));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -91,7 +145,15 @@ public class EventsRepository implements RepoInterface<Event, String> {
 
     @Override
     public void updateOne(Event original, Event changed) throws ValueExistsException {
-
+        String cmd = "UPDATE events SET registered = ? WHERE event_id = ?";
+        try {
+            PreparedStatement preparedStatement = dbInstance.prepareStatement(cmd);
+            preparedStatement.setString(1, original.getRegisteredUsersAsString());
+            preparedStatement.setString(2, original.getId());
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     private String generateNextId() {
@@ -104,7 +166,7 @@ public class EventsRepository implements RepoInterface<Event, String> {
     @Override
     public String getNextAvailableId() {
         String id = generateNextId();
-        while(this.findById(id) != null) {
+        while (this.findById(id) != null) {
             id = generateNextId();
         }
         return id;

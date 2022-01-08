@@ -235,6 +235,7 @@ public class MainController implements Subscriber {
 //        this.eventDispatcher.subscribeTo(this, Channel.onNewMessage);
         this.eventDispatcher.subscribeTo(this, Channel.guiVisibleSelectAFriend);
         this.eventDispatcher.subscribeTo(this, Channel.onSaveToPDFCompleted);
+        this.eventDispatcher.subscribeTo(this, Channel.onEventSuccessfullyCreated);
         this.assignComponentsToControllers();
         this.setEventListeners();
     }
@@ -250,7 +251,7 @@ public class MainController implements Subscriber {
             this.selectAFriendPopupContainer.setVisible(false);
             this.generateReportsPopupContainer.setOpacity(1);
         }
-        else if(Objects.equals(info, "completed")) {
+        else if(Objects.equals(info, "success_image")) {
             this.generateReportsPopupContainer.setVisible(false);
             Image imProfile = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/com/heimdallr/hmdlrapp/res/successTransparent.gif")));
             this.successGif.setImage(imProfile);

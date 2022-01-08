@@ -96,6 +96,6 @@ public class ReportsService {
         pdfWriter.addPage(title, big);
         pdfWriter.saveAndClose();
 
-        eventDispatcher.dispatch(Channel.onSaveToPDFCompleted, "completed");
+        eventDispatcher.dispatch(Channel.onSaveToPDFCompleted, "success_image");
     }
 }
