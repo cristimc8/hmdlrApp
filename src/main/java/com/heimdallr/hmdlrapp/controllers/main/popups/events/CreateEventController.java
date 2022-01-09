@@ -27,6 +27,8 @@ public class CreateEventController extends AnchorPane implements Subscriber {
     private EventDispatcher eventDispatcher;
     private UserService userService;
 
+    private boolean ok = false;
+
     BorderPane parent;
 
     @FXML
@@ -75,6 +77,16 @@ public class CreateEventController extends AnchorPane implements Subscriber {
     private void setListeners() {
         closeCreateEventBtn.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
             closePopup();
+        });
+
+        eventName.textProperty().addListener((observable, oldValue, newValue) -> {
+            this.ok = !eventName.getText().isEmpty() && datePicker.getValue() != null;
+            createEventButton.setDisable(!this.ok);
+        });
+
+        datePicker.valueProperty().addListener((observable, oldValue, newValue) -> {
+            this.ok = !eventName.getText().isEmpty() && datePicker.getValue() != null;
+            createEventButton.setDisable(!this.ok);
         });
 
         createEventButton.setOnAction(e -> {

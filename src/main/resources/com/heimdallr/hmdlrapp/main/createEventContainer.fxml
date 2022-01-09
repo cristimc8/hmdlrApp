@@ -13,7 +13,6 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
 <fx:root fx:id="createEventContainer" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #17212b; -fx-background-radius: 5;" type="AnchorPane" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <BorderPane prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -30,7 +29,7 @@
             </VBox>
          </center>
          <bottom>
-            <Button fx:id="createEventButton" mnemonicParsing="false" styleClass="hmdlrButton" stylesheets="@../res/style.css" text="Create event" textAlignment="CENTER" textFill="WHITE" BorderPane.alignment="CENTER">
+            <Button fx:id="createEventButton" disable="true" mnemonicParsing="false" styleClass="hmdlrButton" stylesheets="@../res/style.css" text="Create event" textAlignment="CENTER" textFill="WHITE" BorderPane.alignment="CENTER">
                <font>
                   <Font name="Garuda" size="18.0" />
                </font>

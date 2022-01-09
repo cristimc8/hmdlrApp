@@ -67,7 +67,6 @@ public class AllEventsContainer extends AnchorPane implements Subscriber {
     private void populateWithAllEvents() {
         injectableVboxEvents.getChildren().clear();
         List<Event> events = eventsService.findAll();
-        System.out.println(events.size());
         for (Event event :
                 events) {
             EventRowController eventRowController = new EventRowController(event);
