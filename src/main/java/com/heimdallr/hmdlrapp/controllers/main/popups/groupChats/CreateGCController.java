@@ -28,7 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class CreateGCController extends Subscriber implements CustomController {
+public class CreateGCController implements CustomController, Subscriber {
     private EventDispatcher eventDispatcher;
     private UserService userService;
     private FriendshipsService friendshipsService;
@@ -86,7 +86,7 @@ public class CreateGCController extends Subscriber implements CustomController {
     }
 
     @Override
-    protected void newContent(String info) {
+    public void newContent(String info) {
         if (info != null) {
             User receivedUser = userService.findByUsername(info);
 

@@ -21,7 +21,7 @@ import javafx.stage.Stage;
 import java.io.File;
 import java.time.LocalDate;
 
-public class GenerateReportsController extends Subscriber implements CustomController {
+public class GenerateReportsController implements CustomController, Subscriber {
 
     Button friendsAndMessagesButton;
     Button messagesWithFriendButton;
@@ -67,7 +67,7 @@ public class GenerateReportsController extends Subscriber implements CustomContr
     }
 
     @Override
-    protected void newContent(String info) {
+    public void newContent(String info) {
         // The selected username will come here
         if (info != null) {
             User selectedUser = this.userService.findByUsername(info);

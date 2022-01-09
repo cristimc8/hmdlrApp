@@ -21,7 +21,7 @@ import javafx.scene.layout.VBox;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SelectAFriendPopupController extends Subscriber implements CustomController {
+public class SelectAFriendPopupController implements CustomController, Subscriber {
 
     ImageView closeSelectAFriendPopupButton;
     TextField scrollableSelectAFriendSearch;
@@ -61,7 +61,7 @@ public class SelectAFriendPopupController extends Subscriber implements CustomCo
     }
 
     @Override
-    protected void newContent(String info) {
+    public void newContent(String info) {
         // When the selected username comes, we close this window
         this.populate();
         this.eventDispatcher.dispatch(Channel.guiVisibleSelectAFriend, "invisible");

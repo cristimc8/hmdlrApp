@@ -21,7 +21,7 @@ import javafx.scene.layout.VBox;
 import java.util.List;
 import java.util.Objects;
 
-public class FriendsController extends Subscriber implements CustomController {
+public class FriendsController implements CustomController, Subscriber {
     private EventDispatcher eventDispatcher;
     private UserService userService;
     private FriendshipsService friendshipsService;
@@ -62,7 +62,7 @@ public class FriendsController extends Subscriber implements CustomController {
     }
 
     @Override
-    protected void newContent(String info) {
+    public void newContent(String info) {
         loadAllUsersAndTheFriendships();
     }
 

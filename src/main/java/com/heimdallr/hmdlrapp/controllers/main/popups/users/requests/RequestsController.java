@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-public class RequestsController extends Subscriber implements CustomController {
+public class RequestsController implements CustomController, Subscriber {
     private EventDispatcher eventDispatcher;
     private UserService userService;
     private FriendRequestService friendRequestService;
@@ -70,7 +70,7 @@ public class RequestsController extends Subscriber implements CustomController {
     }
 
     @Override
-    protected void newContent(String info) {
+    public void newContent(String info) {
         this.loadAllRequests();
     }
 
