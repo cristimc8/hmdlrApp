@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<fx:root fx:id="sliderMenu" prefHeight="737.0" prefWidth="354.0" style="-fx-background-color: #17212b;" translateX="-355.0" type="AnchorPane" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
+<fx:root fx:id="sliderMenu" prefHeight="737.0" prefWidth="354.0" style="-fx-background-color: #17212b;" type="AnchorPane" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <VBox fx:id="recentChatsContainer" layoutX="15.0" prefHeight="737.0" prefWidth="354.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
@@ -19,11 +19,19 @@
                <top>
                   <BorderPane BorderPane.alignment="CENTER">
                      <right>
-                        <VBox spacing="17.0" BorderPane.alignment="CENTER">
+                        <VBox alignment="TOP_CENTER" spacing="25.0" BorderPane.alignment="CENTER">
                            <children>
                               <ImageView fx:id="closeSliderMenuButton" fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
                                     <Image url="@../res/close.png" />
+                                 </image>
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
+                              </ImageView>
+                              <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../res/bell.png" />
                                  </image>
                                  <cursor>
                                     <Cursor fx:constant="HAND" />
