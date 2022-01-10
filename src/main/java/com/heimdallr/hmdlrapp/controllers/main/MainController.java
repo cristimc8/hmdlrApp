@@ -62,6 +62,14 @@ public class MainController implements Subscriber {
     @FXML
     ImageView closeSliderMenuButton;
 
+    // notifications
+    @FXML
+    BorderPane notificationsButton;
+
+    @FXML
+    Label numberOfNotificationsLabel;
+    //
+
     @FXML
     Label nameLabel;
 
@@ -91,9 +99,6 @@ public class MainController implements Subscriber {
 
     @FXML
     HBox allEventsRow;
-
-    @FXML
-    HBox upcomingRow;
 
     @FXML
     BorderPane dynamicContentHolder;
@@ -297,7 +302,8 @@ public class MainController implements Subscriber {
                 createGCPopupContainer,
                 generateReportsRow,
                 generateReportsPopupContainer,
-                selectAFriendPopupContainer
+                selectAFriendPopupContainer,
+                numberOfNotificationsLabel
         );
         sliderMenuController.initialize();
     }
@@ -402,7 +408,11 @@ public class MainController implements Subscriber {
         });
 
         allEventsRow.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
-            this.setCenteredAndFocusedNode(new AllEventsContainer(mainChildrenComponents));
+            this.setCenteredAndFocusedNode(new AllEventsContainer(mainChildrenComponents, false));
+        });
+
+        notificationsButton.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
+            this.setCenteredAndFocusedNode(new AllEventsContainer(mainChildrenComponents, true));
         });
     }
 

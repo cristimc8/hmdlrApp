@@ -24,7 +24,7 @@
                <children>
                   <BorderPane prefHeight="200.0013629688322" prefWidth="200.0013629688322" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <center>
-                        <Label text="12" textFill="WHITE" BorderPane.alignment="CENTER">
+                        <Label fx:id="numberOfNotificationsLabel" text="12" textFill="WHITE" BorderPane.alignment="CENTER">
                            <font>
                               <Font name="Garuda" size="12.0" />
                            </font>
