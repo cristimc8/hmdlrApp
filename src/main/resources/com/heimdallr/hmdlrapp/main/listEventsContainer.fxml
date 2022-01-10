@@ -24,7 +24,7 @@
          <top>
             <BorderPane BorderPane.alignment="CENTER">
                <left>
-                  <Label text="All events" textFill="WHITE" BorderPane.alignment="CENTER">
+                  <Label fx:id="popupTitle" text="All events" textFill="WHITE" BorderPane.alignment="CENTER">
                      <font>
                         <Font name="Garuda Bold" size="22.0" />
                      </font>

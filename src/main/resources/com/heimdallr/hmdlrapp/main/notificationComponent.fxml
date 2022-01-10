@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.text.Font?>
+
+
+<BorderPane fx:id="notificationsButton" style="-fx-background-color: transparent;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
+   <center>
+      <StackPane BorderPane.alignment="CENTER">
+         <children>
+            <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../res/bell.png" />
+               </image>
+            </ImageView>
+            <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="25.0" prefWidth="25.0" style="-fx-background-radius: 25; -fx-background-color: red;">
+               <children>
+                  <BorderPane prefHeight="200.0013629688322" prefWidth="200.0013629688322" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <center>
+                        <Label fx:id="numberOfNotificationsLabel" text="12" textFill="WHITE" BorderPane.alignment="CENTER">
+                           <font>
+                              <Font name="Garuda" size="12.0" />
+                           </font>
+                        </Label>
+                     </center>
+                  </BorderPane>
+               </children>
+               <StackPane.margin>
+                  <Insets bottom="20.0" left="25.0" />
+               </StackPane.margin>
+            </AnchorPane>
+         </children>
+      </StackPane>
+   </center>
+   <cursor>
+      <Cursor fx:constant="HAND" />
+   </cursor>
+</BorderPane>

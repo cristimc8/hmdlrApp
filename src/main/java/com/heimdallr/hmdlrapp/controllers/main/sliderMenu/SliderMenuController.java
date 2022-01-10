@@ -4,9 +4,11 @@ package com.heimdallr.hmdlrapp.controllers.main.sliderMenu;
 import com.heimdallr.hmdlrapp.controllers.CustomController;
 import com.heimdallr.hmdlrapp.exceptions.ServiceNotRegisteredException;
 import com.heimdallr.hmdlrapp.services.DI.HmdlrDI;
+import com.heimdallr.hmdlrapp.services.EventsService;
 import com.heimdallr.hmdlrapp.services.UserService;
 import com.heimdallr.hmdlrapp.services.pubSub.Channel;
 import com.heimdallr.hmdlrapp.services.pubSub.EventDispatcher;
+import com.heimdallr.hmdlrapp.services.pubSub.Subscriber;
 import com.heimdallr.hmdlrapp.utils.Async;
 import javafx.animation.TranslateTransition;
 import javafx.event.EventHandler;
@@ -18,8 +20,9 @@ import javafx.scene.layout.HBox;
 import javafx.util.Duration;
 
 
-public class SliderMenuController implements CustomController {
+public class SliderMenuController implements CustomController, Subscriber {
     private EventDispatcher eventDispatcher;
+    private EventsService eventsService;
 
     private AnchorPane sliderMenu;
     private Label usernameLabel;
@@ -38,6 +41,8 @@ public class SliderMenuController implements CustomController {
     private BorderPane generateReportsPopupContainer;
     BorderPane selectAFriendPopupContainer;
 
+    Label numberOfNotificationsLabel;
+
     private UserService userService;
 
     public SliderMenuController(AnchorPane sliderMenu,
@@ -55,7 +60,8 @@ public class SliderMenuController implements CustomController {
                                 BorderPane createGCPopupContainer,
                                 HBox generateReportsRow,
                                 BorderPane generateReportsPopupContainer,
-                                BorderPane selectAFriendPopupContainer) {
+                                BorderPane selectAFriendPopupContainer,
+                                Label numberOfNotificationsLabel) {
         this.sliderMenu = sliderMenu;
         this.usernameLabel = usernameLabel;
         this.nameLabel = nameLabel;
@@ -72,10 +78,12 @@ public class SliderMenuController implements CustomController {
         this.generateReportsRow = generateReportsRow;
         this.generateReportsPopupContainer = generateReportsPopupContainer;
         this.selectAFriendPopupContainer = selectAFriendPopupContainer;
+        this.numberOfNotificationsLabel = numberOfNotificationsLabel;
 
         try {
             this.eventDispatcher = (EventDispatcher) HmdlrDI.getContainer().getService(EventDispatcher.class);
             this.userService = (UserService) HmdlrDI.getContainer().getService(UserService.class);
+            this.eventsService = (EventsService) HmdlrDI.getContainer().getService(EventsService.class);
         } catch (ServiceNotRegisteredException e) {
             e.printStackTrace();
         }
@@ -85,12 +93,14 @@ public class SliderMenuController implements CustomController {
     public void initialize() {
         setGUIForUser();
         this.setEventListeners();
+        this.eventDispatcher.subscribeTo(this, Channel.onEventsChanged);
     }
 
     public void setGUIForUser() {
         usernameLabel.setText(userService.getCurrentUser().getDisplayUsername());
         nameLabel.setText(userService.getCurrentUser().getFirstName() + " " + userService.getCurrentUser().getLastName());
         lettersLabel.setText(userService.getChatHeadPreviewLetters(userService.getCurrentUser()));
+        this.setNumberOfNotificationsLabel();
     }
 
     private void setEventListeners() {
@@ -181,5 +191,14 @@ public class SliderMenuController implements CustomController {
             }, 150);
         });
 
+    }
+
+    @Override
+    public void newContent(String info) {
+        this.setNumberOfNotificationsLabel();
+    }
+
+    private void setNumberOfNotificationsLabel() {
+        numberOfNotificationsLabel.setText(String.valueOf(eventsService.findUpcomingForUser(userService.getCurrentUser()).size()));
     }
 }
