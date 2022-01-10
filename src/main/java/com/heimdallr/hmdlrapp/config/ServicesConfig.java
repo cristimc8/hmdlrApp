@@ -19,6 +19,7 @@ public class ServicesConfig {
     public void initServices() throws ServiceInitException {
         List<Class<?>> servicesToInit = List.of(
                 DBConfig.class,
+                HmdlrSubscribers.class,
                 EventDispatcher.class,
                 MessagesService.class,
                 UserService.class,
@@ -26,7 +27,8 @@ public class ServicesConfig {
                 FriendRequestService.class,
                 GroupChatsService.class,
                 ReportsService.class,
-                EventsService.class);
+                EventsService.class
+        );
         hmdlrDI.initialize(servicesToInit);
     }
 }

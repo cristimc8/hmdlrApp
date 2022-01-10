@@ -1,7 +1,13 @@
 package com.heimdallr.hmdlrapp.services.pubSub;
 
+import com.heimdallr.hmdlrapp.HelloApplication;
+import com.heimdallr.hmdlrapp.controllers.main.sliderMenu.SliderMenuController;
+import com.heimdallr.hmdlrapp.exceptions.ServiceNotRegisteredException;
+import com.heimdallr.hmdlrapp.services.DI.HmdlrDI;
 import com.heimdallr.hmdlrapp.services.DI.Service;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -15,10 +21,17 @@ import java.util.List;
  */
 @Service
 public class EventDispatcher {
+    private HmdlrSubscribers hmdlrSubscribers;
+
     HashMap<Subscriber, List<Channel>> subscriberChannelHashMap;
 
     private EventDispatcher() {
         this.subscriberChannelHashMap = new HashMap<>();
+        try {
+            hmdlrSubscribers = (HmdlrSubscribers) HmdlrDI.getContainer().getService(HmdlrSubscribers.class);
+        } catch (ServiceNotRegisteredException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -29,11 +42,19 @@ public class EventDispatcher {
      * @param info    Info transmitted
      */
     public void dispatch(Channel channel, String info) {
-        for (Subscriber subscriber : this.subscriberChannelHashMap.keySet()) {
+        for(Method method : this.hmdlrSubscribers.getMethodsSubscribedToChannel(channel)) {
+            method.setAccessible(true);
+            try {
+                method.invoke(null, info);
+            } catch (IllegalAccessException | InvocationTargetException e) {
+                e.printStackTrace();
+            }
+        }
+        /*for (Subscriber subscriber : this.subscriberChannelHashMap.keySet()) {
             if (isSubscribedTo(subscriber, channel)) {
                 subscriber.newContent(info);
             }
-        }
+        }*/
     }
 
     private boolean isSubscribedTo(Subscriber subscriber, Channel channel) {

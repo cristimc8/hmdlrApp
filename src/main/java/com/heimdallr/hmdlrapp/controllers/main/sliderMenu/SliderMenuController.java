@@ -6,9 +6,7 @@ import com.heimdallr.hmdlrapp.exceptions.ServiceNotRegisteredException;
 import com.heimdallr.hmdlrapp.services.DI.HmdlrDI;
 import com.heimdallr.hmdlrapp.services.EventsService;
 import com.heimdallr.hmdlrapp.services.UserService;
-import com.heimdallr.hmdlrapp.services.pubSub.Channel;
-import com.heimdallr.hmdlrapp.services.pubSub.EventDispatcher;
-import com.heimdallr.hmdlrapp.services.pubSub.Subscriber;
+import com.heimdallr.hmdlrapp.services.pubSub.*;
 import com.heimdallr.hmdlrapp.utils.Async;
 import javafx.animation.TranslateTransition;
 import javafx.event.EventHandler;
@@ -19,8 +17,8 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.util.Duration;
 
-
-public class SliderMenuController implements CustomController, Subscriber {
+@HmdlrSubscriber
+public class SliderMenuController implements CustomController {
     private EventDispatcher eventDispatcher;
     private EventsService eventsService;
 
@@ -93,7 +91,7 @@ public class SliderMenuController implements CustomController, Subscriber {
     public void initialize() {
         setGUIForUser();
         this.setEventListeners();
-        this.eventDispatcher.subscribeTo(this, Channel.onEventsChanged);
+//        this.eventDispatcher.subscribeTo(this, Channel.onEventsChanged);
     }
 
     public void setGUIForUser() {
@@ -193,10 +191,15 @@ public class SliderMenuController implements CustomController, Subscriber {
 
     }
 
-    @Override
-    public void newContent(String info) {
+    @On(CapturedChannel = Channel.onEventsChanged)
+    public void onEventsChanged(String info) {
         this.setNumberOfNotificationsLabel();
     }
+
+    /*@Override
+    public void newContent(String info) {
+        this.setNumberOfNotificationsLabel();
+    }*/
 
     private void setNumberOfNotificationsLabel() {
         numberOfNotificationsLabel.setText(String.valueOf(eventsService.findUpcomingForUser(userService.getCurrentUser()).size()));
