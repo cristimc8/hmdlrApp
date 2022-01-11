@@ -26,15 +26,17 @@ public class FriendshipsRepository implements RepoInterface<Friendship, Integer>
         }
     }
 
-    public List<Friendship> findForUserInRange(Timestamp t1, Timestamp t2) {
+    public List<Friendship> findForUserInRange(Timestamp t1, Timestamp t2, int uid) {
         List<Friendship> friendships = new ArrayList<>();
         String cmd = "SELECT * FROM friendships WHERE " +
-                "timestamp >= ? AND timestamp <= ?";
+                "timestamp >= ? AND timestamp <= ? AND (user_one_id = ? OR user_two_id = ?) ";
 
         try {
             PreparedStatement ps = dbInstance.prepareStatement(cmd);
             ps.setTimestamp(1, t1);
             ps.setTimestamp(2, t2);
+            ps.setInt(3, uid);
+            ps.setInt(4, uid);
             ResultSet resultSet = ps.executeQuery();
 
             while (resultSet.next()) {
