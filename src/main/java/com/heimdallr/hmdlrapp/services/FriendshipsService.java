@@ -38,8 +38,8 @@ public class FriendshipsService {
         }
     }
 
-    public List<Friendship> findForUserInRange(Timestamp t1, Timestamp t2) {
-        return friendshipsRepository.findForUserInRange(t1, t2);
+    public List<Friendship> findForUserInRange(Timestamp t1, Timestamp t2, User user) {
+        return friendshipsRepository.findForUserInRange(t1, t2, user.getId());
     }
 
     public void createFriendship(User userOne, User userTwo) {

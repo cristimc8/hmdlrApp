@@ -50,7 +50,7 @@ public class ReportsService {
         big.append("\n").append("Number of messages that were visible to you in this time range: ")
                 .append(numberOfMessages).append('\n').append("(Including group chats)").append('\n');
 
-        List<Friendship> friendships = friendshipsService.findForUserInRange(t1, t2);
+        List<Friendship> friendships = friendshipsService.findForUserInRange(t1, t2, this.user);
         List<UserFriendshipDTO> userFriendshipDTOS =
                 friendships.stream().map(f -> {
                     return new UserFriendshipDTO(f,
