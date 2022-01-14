@@ -1,5 +1,6 @@
 package com.heimdallr.hmdlrapp.controllers.main.sliderMenu;
 
+import com.heimdallr.hmdlrapp.controllers.main.popups.profile.ProfilePageController;
 import com.heimdallr.hmdlrapp.exceptions.ServiceNotRegisteredException;
 import com.heimdallr.hmdlrapp.models.FriendRequest;
 import com.heimdallr.hmdlrapp.models.Friendship;
@@ -13,9 +14,12 @@ import com.heimdallr.hmdlrapp.services.pubSub.EventDispatcher;
 import com.heimdallr.hmdlrapp.utils.Constants;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Cursor;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
 
 import java.io.IOException;
 import java.util.Objects;
@@ -25,6 +29,8 @@ public class UserRowController extends AnchorPane {
     private UserService userService;
     private FriendRequestService friendRequestService;
     private EventDispatcher eventDispatcher;
+
+    BorderPane parent;
 
     @FXML
     Label lettersLabel;
@@ -62,6 +68,7 @@ public class UserRowController extends AnchorPane {
             }
 
             usernameLabel.setText(userService.findByUsername(username).getDisplayUsername());
+            usernameLabel.setCursor(Cursor.HAND);
             userFullNameLabel.setText(userFullName);
 
 
@@ -123,6 +130,21 @@ public class UserRowController extends AnchorPane {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void setThisParent(BorderPane borderPane) {
+        this.parent = borderPane;
+        usernameLabel.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
+            ProfilePageController profilePageController = new ProfilePageController(parent);
+            BorderPane borderPane1 = new BorderPane();
+            borderPane1.setCenter(profilePageController);
+            setTopAnchor(borderPane1, 0.);
+            setBottomAnchor(borderPane1, 0.);
+            setLeftAnchor(borderPane1, 0.);
+            setRightAnchor(borderPane1, 0.);
+
+            parent.getChildren().add(borderPane1);
+        });
     }
 
     /**

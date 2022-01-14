@@ -13,6 +13,7 @@ import com.heimdallr.hmdlrapp.services.pubSub.EventDispatcher;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service(AssociatedRepo = EventsRepository.class)
 public class EventsService {
@@ -76,13 +77,20 @@ public class EventsService {
                 eventName,
                 List.of(creatorId),
                 eventDate
-                );
+        );
         eventsRepository.addOne(event);
         eventDispatcher.dispatch(Channel.onEventsChanged, null);
     }
 
     public Event findById(String id) {
         return this.eventsRepository.findById(id);
+    }
+
+    public List<Event> findAllForUser(User user) {
+        return this.eventsRepository.findAll().stream().filter(e -> {
+                    return e.getRegisteredUsers().contains(user.getId());
+                })
+                .collect(Collectors.toList());
     }
 
     public List<Event> findAll() {

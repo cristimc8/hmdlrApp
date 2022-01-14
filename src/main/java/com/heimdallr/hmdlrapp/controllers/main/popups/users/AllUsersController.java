@@ -104,6 +104,8 @@ public class AllUsersController implements CustomController, Subscriber {
                     user.getFirstName() + " " + user.getLastName()
             );
 
+            userRowController.setThisParent(parent);
+
             try {
                 scrollableUsersContainer.getChildren().add(userRowController);
             } catch (Exception e) {
