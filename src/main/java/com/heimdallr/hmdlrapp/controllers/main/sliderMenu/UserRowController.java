@@ -1,5 +1,6 @@
 package com.heimdallr.hmdlrapp.controllers.main.sliderMenu;
 
+import com.heimdallr.hmdlrapp.controllers.main.popups.profile.ProfilePageController;
 import com.heimdallr.hmdlrapp.exceptions.ServiceNotRegisteredException;
 import com.heimdallr.hmdlrapp.models.FriendRequest;
 import com.heimdallr.hmdlrapp.models.Friendship;
@@ -13,9 +14,12 @@ import com.heimdallr.hmdlrapp.services.pubSub.EventDispatcher;
 import com.heimdallr.hmdlrapp.utils.Constants;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Cursor;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
 
 import java.io.IOException;
 import java.util.Objects;
@@ -25,6 +29,8 @@ public class UserRowController extends AnchorPane {
     private UserService userService;
     private FriendRequestService friendRequestService;
     private EventDispatcher eventDispatcher;
+
+    User user;
 
     @FXML
     Label lettersLabel;
@@ -61,7 +67,15 @@ public class UserRowController extends AnchorPane {
                 lettersLabel.setText(letters);
             }
 
-            usernameLabel.setText(userService.findByUsername(username).getDisplayUsername());
+            this.user = userService.findByUsername(username);
+            usernameLabel.setText(user.getDisplayUsername());
+            usernameLabel.setCursor(Cursor.HAND);
+            try {
+                usernameLabel.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
+                    this.eventDispatcher.dispatch(Channel.guiVisibleProfilePage, "id:" + user.getId());
+                });
+            }
+            catch (Exception ignored){}
             userFullNameLabel.setText(userFullName);
 
 

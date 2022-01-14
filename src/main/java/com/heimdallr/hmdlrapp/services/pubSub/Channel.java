@@ -15,5 +15,6 @@ public enum Channel {
     guiVisibleRequestsController,
     guiVisibleGCController,
     guiVisibleGenerateReports,
-    guiVisibleSelectAFriend
+    guiVisibleSelectAFriend,
+    guiVisibleProfilePage
 }

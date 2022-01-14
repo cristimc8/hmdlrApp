@@ -2,6 +2,7 @@ package com.heimdallr.hmdlrapp.controllers.main;
 
 import com.heimdallr.hmdlrapp.controllers.main.popups.events.AllEventsContainer;
 import com.heimdallr.hmdlrapp.controllers.main.popups.events.CreateEventController;
+import com.heimdallr.hmdlrapp.controllers.main.popups.profile.ProfilePageController;
 import com.heimdallr.hmdlrapp.controllers.main.popups.reports.GenerateReportsController;
 import com.heimdallr.hmdlrapp.controllers.main.popups.reports.SelectAFriendPopupController;
 import com.heimdallr.hmdlrapp.controllers.main.popups.users.AllUsersController;
@@ -10,6 +11,7 @@ import com.heimdallr.hmdlrapp.controllers.main.popups.users.FriendsController;
 import com.heimdallr.hmdlrapp.controllers.main.popups.users.requests.RequestsController;
 import com.heimdallr.hmdlrapp.controllers.main.sliderMenu.SliderMenuController;
 import com.heimdallr.hmdlrapp.exceptions.*;
+import com.heimdallr.hmdlrapp.models.User;
 import com.heimdallr.hmdlrapp.services.DI.HmdlrDI;
 import com.heimdallr.hmdlrapp.services.GroupChatsService;
 import com.heimdallr.hmdlrapp.services.MessagesService;
@@ -241,6 +243,7 @@ public class MainController implements Subscriber {
         this.eventDispatcher.subscribeTo(this, Channel.guiVisibleSelectAFriend);
         this.eventDispatcher.subscribeTo(this, Channel.onSaveToPDFCompleted);
         this.eventDispatcher.subscribeTo(this, Channel.onEventSuccessfullyCreated);
+        this.eventDispatcher.subscribeTo(this, Channel.guiVisibleProfilePage);
         this.assignComponentsToControllers();
         this.setEventListeners();
     }
@@ -265,6 +268,11 @@ public class MainController implements Subscriber {
                 successGifContainer.setVisible(false);
                 this.mainChildrenComponents.setOpacity(1);
             }, 1500);
+        }
+        else if(info.contains("id:")) {
+            int id = Integer.parseInt(info.split("id:")[1]);
+            User user = userService.findById(id);
+            setCenteredAndFocusedNode(new ProfilePageController(mainChildrenComponents, user));
         }
     }
 
