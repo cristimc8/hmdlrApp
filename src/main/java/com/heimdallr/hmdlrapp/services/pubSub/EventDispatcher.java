@@ -29,11 +29,14 @@ public class EventDispatcher {
      * @param info    Info transmitted
      */
     public void dispatch(Channel channel, String info) {
-        for (Subscriber subscriber : this.subscriberChannelHashMap.keySet()) {
-            if (isSubscribedTo(subscriber, channel)) {
-                subscriber.newContent(info);
+        try {
+            for (Subscriber subscriber : this.subscriberChannelHashMap.keySet()) {
+                if (isSubscribedTo(subscriber, channel)) {
+                    subscriber.newContent(info);
+                }
             }
         }
+        catch (Exception ignored){}
     }
 
     private boolean isSubscribedTo(Subscriber subscriber, Channel channel) {

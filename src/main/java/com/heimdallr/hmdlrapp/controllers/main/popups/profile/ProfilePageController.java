@@ -1,9 +1,9 @@
 package com.heimdallr.hmdlrapp.controllers.main.popups.profile;
 
-import com.heimdallr.hmdlrapp.controllers.CustomController;
 import com.heimdallr.hmdlrapp.controllers.misc.ProfileHeadController;
 import com.heimdallr.hmdlrapp.exceptions.ServiceNotRegisteredException;
 import com.heimdallr.hmdlrapp.models.FriendRequest;
+import com.heimdallr.hmdlrapp.models.User;
 import com.heimdallr.hmdlrapp.models.dtos.Page;
 import com.heimdallr.hmdlrapp.services.DI.HmdlrDI;
 import com.heimdallr.hmdlrapp.services.EventsService;
@@ -25,7 +25,6 @@ import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class ProfilePageController extends AnchorPane implements Subscriber {
 
@@ -59,7 +58,7 @@ public class ProfilePageController extends AnchorPane implements Subscriber {
     @FXML
     VBox injectHistoryBox;
 
-    public ProfilePageController(BorderPane parent) {
+    public ProfilePageController(BorderPane parent, User user) {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/heimdallr/hmdlrapp/profile/profilePage.fxml"));
         fxmlLoader.setRoot(this);
         fxmlLoader.setController(this);
@@ -80,7 +79,7 @@ public class ProfilePageController extends AnchorPane implements Subscriber {
             eventDispatcher.subscribeTo(this, Channel.onEventDeleted);
             eventDispatcher.subscribeTo(this, Channel.onEventsChanged);
 
-            this.page = new Page();
+            this.page = new Page(user);
 
             this.populate();
 
@@ -121,7 +120,6 @@ public class ProfilePageController extends AnchorPane implements Subscriber {
         }).toList();
 
         injectHistoryBox.getChildren().clear();
-        System.out.println(past.get(0));
         past.forEach(s -> {
             HBox hbox = new HBox();
             hbox.setAlignment(Pos.CENTER);
@@ -139,7 +137,6 @@ public class ProfilePageController extends AnchorPane implements Subscriber {
 
     private void setListeners() {
         this.closeButton.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
-            this.parent.setOpacity(1.0);
             this.profileContainer.setVisible(false);
         });
     }

@@ -19,9 +19,9 @@ public class Page {
 
     List<FriendRequest> friendRequests;
 
-    public Page() {
+    public Page(User user) {
         try {
-            this.user = ((UserService) HmdlrDI.getContainer().getService(UserService.class)).getCurrentUser();
+            this.user = user;
             this.fname = user.getFirstName();
             this.lname = user.getLastName();
             this.friends = ((FriendshipsService) HmdlrDI.getContainer().getService(FriendshipsService.class)).findAllWithUser(user);

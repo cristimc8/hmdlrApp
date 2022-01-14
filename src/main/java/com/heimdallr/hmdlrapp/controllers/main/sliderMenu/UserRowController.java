@@ -30,7 +30,7 @@ public class UserRowController extends AnchorPane {
     private FriendRequestService friendRequestService;
     private EventDispatcher eventDispatcher;
 
-    BorderPane parent;
+    User user;
 
     @FXML
     Label lettersLabel;
@@ -67,8 +67,15 @@ public class UserRowController extends AnchorPane {
                 lettersLabel.setText(letters);
             }
 
-            usernameLabel.setText(userService.findByUsername(username).getDisplayUsername());
+            this.user = userService.findByUsername(username);
+            usernameLabel.setText(user.getDisplayUsername());
             usernameLabel.setCursor(Cursor.HAND);
+            try {
+                usernameLabel.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
+                    this.eventDispatcher.dispatch(Channel.guiVisibleProfilePage, "id:" + user.getId());
+                });
+            }
+            catch (Exception ignored){}
             userFullNameLabel.setText(userFullName);
 
 
@@ -130,21 +137,6 @@ public class UserRowController extends AnchorPane {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    public void setThisParent(BorderPane borderPane) {
-        this.parent = borderPane;
-        usernameLabel.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
-            ProfilePageController profilePageController = new ProfilePageController(parent);
-            BorderPane borderPane1 = new BorderPane();
-            borderPane1.setCenter(profilePageController);
-            setTopAnchor(borderPane1, 0.);
-            setBottomAnchor(borderPane1, 0.);
-            setLeftAnchor(borderPane1, 0.);
-            setRightAnchor(borderPane1, 0.);
-
-            parent.getChildren().add(borderPane1);
-        });
     }
 
     /**
