@@ -111,6 +111,7 @@ public class LeftBarController implements CustomController, Subscriber {
         }
 
         this.eventDispatcher.subscribeTo(this, Channel.onNewMessage);
+        this.eventDispatcher.subscribeTo(this, Channel.onQueryChangedLeftBar);
 
         this.setEventListeners();
         this.loadMessages();
@@ -119,13 +120,19 @@ public class LeftBarController implements CustomController, Subscriber {
 
     @Override
     public void newContent(String info) {
-        this.loadMessages();
+        if(info == null) {
+            this.loadMessages();
+        }
+        else {
+            this.loadMessages();
+        }
     }
 
     private void setEventListeners() {
         searchTextBox.textProperty().addListener((observable, oldValue, newValue) -> {
             this.query = searchTextBox.getText();
-            this.eventDispatcher.dispatch(Channel.onNewMessage, null);
+//            this.eventDispatcher.dispatch(Channel.onNewMessage, null);
+            this.eventDispatcher.dispatch(Channel.onQueryChangedLeftBar, this.query);
         });
     }
 
