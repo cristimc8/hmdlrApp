@@ -13,12 +13,15 @@ import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
+import javafx.scene.control.Tooltip;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
+
+import java.time.format.DateTimeFormatter;
 
 public class MessageChatController extends AnchorPane {
     private UserService userService;
@@ -48,6 +51,10 @@ public class MessageChatController extends AnchorPane {
         this.message = message;
 
         this.parent = scrollableChatAreaContainer;
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd, hh:mm");
+        String formatDateTime = message.getTimestamp().toLocalDateTime().format(formatter);
+        Tooltip.install(this, new Tooltip(formatDateTime));
 
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/heimdallr/hmdlrapp/messageComponent.fxml"));
         fxmlLoader.setRoot(this);
