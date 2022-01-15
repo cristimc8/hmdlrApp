@@ -25,6 +25,7 @@ import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 
 import java.util.List;
+import java.util.Objects;
 
 public class ProfilePageController extends AnchorPane implements Subscriber {
 
@@ -58,10 +59,14 @@ public class ProfilePageController extends AnchorPane implements Subscriber {
     @FXML
     VBox injectHistoryBox;
 
-    public ProfilePageController(BorderPane parent, User user) {
+    AnchorPane sliderMenu;
+
+    public ProfilePageController(BorderPane parent, AnchorPane sliderMenu, User user) {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/heimdallr/hmdlrapp/profile/profilePage.fxml"));
         fxmlLoader.setRoot(this);
         fxmlLoader.setController(this);
+
+        this.sliderMenu = sliderMenu;
 
         this.parent = parent;
 
@@ -88,6 +93,12 @@ public class ProfilePageController extends AnchorPane implements Subscriber {
         }
     }
 
+    public void hackUpdateGUIJavafxIsBad() {
+        if(Objects.equals(this.getAccessibleText(), "slideOpaque")) {
+            this.sliderMenu.setDisable(true);
+        }
+    }
+
     @Override
     public void newContent(String info) {
         this.populate();
@@ -101,43 +112,47 @@ public class ProfilePageController extends AnchorPane implements Subscriber {
         this.profileVbox.getChildren().add(0, new ProfileHeadController(null, userService.getChatHeadPreviewLetters(this.page.getUser())));
         this.attendance.setText(this.page.getUser().getDisplayUsername() + " is attending " + eventsService.findAllForUser(page.getUser()).size() + " public events");
         List<FriendRequest> pastFriendRequests = this.page.getFriendRequests();
-        List<String> past = pastFriendRequests.stream().map(e -> {
-            String word;
-            String prop = "";
-            switch (e.getFriendshipRequestStatus()) {
-                case APPROVED -> word = " approved a request from ";
-                case CANCELED -> word = " retracted a request to ";
-                case REJECTED -> word = " rejected a request from ";
-                case PENDING -> word = " waiting for response from ";
-                default -> word = " sent a request to ";
-            }
-            switch (e.getFriendshipRequestStatus()) {
-                case APPROVED, REJECTED -> prop = userService.findById(e.getReceiverId()).getDisplayUsername() + word + userService.findById(e.getSenderId()).getDisplayUsername();
-                case CANCELED, PENDING -> prop = userService.findById(e.getSenderId()).getDisplayUsername() + word + userService.findById(e.getReceiverId()).getDisplayUsername();
-
-            }
-            return prop;
-        }).toList();
-
         injectHistoryBox.getChildren().clear();
-        past.forEach(s -> {
-            HBox hbox = new HBox();
-            hbox.setAlignment(Pos.CENTER);
-            Label label = new Label();
-            label.setText(s);
-            label.setTextFill(Paint.valueOf("#ffffff"));
-            label.setFont(Font.font("Garuda"));
-            hbox.getChildren().add(label);
+        if(Objects.equals(this.page.getUser().getId(), this.userService.getCurrentUser().getId())) {
+            List<String> past = pastFriendRequests.stream().map(e -> {
+                String word;
+                String prop = "";
+                switch (e.getFriendshipRequestStatus()) {
+                    case APPROVED -> word = " approved a request from ";
+                    case CANCELED -> word = " retracted a request to ";
+                    case REJECTED -> word = " rejected a request from ";
+                    case PENDING -> word = " waiting for response from ";
+                    default -> word = " sent a request to ";
+                }
+                switch (e.getFriendshipRequestStatus()) {
+                    case APPROVED, REJECTED -> prop = userService.findById(e.getReceiverId()).getDisplayUsername() + word + userService.findById(e.getSenderId()).getDisplayUsername();
+                    case CANCELED, PENDING -> prop = userService.findById(e.getSenderId()).getDisplayUsername() + word + userService.findById(e.getReceiverId()).getDisplayUsername();
 
-            injectHistoryBox.getChildren().add(hbox);
-        });
+                }
+                return prop;
+            }).toList();
 
+            past.forEach(s -> {
+                HBox hbox = new HBox();
+                hbox.setAlignment(Pos.CENTER);
+                Label label = new Label();
+                label.setText(s);
+                label.setTextFill(Paint.valueOf("#ffffff"));
+                label.setFont(Font.font("Garuda"));
+                hbox.getChildren().add(label);
+
+                injectHistoryBox.getChildren().add(hbox);
+            });
+        }
         this.setListeners();
     }
 
     private void setListeners() {
         this.closeButton.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
             this.profileContainer.setVisible(false);
+            if(Objects.equals(this.getAccessibleText(), "slideOpaque")) {
+                this.sliderMenu.setDisable(false);
+            }
         });
     }
 }

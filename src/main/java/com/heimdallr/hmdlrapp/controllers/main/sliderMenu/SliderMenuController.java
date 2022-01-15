@@ -12,6 +12,7 @@ import com.heimdallr.hmdlrapp.services.pubSub.Subscriber;
 import com.heimdallr.hmdlrapp.utils.Async;
 import javafx.animation.TranslateTransition;
 import javafx.event.EventHandler;
+import javafx.scene.Cursor;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
@@ -98,12 +99,16 @@ public class SliderMenuController implements CustomController, Subscriber {
 
     public void setGUIForUser() {
         usernameLabel.setText(userService.getCurrentUser().getDisplayUsername());
+        lettersLabel.setCursor(Cursor.HAND);
         nameLabel.setText(userService.getCurrentUser().getFirstName() + " " + userService.getCurrentUser().getLastName());
         lettersLabel.setText(userService.getChatHeadPreviewLetters(userService.getCurrentUser()));
         this.setNumberOfNotificationsLabel();
     }
 
     private void setEventListeners() {
+        lettersLabel.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
+            this.eventDispatcher.dispatch(Channel.guiVisibleProfilePage, "id:" + this.userService.getCurrentUser().getId());
+        });
         allUsersRow.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {

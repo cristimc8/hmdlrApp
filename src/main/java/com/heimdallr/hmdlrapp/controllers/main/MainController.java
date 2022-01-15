@@ -272,7 +272,7 @@ public class MainController implements Subscriber {
         else if(info.contains("id:")) {
             int id = Integer.parseInt(info.split("id:")[1]);
             User user = userService.findById(id);
-            setCenteredAndFocusedNode(new ProfilePageController(mainChildrenComponents, user));
+            setCenteredAndFocusedNode(new ProfilePageController(mainChildrenComponents, sliderMenu, user), false);
         }
     }
 
@@ -412,25 +412,33 @@ public class MainController implements Subscriber {
 
     private void setEventListeners() {
         createAnEventRow.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
-            this.setCenteredAndFocusedNode(new CreateEventController(mainChildrenComponents));
+            this.setCenteredAndFocusedNode(new CreateEventController(mainChildrenComponents), true);
         });
 
         allEventsRow.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
-            this.setCenteredAndFocusedNode(new AllEventsContainer(mainChildrenComponents, false));
+            this.setCenteredAndFocusedNode(new AllEventsContainer(mainChildrenComponents, false), true);
         });
 
         notificationsButton.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
-            this.setCenteredAndFocusedNode(new AllEventsContainer(mainChildrenComponents, true));
+            this.setCenteredAndFocusedNode(new AllEventsContainer(mainChildrenComponents, true), true);
         });
     }
 
-    private void setCenteredAndFocusedNode(Node node) {
+    private void setCenteredAndFocusedNode(Node node, boolean closeNavNeeded) {
         dynamicContentHolder.setCenter(node);
-        TranslateTransition closeNav = new TranslateTransition(new Duration(150), sliderMenu);
-        closeNav.setToX(-(sliderMenu.getWidth()));
-        closeNav.play();
+        node.setAccessibleText("slideOpaque");
+        if(closeNavNeeded) {
+            node.setAccessibleText("slideHidden");
+            TranslateTransition closeNav = new TranslateTransition(new Duration(150), sliderMenu);
+            closeNav.setToX(-(sliderMenu.getWidth()));
+            closeNav.play();
+        }
         Async.setTimeout(() -> {
-            sliderMenu.setVisible(false);
+            if(closeNavNeeded)
+                sliderMenu.setVisible(false);
+            if(node.getClass() == ProfilePageController.class) {
+                ((ProfilePageController) node).hackUpdateGUIJavafxIsBad();
+            }
             mainChildrenComponents.setOpacity(0.12);
         }, 150);
     }
