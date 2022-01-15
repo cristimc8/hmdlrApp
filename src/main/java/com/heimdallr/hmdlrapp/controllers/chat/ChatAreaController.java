@@ -31,6 +31,7 @@ import javafx.scene.text.Font;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ChatAreaController implements CustomController, Subscriber {
 
@@ -49,6 +50,8 @@ public class ChatAreaController implements CustomController, Subscriber {
     Label chatUsernameLabel;
     VBox messageTextAreaContainer;
     ScrollPane parentScrollPane;
+
+    Tooltip gcMembers;
 
     private int uid = 0;
     private String gid = null;
@@ -162,6 +165,7 @@ public class ChatAreaController implements CustomController, Subscriber {
         if (this.chatTopLeftBar.getChildren().size() > 1)
             this.chatTopLeftBar.getChildren().remove(0);
         if (this.isConvo) {
+            Tooltip.uninstall(chatTopLeftBar, gcMembers);
             this.groupChat = null;
             this.other = userService.findById(uid);
             if (this.other.getId() == 1) {
@@ -183,7 +187,24 @@ public class ChatAreaController implements CustomController, Subscriber {
                     groupChatsService.getChatHeadPreviewLetters(gid)
             );
             this.chatTopLeftBar.getChildren().add(0, profileHeadController);
+            if(gcMembers == null) {
+                gcMembers = new Tooltip();
+            }
+            setGCMembersForTooltip(gcMembers);
+            Tooltip.install(chatTopLeftBar, gcMembers);
         }
+    }
+
+    private void setGCMembersForTooltip(Tooltip tooltip) {
+        StringBuilder stringBuilder = new StringBuilder("");
+        List<User> users = groupChatsService.findById(this.gid).getParticipants()
+                .stream().map(id -> {
+                    return userService.findById(id);
+                }).toList();
+        users.forEach(user -> {
+            stringBuilder.append(user.getDisplayUsername()).append("\n");
+        });
+        tooltip.setText(stringBuilder.toString());
     }
 
     private void setEventHandlers() {

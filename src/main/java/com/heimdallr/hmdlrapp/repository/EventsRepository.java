@@ -71,7 +71,8 @@ public class EventsRepository implements RepoInterface<Event, String> {
     public List<Event> findUpcomingForUserId(int uid, Timestamp currentDate, int acceptableNumberOfDaysForNotification) {
         List<Event> events = new ArrayList<>();
         String cmd = "SELECT * FROM events WHERE EXTRACT(DAY FROM events.event_date- ?) < ?" +
-                " AND events.registered LIKE '%' || ? || '%'";
+                " AND events.registered LIKE '%' || ? || '%' AND event_date > NOW() " +
+                "ORDER BY event_date";
         try {
             PreparedStatement preparedStatement = dbInstance.prepareStatement(cmd);
             preparedStatement.setTimestamp(1, currentDate);
@@ -124,7 +125,7 @@ public class EventsRepository implements RepoInterface<Event, String> {
     @Override
     public List<Event> findAll() {
         List<Event> events = new ArrayList<>();
-        String cmd = "SELECT * FROM events";
+        String cmd = "SELECT * FROM events WHERE event_date > NOW() ORDER BY event_date";
         try {
             PreparedStatement preparedStatement = dbInstance.prepareStatement(cmd);
             ResultSet resultSet = preparedStatement.executeQuery();
